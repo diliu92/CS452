@@ -34,10 +34,10 @@ $(OUT_DIR)/io.o: $(OUT_DIR)/io.s
 	$(AS) $(ASFLAGS) -o $(OUT_DIR)/io.o io.s
 
 $(OUT_DIR)/main.s:
-	$(XCC) -S $(CFLAGS) $(SRC_DIR)/main.c 
+	$(XCC) -S -o $(OUT_DIR)/main.s $(CFLAGS) $(SRC_DIR)/main.c
 
 $(OUT_DIR)/io.s: 
-	$(XCC) -S $(CFLAGS) $(SRC_DIR)/io.c 
+	$(XCC) -S -o $(OUT_DIR)/io.s $(CFLAGS) $(SRC_DIR)/io.c
 
 clean:
 	-rm -f $(OUT_DIR)/main.elf $(OUT_DIR)/*.s $(OUT_DIR)/*.o $(OUT_DIR)/main.map
