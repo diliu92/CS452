@@ -21,13 +21,13 @@ LDFLAGS = -init main -Map $(OUT_DIR)/main.map -N  -T orex.ld -L/u/wbcowan/gnuarm
 
 all: main.elf
 
-main.elf: $(OUT_DIR)/main.o $(OUT_DIR)/io.o
+main.elf: main.o io.o
 	$(LD) $(LDFLAGS) -o $@ $(OUT_DIR)/main.o $(OUT_DIR)/io.o -lgcc		
 
-$(OUT_DIR)/main.o: $(OUT_DIR)/main.s
+main.o: $(OUT_DIR)/main.s
 	$(AS) $(ASFLAGS) -o $(OUT_DIR)/main.o $(OUT_DIR)/main.s
 
-$(OUT_DIR)/io.o: $(OUT_DIR)/io.s
+io.o: $(OUT_DIR)/io.s
 	$(AS) $(ASFLAGS) -o $(OUT_DIR)/io.o $(OUT_DIR)/io.s
 
 $(OUT_DIR)/main.s: $(SRC_DIR)/main.c 
