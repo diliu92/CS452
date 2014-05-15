@@ -28,16 +28,16 @@ main.elf: $(OBJS)
 	$(LD) $(LDFLAGS) -o $@ $(OBJS) -lgcc		
 
 $(OUT_DIR)/main.o: $(OUT_DIR)/main.s
-	$(AS) $(ASFLAGS) -o $(OUT_DIR)/main.o $(OUT_DIR)/main.s
-
-$(OUT_DIR)/io.o: $(OUT_DIR)/io.s
-	$(AS) $(ASFLAGS) -o $(OUT_DIR)/io.o $(OUT_DIR)/io.s
+	$(AS) 	-o $(OUT_DIR)/main.o 	$(ASFLAGS) $(OUT_DIR)/main.s
 
 $(OUT_DIR)/main.s:
-	$(XCC) -S -o $(OUT_DIR)/main.s $(CFLAGS) $(SRC_DIR)/main.c
+	$(XCC) 	-o $(OUT_DIR)/main.s 	-S $(CFLAGS) $(SRC_DIR)/main.c
+
+$(OUT_DIR)/io.o: $(OUT_DIR)/io.s
+	$(AS)	-o $(OUT_DIR)/io.o 	$(ASFLAGS) $(OUT_DIR)/io.s
 
 $(OUT_DIR)/io.s: 
-	$(XCC) -S -o $(OUT_DIR)/io.s $(CFLAGS) $(SRC_DIR)/io.c
+	$(XCC) 	-o $(OUT_DIR)/io.s 	-S $(CFLAGS) $(SRC_DIR)/io.c
 
 clean:
 	-rm -f $(OUT_DIR)/main.elf $(OUT_DIR)/*.s $(OUT_DIR)/*.o $(OUT_DIR)/main.map
