@@ -33,10 +33,10 @@ $(OUT_DIR)/main.o: $(OUT_DIR)/main.s
 $(OUT_DIR)/io.o: $(OUT_DIR)/io.s
 	$(AS) $(ASFLAGS) -o $(OUT_DIR)/io.o io.s
 
-$(OUT_DIR)/main.s:  main.c
+$(OUT_DIR)/main.s:
 	$(XCC) -S $(CFLAGS) $(SRC_DIR)/main.c -o $(OUT_DIR)/main.s
 
-$(OUT_DIR)/io.s:  io.c
+$(OUT_DIR)/io.s: 
 	$(XCC) -S $(CFLAGS) $(SRC_DIR)/io.c -o $(OUT_DIR)/io.s 
 
 clean:
