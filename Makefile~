@@ -28,10 +28,10 @@ main.elf: $(OBJS)
 	$(LD) $(LDFLAGS) -o $@ $(OBJS) -lgcc		
 
 $(OUT_DIR)/main.o: $(OUT_DIR)/main.s
-	$(AS) $(ASFLAGS) -o $(OUT_DIR)/main.o main.s
+	$(AS) $(ASFLAGS) -o $(OUT_DIR)/main.o $(OUT_DIR)/main.s
 
 $(OUT_DIR)/io.o: $(OUT_DIR)/io.s
-	$(AS) $(ASFLAGS) -o $(OUT_DIR)/io.o io.s
+	$(AS) $(ASFLAGS) -o $(OUT_DIR)/io.o $(OUT_DIR)/io.s
 
 $(OUT_DIR)/main.s:
 	$(XCC) -S -o $(OUT_DIR)/main.s $(CFLAGS) $(SRC_DIR)/main.c
