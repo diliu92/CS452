@@ -24,17 +24,17 @@ all: main.elf
 main.elf: main.o io.o
 	$(LD) $(LDFLAGS) -o $@ $(OUT_DIR)/main.o $(OUT_DIR)/io.o -lgcc		
 
-main.o: $(OUT_DIR)/main.s
+main.o: main.s
 	$(AS) $(ASFLAGS) -o $(OUT_DIR)/main.o $(OUT_DIR)/main.s
 
-io.o: $(OUT_DIR)/io.s
+io.o: io.s
 	$(AS) $(ASFLAGS) -o $(OUT_DIR)/io.o $(OUT_DIR)/io.s
 
-$(OUT_DIR)/main.s: $(SRC_DIR)/main.c 
-	$(XCC) -S $(CFLAGS) $(SRC_DIR)/main.c
+main.s: main.c 
+	$(XCC) -S $(CFLAGS) -o $(OUT_DIR)/main.s $(SRC_DIR)/main.c
 
-$(OUT_DIR)/io.s: $(SRC_DIR)/io.c 
-	$(XCC) -S $(CFLAGS) $(SRC_DIR)/io.c
+io.s: io.c 
+	$(XCC) -S $(CFLAGS) -o $(OUT_DIR)/io.s $(SRC_DIR)/io.c
 
 clean:
 	-rm -f $(OUT_DIR)/main.elf $(OUT_DIR)/*.s $(OUT_DIR)/*.o $(OUT_DIR)/main.map
