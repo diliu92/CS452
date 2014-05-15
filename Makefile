@@ -4,8 +4,8 @@
 XCC     = gcc
 AS	= as
 LD      = ld
-OUT_DIR	= /bin
-SRC_DIR	= /src
+OUT_DIR	= bin
+SRC_DIR	= src
 
 CFLAGS  = -c -fPIC -Wall -I./include -mcpu=arm920t -msoft-float
 # -g: include hooks for gdb
