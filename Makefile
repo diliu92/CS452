@@ -19,22 +19,22 @@ ASFLAGS	= -mcpu=arm920t -mapcs-32
 
 LDFLAGS = -init main -Map $(OUT_DIR)/main.map -N  -T orex.ld -L/u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2
 
-all:  $(OUT_DIR)/io.s $(OUT_DIR)/main.s main.elf
+all: main.elf
 
-$(OUT_DIR)/main.s: $(SRC_DIR)/main.c 
-	$(XCC) -S $(CFLAGS) $(SRC_DIR)/main.c
+main.elf: $(OUT_DIR)/main.o $(OUT_DIR)/io.o
+	$(LD) $(LDFLAGS) -o $@ $(OUT_DIR)/main.o $(OUT_DIR)/io.o -lgcc		
 
 $(OUT_DIR)/main.o: $(OUT_DIR)/main.s
 	$(AS) $(ASFLAGS) -o $(OUT_DIR)/main.o $(OUT_DIR)/main.s
 
-$(OUT_DIR)/io.s: $(SRC_DIR)/io.c 
-	$(XCC) -S $(CFLAGS) $(SRC_DIR)/io.c
-
 $(OUT_DIR)/io.o: $(OUT_DIR)/io.s
 	$(AS) $(ASFLAGS) -o $(OUT_DIR)/io.o $(OUT_DIR)/io.s
 
-main.elf: $(OUT_DIR)/main.o $(OUT_DIR)/io.o
-	$(LD) $(LDFLAGS) -o $@ $(OUT_DIR)/main.o $(OUT_DIR)/io.o -lgcc
+$(OUT_DIR)/main.s: $(SRC_DIR)/main.c 
+	$(XCC) -S $(CFLAGS) $(SRC_DIR)/main.c
+
+$(OUT_DIR)/io.s: $(SRC_DIR)/io.c 
+	$(XCC) -S $(CFLAGS) $(SRC_DIR)/io.c
 
 clean:
 	-rm -f $(OUT_DIR)/main.elf $(OUT_DIR)/*.s $(OUT_DIR)/*.o $(OUT_DIR)/main.map
