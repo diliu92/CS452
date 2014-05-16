@@ -14,7 +14,7 @@ typedef struct kernelGlobal{
 
 static int findEmptyQueueItem(kernelGlobal*);
 
-int popQueue(kernelGlobal* kernelData){
+int popQueue(kernelGlobal* kernelData, int qIdx){
 	int tid = -1;
 	queueItem* qItem;
 	
@@ -34,7 +34,7 @@ int popQueue(kernelGlobal* kernelData){
 	return tid;
 }
 
-int pushQueue(kernelGlobal* kernelData, int tid, int priority){
+int pushQueue(kernelGlobal* kernelData, int qIdx){
 	int qItemIdx = findEmptyQueueItem(kernelData);
 	queueItem* pushItem;
 	
@@ -72,17 +72,9 @@ int pushQueue(kernelGlobal* kernelData, int tid, int priority){
 	}
 }
 
-static int findEmptyQueueItem(kernelGlobal*){	//more like a "malloc"
-	int i;
-	queueItem* qItem;
+static int isQueueEmpty(kernelGlobal* kernelData, int queueIdx){
+	priorityQueue* qItem = &((kernelData->priorityQueues)[queueIdx]);
 	
-	for (i = 0; i < MAX_TASK; i++)
-	{
-		qItem = &((kernelData->priorityQueue)[i]);
-		if(qItem->tid == -1 && qItem->priority == -1 
-				&& qItem->prev == -1 && qItem->next == -1 )
-			return i;	
-	}
-	
-	return -1;
+	return (qItem->head == NULL && qItem->tail == NULL) ? 1 : 0;
 }
+

@@ -7,7 +7,7 @@ static void queueInit(kernelGlobal*);
 
 void kernelInit(kernelGlobal* kernelData){
 	tasksInit(kernelData);
-	queueInit(kernelData);
+	queuesInit(kernelData);
 	/*
 	 * More functions to be added.
 	 */ 
@@ -29,25 +29,31 @@ static void tasksInit(kernelGlobal* kernelData){
 		tsk->state = Empty;
 		tsk->priority = -1;
 		tsk->parent_tid = -1;
+		
+		tsk->nextTask = NULL;
 	}
 	
 	
 }
 
-static void queueInit(kernelGlobal*){
+static void queuesInit(kernelGlobal*){
 	int i;
-	queueItem* qItem;
-	
-	for (i = 0; i < MAX_TASK; i++)
+	priorityQueue* qItem;
+		
+	for (i = 0; i < MAX_PRIORITY; i++)
 	{
-		qItem = &((kernelData->priorityQueue)[i]);
+		qItem = &((kernelData->priorityQueues)[i]);
 		
 		qItem->tid = -1;
 		qItem->priority = -1;
 		qItem->prev = -1;
 		qItem->next = -1;
 	}	
-	nextReadyTaskIdx = -1;
+
+	for (i = 0; i < MAX_PRIORITY; i++)
+	{
+		(kernelData->whichQueue)[i] = 0;
+	}
 }
 
 

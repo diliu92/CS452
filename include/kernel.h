@@ -8,8 +8,9 @@ typedef struct kernelGlobal{
 	int nextIdleTask;
 	int currentActiveTask;
 	
-	queueItem priorityQueue[MAX_TASK];
-	int nextReadyTaskIdx;
+	priorityQueue priorityQueues[MAX_PRIORITY];
+	int whichQueue[MAX_PRIORITY];
+	
 	
 }kernelGlobal;
 
