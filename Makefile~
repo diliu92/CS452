@@ -20,7 +20,7 @@ ASFLAGS	= -mcpu=arm920t -mapcs-32
 LDFLAGS = -init main -Map $(OUT_DIR)/main.map -N  -T orex.ld -L/u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2
 
 OBJS = 	$(OUT_DIR)/main.o	\
-	$(OUT_DIR)/io.o
+	$(OUT_DIR)/bwio.o
 
 all: main.elf
 
@@ -33,11 +33,11 @@ $(OUT_DIR)/main.o: $(OUT_DIR)/main.s
 $(OUT_DIR)/main.s:
 	$(XCC) 	-o $(OUT_DIR)/main.s 	-S $(CFLAGS) $(SRC_DIR)/main.c
 
-$(OUT_DIR)/io.o: $(OUT_DIR)/io.s
-	$(AS)	-o $(OUT_DIR)/io.o 	$(ASFLAGS) $(OUT_DIR)/io.s
+$(OUT_DIR)/bwio.o: $(OUT_DIR)/bwio.s
+	$(AS)	-o $(OUT_DIR)/bwio.o 	$(ASFLAGS) $(OUT_DIR)/bwio.s
 
-$(OUT_DIR)/io.s: 
-	$(XCC) 	-o $(OUT_DIR)/io.s 	-S $(CFLAGS) $(SRC_DIR)/io.c
+$(OUT_DIR)/bwio.s: 
+	$(XCC) 	-o $(OUT_DIR)/bwio.s 	-S $(CFLAGS) $(SRC_DIR)/bwio.c
 
 clean:
 	-rm -f $(OUT_DIR)/main.elf $(OUT_DIR)/*.s $(OUT_DIR)/*.o $(OUT_DIR)/main.map
