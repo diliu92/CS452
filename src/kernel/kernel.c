@@ -55,17 +55,3 @@ static void queuesInit(kernelGlobal*){
 }
 
 
-
-
-
-task* getNextTask(kernelGlobal* kernel_data){
-	task* NextReadyTask = NULL;
-	int i;
-	
-	for (i = 0; i < MAX_TASK; i++)
-	{
-		if( NextReadyTask == NULL && )
-			;
-	}
-	
-}

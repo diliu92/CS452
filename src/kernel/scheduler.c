@@ -1,27 +1,51 @@
 #include <kernel.h>
 #include <scheduler.h>
 
+static int isQueueEmpty(kernelGlobal* kernelData, int qIdx){
+	priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
+	
+	return (qItem->head == NULL && qItem->tail == NULL) ? 1 : 0;
+}
 
-static int isQueueEmpty(kernelGlobal* kernelData, int qIdx);
+static int findNextPriorityQueue(kernelGlobal* kernelData){
+	int i;
+	
+	for (i = 0; i < MAX_PRIORITY; i++)
+	{
+		if (isQueueEmpty(kernelData, i)
+			continue;
+		return i;
+	}
+	return -1;
+}
 
-task* popQueue(kernelGlobal* kernelData, int qIdx){
+static task* popQueue(kernelGlobal* kernelData, int qIdx){
 	priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
 	
 	task* retval = qItem->head;
 	
 	qItem->head = (qItem->head)->nextTask;
 	
+	(qItem->head)->nextTask = NULL;
 	/*
 	 * EQC(Empty Queue Check)
 	 */ 
 	if(qItem->head == NULL && qItem->tail == retval){	
 		qItem->tail == NULL;
 	}
-	
-	((kernelData->whichQueue)[qIdx])--;
 			
 	return retval;
 }
+
+task* getNextTask(kernelGlobal* kernelData){	
+	int i = findNextPriorityQueue(kernelData);
+	
+	if (i >= 0)
+		return popQueue(kernelData, i);
+			
+	return NULL;
+}
+
 
 void pushQueue(kernelGlobal* kernelData, int qIdx, task* tsk){
 	priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
@@ -34,24 +58,7 @@ void pushQueue(kernelGlobal* kernelData, int qIdx, task* tsk){
 			(qItem->tail)->nextTask = tsk;
 			qItem->tail = (qItem->tail)->nextTask;
 	}
-	
-	((kernelData->whichQueue)[qIdx])++;
 }
 
-int findNextPriorityQueue(kernelGlobal* kernelData){
-	int i;
-	
-	for (i = 0; i < MAX_PRIORITY; i++)
-	{
-		if ((kernelData->whichQueue)[i] != 0)
-			return i;
-	}
-	return -1;
-}
 
-static int isQueueEmpty(kernelGlobal* kernelData, int qIdx){
-	priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
-	
-	return (qItem->head == NULL && qItem->tail == NULL) ? 1 : 0;
-}
 

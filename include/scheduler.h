@@ -14,13 +14,8 @@ typedef struct priorityQueue{
 	task* head;	
 	task* tail;		
 }priorityQueue; 
- 
- 
- 
- 
-task* popQueue(kernelGlobal* kernelData, int qIdx);
-
+  
 void pushQueue(kernelGlobal* kernelData, int qIdx, task* tsk);
 
-int findNextPriorityQueue(kernelGlobal* kernelData);
+task* getNextTask(kernelGlobal* kernel_data);
 

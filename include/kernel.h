@@ -9,9 +9,7 @@ typedef struct kernelGlobal{
 	int currentActiveTask;
 	
 	priorityQueue priorityQueues[MAX_PRIORITY];
-	int whichQueue[MAX_PRIORITY];
-	
-	
+		
 }kernelGlobal;
 
 void kernelInit(kernelGlobal*);
