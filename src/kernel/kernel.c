@@ -18,7 +18,7 @@ static void tasksInit(kernelGlobal* kernelData){
 		tsk->sp = (kernelData->tasks_stack)+(STACK_SIZE*(i+1));
 		tsk->pc = NULL;
 		
-		tsk->state = Empty;
+		tsk->state = Idle;
 		tsk->priority = -1;
 		tsk->parent_tid = -1;
 		

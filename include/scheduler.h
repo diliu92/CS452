@@ -15,9 +15,9 @@ struct priorityQueue{
 	task* tail;		
 }; 
   
-void pushQueue(kernelGlobal* kernelData, int qIdx, task* tsk);
+void pushQueue(kernelGlobal*,int,task*);
 
-task* getNextTask(kernelGlobal* kernelData);
+task* getNextTask(kernelGlobal*);
 
 
 
