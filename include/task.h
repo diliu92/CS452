@@ -32,7 +32,7 @@ struct task{
 	int parent_tid;
 	
 	task* nextTask;
-}task;
+};
 
 int CreateTask(int, void (*)());
 
