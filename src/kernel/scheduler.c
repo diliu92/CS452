@@ -21,7 +21,7 @@ static int findNextPriorityQueue(struct kernelGlobal* kernelData){
 	return -1;
 }
 
-static task* popQueue(struct kernelGlobal* kernelData, int qIdx){
+static struct task* popQueue(struct kernelGlobal* kernelData, int qIdx){
 	struct priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
 	
 	struct task* retval = qItem->head;
