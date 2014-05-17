@@ -1,5 +1,5 @@
-#include <kernel.h>
 #include <scheduler.h>
+#include <kernel.h>
 #include <utils.h>
 
 
