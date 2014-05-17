@@ -33,7 +33,7 @@ static task* popQueue(struct kernelGlobal* kernelData, int qIdx){
 	 * EQC(Empty Queue Check)
 	 */ 
 	if(qItem->head == NULL && qItem->tail == retval){	
-		qItem->tail == NULL;
+		qItem->tail = NULL;
 	}
 			
 	return retval;
