@@ -1,6 +1,5 @@
 
 #define MAX_PRIORITY 16
-
  
  
 typedef struct priorityQueue{
