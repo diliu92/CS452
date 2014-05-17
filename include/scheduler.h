@@ -1,3 +1,7 @@
+#include <task.h>
+#include <kernel.h>
+
+
 
 #define MAX_PRIORITY 16
  
