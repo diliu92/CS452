@@ -13,7 +13,7 @@ typedef enum taskState_t{
 	Event_blocked 
 }taskState_t;
 
-typedef struct task{
+struct task{
 	int tid;
 	unsigned int cpsr;
 	void* sp;	//a pointer to its private stack
@@ -24,7 +24,7 @@ typedef struct task{
 	int parent_tid;
 	
 	struct task* nextTask;
-}task;
+};
 
 int CreateTask(int, void (*)());
 
