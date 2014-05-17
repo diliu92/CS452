@@ -1,5 +1,7 @@
 #include <kernel.h>
 #include <scheduler.h>
+#include <utils.h>
+
 
 static int isQueueEmpty(kernelGlobal* kernelData, int qIdx){
 	priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);

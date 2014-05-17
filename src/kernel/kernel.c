@@ -1,6 +1,8 @@
 #include <kernel.h>
 #include <task.h>
 #include <scheduler.h>
+#include <utils.h>
+
 
 
 static void tasksInit(kernelGlobal* kernelData){
@@ -26,7 +28,7 @@ static void tasksInit(kernelGlobal* kernelData){
 	
 }
 
-static void queuesInit(kernelGlobal*){
+static void queuesInit(kernelGlobal* kernelData){
 	int i;
 	priorityQueue* qItem;
 		
@@ -54,7 +56,7 @@ int main( int argc, char* argv[] ) {
 	
 	kernelInit(&kernelData);
 	
-	
+	return 0;
 }
 
 
