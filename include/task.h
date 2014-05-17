@@ -1,3 +1,9 @@
+#ifndef __TASK_H__
+#define __TASK_H__
+
+
+
+
 #define MAX_TASK 	64
 #define STACK_SIZE	4096	//4KB is the best!
 

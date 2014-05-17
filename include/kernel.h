@@ -1,3 +1,8 @@
+#ifndef __KERNEL_H__
+#define __KERNEL_H__
+
+
+
 #include <task.h>
 #include <scheduler.h>
 
