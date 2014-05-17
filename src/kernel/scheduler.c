@@ -3,13 +3,13 @@
 #include <utils.h>
 
 
-static int isQueueEmpty(kernelGlobal* kernelData, int qIdx){
-	priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
+static int isQueueEmpty(struct kernelGlobal* kernelData, int qIdx){
+	struct priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
 	
 	return (qItem->head == NULL && qItem->tail == NULL) ? 1 : 0;
 }
 
-static int findNextPriorityQueue(kernelGlobal* kernelData){
+static int findNextPriorityQueue(struct kernelGlobal* kernelData){
 	int i;
 	
 	for (i = 0; i < MAX_PRIORITY; i++)
@@ -21,10 +21,10 @@ static int findNextPriorityQueue(kernelGlobal* kernelData){
 	return -1;
 }
 
-static task* popQueue(kernelGlobal* kernelData, int qIdx){
-	priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
+static task* popQueue(struct kernelGlobal* kernelData, int qIdx){
+	struct priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
 	
-	task* retval = qItem->head;
+	struct task* retval = qItem->head;
 	
 	qItem->head = (retval)->nextTask;
 	
@@ -39,7 +39,7 @@ static task* popQueue(kernelGlobal* kernelData, int qIdx){
 	return retval;
 }
 
-task* getNextTask(kernelGlobal* kernelData){	
+struct task* getNextTask(struct kernelGlobal* kernelData){	
 	int i = findNextPriorityQueue(kernelData);
 	
 	if (i >= 0)
@@ -49,8 +49,8 @@ task* getNextTask(kernelGlobal* kernelData){
 }
 
 
-void pushQueue(kernelGlobal* kernelData, int qIdx, task* tsk){
-	priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
+void pushQueue(struct kernelGlobal* kernelData, int qIdx, task* tsk){
+	struct priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
 
 	if (isQueueEmpty(kernelData, qIdx)){
 			qItem->head=tsk;

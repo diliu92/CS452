@@ -3,9 +3,9 @@
 
 
 
-static void tasksInit(kernelGlobal* kernelData){
+static void tasksInit(struct kernelGlobal* kernelData){
 	int i;
-	task* tsk;
+	struct task* tsk;
 	
 	for (i = 0; i < MAX_TASK; i++)
 	{
@@ -26,9 +26,9 @@ static void tasksInit(kernelGlobal* kernelData){
 	
 }
 
-static void queuesInit(kernelGlobal* kernelData){
+static void queuesInit(struct kernelGlobal* kernelData){
 	int i;
-	priorityQueue* qItem;
+	struct priorityQueue* qItem;
 		
 	for (i = 0; i < MAX_PRIORITY; i++)
 	{
@@ -50,7 +50,7 @@ void kernelInit(kernelGlobal* kernelData){
 
 int main( int argc, char* argv[] ) {	
 	
-	kernelGlobal kernelData;
+	struct kernelGlobal kernelData;
 	
 	kernelInit(&kernelData);
 	
