@@ -47,8 +47,4 @@ struct kernelGlobal{
 	struct priorityQueue priorityQueues[MAX_PRIORITY];	
 };
 
-void kernelInit(struct kernelGlobal*);
-
-struct task* getNextReady(struct kernelGlobal*);
-
 #endif

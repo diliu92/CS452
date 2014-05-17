@@ -39,20 +39,16 @@ static void queuesInit(struct kernelGlobal* kernelData){
 	}	
 }
 
-void kernelInit(struct kernelGlobal* kernelData){
-	tasksInit(kernelData);
-	queuesInit(kernelData);
-	/*
-	 * More functions to be added.
-	 */ 
-}
-
 
 int main( int argc, char* argv[] ) {	
 	
 	struct kernelGlobal kernelData;
 	
-	kernelInit(&kernelData);
+	tasksInit(kernelData);
+	queuesInit(kernelData);
+	
+	
+	
 	
 	
 	char str[] = "Hello\n\r";
