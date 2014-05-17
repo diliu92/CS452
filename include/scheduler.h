@@ -5,8 +5,6 @@
 #include <task.h>
 #include <kernel.h>
 
-
-
 #define MAX_PRIORITY 16
  
  
@@ -19,3 +17,6 @@ void pushQueue(kernelGlobal* kernelData, int qIdx, task* tsk);
 
 task* getNextTask(kernelGlobal* kernel_data);
 
+
+
+#endif

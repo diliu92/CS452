@@ -19,7 +19,6 @@ typedef struct kernelGlobal{
 
 void kernelInit(kernelGlobal*);
 
-
-
 task* getNextReady(kernelGlobal*);
 
+#endif

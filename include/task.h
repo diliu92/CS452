@@ -2,8 +2,6 @@
 #define __TASK_H__
 
 
-
-
 #define MAX_TASK 	64
 #define STACK_SIZE	4096	//4KB is the best!
 
@@ -18,10 +16,7 @@ typedef enum taskState_t{
 	Event_blocked 
 }taskState_t;
 
-struct task;
-typedef struct task task;
-
-struct task{
+typedef struct task{
 	int tid;
 	unsigned int cpsr;
 	void* sp;	//a pointer to its private stack
@@ -31,10 +26,11 @@ struct task{
 	int priority;
 	int parent_tid;
 	
-	task* nextTask;
-};
+	struct task* nextTask;
+}task;
 
 int CreateTask(int, void (*)());
 
 
 
+#endif
