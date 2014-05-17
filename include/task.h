@@ -1,8 +1,5 @@
-
-
 #define MAX_TASK 	64
 #define STACK_SIZE	4096	//4KB is the best!
-
 
 typedef enum taskState_t{
 	Idle,
@@ -16,7 +13,7 @@ typedef enum taskState_t{
 }taskState_t;
 
 
-typedef struct task{
+typedef struct{
 	int tid;
 	unsigned int cpsr;
 	void* sp;	//a pointer to its private stack
