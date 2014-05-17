@@ -24,9 +24,9 @@ static task* popQueue(kernelGlobal* kernelData, int qIdx){
 	
 	task* retval = qItem->head;
 	
-	qItem->head = (qItem->head)->nextTask;
+	qItem->head = (retval)->nextTask;
 	
-	(qItem->head)->nextTask = NULL;
+	(retval)->nextTask = NULL;
 	/*
 	 * EQC(Empty Queue Check)
 	 */ 

@@ -8,6 +8,6 @@
  */ 
 
 int CreateTask(int priority, void (*code)(),){
-	
+	return 0;
 	
 }

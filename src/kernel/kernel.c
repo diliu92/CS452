@@ -2,17 +2,6 @@
 #include <scheduler.h>
 
 
-static void tasksInit(kernelGlobal*);
-static void queueInit(kernelGlobal*);
-
-void kernelInit(kernelGlobal* kernelData){
-	tasksInit(kernelData);
-	queuesInit(kernelData);
-	/*
-	 * More functions to be added.
-	 */ 
-}
-
 static void tasksInit(kernelGlobal* kernelData){
 	int i;
 	task* tsk;
@@ -47,11 +36,26 @@ static void queuesInit(kernelGlobal*){
 		qItem->head = NULL;
 		qItem->tail = NULL;
 	}	
-
-	for (i = 0; i < MAX_PRIORITY; i++)
-	{
-		(kernelData->whichQueue)[i] = 0;
-	}
 }
+
+void kernelInit(kernelGlobal* kernelData){
+	tasksInit(kernelData);
+	queuesInit(kernelData);
+	/*
+	 * More functions to be added.
+	 */ 
+}
+
+
+int main( int argc, char* argv[] ) {	
+	
+	kernelGlobal kernelData;
+	
+	kernelInit(&kernelData);
+	
+	
+}
+
+
 
 
