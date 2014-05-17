@@ -1,6 +1,4 @@
 #include <kernel.h>
-#include <task.h>
-#include <scheduler.h>
 #include <utils.h>
 
 
