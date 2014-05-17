@@ -5,19 +5,15 @@
 #include <task.h>
 
 #define MAX_PRIORITY 16
- 
-struct priorityQueue;
-typedef struct priorityQueue priorityQueue; 
   
-struct priorityQueue{
-	task* head;	
-	task* tail;		
-}; 
+typedef struct priorityQueue{
+	struct task* head;	
+	struct task* tail;		
+}priorityQueue; 
  
+task* getNextTask(struct kernelGlobal* kernelData);
 
-task* getNextTask(kernelGlobal* kernelData);
-
-void pushQueue(kernelGlobal* kernelData, int qIdx, task* tsk);
+void pushQueue(struct kernelGlobal* kernelData, int qIdx, task* tsk);
 
 
 #endif

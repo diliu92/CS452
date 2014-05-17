@@ -4,18 +4,18 @@
 #include <task.h>
 #include <scheduler.h>
 
-struct kernelGlobal{
+typedef struct kernelGlobal{
 	task tasks[MAX_TASK];
 	char tasks_stack[MAX_TASK*STACK_SIZE];
 	int nextIdleTask;
 	int currentActiveTask;
 	
 	priorityQueue priorityQueues[MAX_PRIORITY];	
-};
-typedef struct kernelGlobal kernelGlobal; 
+}kernelGlobal;
 
-void kernelInit(kernelGlobal*);
 
-task* getNextReady(kernelGlobal*);
+void kernelInit(struct kernelGlobal*);
+
+task* getNextReady(struct kernelGlobal*);
 
 #endif
