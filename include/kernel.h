@@ -6,16 +6,17 @@
 #include <task.h>
 #include <scheduler.h>
 
+struct kernelGlobal;
+typedef struct kernelGlobal kernelGlobal;
 
-typedef struct kernelGlobal{
+struct kernelGlobal{
 	task tasks[MAX_TASK];
 	char tasks_stack[MAX_TASK*STACK_SIZE];
 	int nextIdleTask;
 	int currentActiveTask;
 	
-	priorityQueue priorityQueues[MAX_PRIORITY];
-		
-}kernelGlobal;
+	priorityQueue priorityQueues[MAX_PRIORITY];	
+};
 
 void kernelInit(kernelGlobal*);
 

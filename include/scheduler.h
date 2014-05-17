@@ -7,11 +7,13 @@
 
 #define MAX_PRIORITY 16
  
- 
-typedef struct priorityQueue{
+struct priorityQueue;
+typedef struct priorityQueue priorityQueue; 
+  
+struct priorityQueue{
 	task* head;	
 	task* tail;		
-}priorityQueue; 
+}; 
   
 void pushQueue(kernelGlobal* kernelData, int qIdx, task* tsk);
 
