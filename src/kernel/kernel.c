@@ -44,10 +44,8 @@ static void queuesInit(kernelGlobal*){
 	{
 		qItem = &((kernelData->priorityQueues)[i]);
 		
-		qItem->tid = -1;
-		qItem->priority = -1;
-		qItem->prev = -1;
-		qItem->next = -1;
+		qItem->head = NULL;
+		qItem->tail = NULL;
 	}	
 
 	for (i = 0; i < MAX_PRIORITY; i++)
@@ -60,7 +58,7 @@ static void queuesInit(kernelGlobal*){
 
 
 
-task* getNextReady(kernelGlobal* kernel_data){
+task* getNextTask(kernelGlobal* kernel_data){
 	task* NextReadyTask = NULL;
 	int i;
 	
