@@ -39,7 +39,7 @@ static void queuesInit(struct kernelGlobal* kernelData){
 	}	
 }
 
-void kernelInit(kernelGlobal* kernelData){
+void kernelInit(struct kernelGlobal* kernelData){
 	tasksInit(kernelData);
 	queuesInit(kernelData);
 	/*

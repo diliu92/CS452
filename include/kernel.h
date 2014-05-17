@@ -16,6 +16,6 @@ struct kernelGlobal{
 
 void kernelInit(struct kernelGlobal*);
 
-task* getNextReady(struct kernelGlobal*);
+struct task* getNextReady(struct kernelGlobal*);
 
 #endif
