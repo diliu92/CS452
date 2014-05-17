@@ -14,7 +14,7 @@ static int findNextPriorityQueue(struct kernelGlobal* kernelData){
 	
 	for (i = 0; i < MAX_PRIORITY; i++)
 	{
-		if (isQueueEmpty(kernelData, i)
+		if (isQueueEmpty(kernelData, i))
 			continue;
 		return i;
 	}
@@ -49,7 +49,7 @@ struct task* getNextTask(struct kernelGlobal* kernelData){
 }
 
 
-void pushQueue(struct kernelGlobal* kernelData, int qIdx, task* tsk){
+void pushQueue(struct kernelGlobal* kernelData, int qIdx, struct task* tsk){
 	struct priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
 
 	if (isQueueEmpty(kernelData, qIdx)){
