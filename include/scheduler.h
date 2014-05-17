@@ -1,9 +1,8 @@
 #ifndef __SCHEDULER_H__
 #define __SCHEDULER_H__
 
-
-#include <task.h>
 #include <kernel.h>
+#include <task.h>
 
 #define MAX_PRIORITY 16
  
@@ -14,11 +13,11 @@ struct priorityQueue{
 	task* head;	
 	task* tail;		
 }; 
-  
-void pushQueue(kernelGlobal*,int,task*);
+ 
 
-task* getNextTask(kernelGlobal*);
+task* getNextTask(kernelGlobal* kernelData);
 
+void pushQueue(kernelGlobal* kernelData, int qIdx, task* tsk);
 
 
 #endif
