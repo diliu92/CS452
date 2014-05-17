@@ -9,7 +9,6 @@
 
 #define MAX_PRIORITY 16
 
-
 struct kernelGlobal{
 	struct task tasks[MAX_TASK];
 	char tasks_stack[MAX_TASK*STACK_SIZE];
