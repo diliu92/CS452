@@ -30,7 +30,7 @@ typedef struct task{
 	int priority;
 	int parent_tid;
 	
-	task* nextTask;
+	struct task* nextTask;
 }task; 
 
 typedef struct priorityQueue{
