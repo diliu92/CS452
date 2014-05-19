@@ -15,7 +15,7 @@
 #define SYSCALL_REPLY			8
 
 
-
+/*
 typedef struct requestMessage{
 
 }
@@ -37,7 +37,7 @@ void pushQueue(struct kernelGlobal* kernelData, int qIdx, struct task* tsk);
 
 
 
-
+*/
 
 
 #endif
