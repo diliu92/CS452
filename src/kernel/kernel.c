@@ -45,8 +45,8 @@ int main( int argc, char* argv[] ) {
 	
 	kernGlobal kernelData;
 	
-	tasksInit(kernelData);
-	queuesInit(kernelData);
+	tasksInit(&kernelData);
+	queuesInit(&kernelData);
 	
 	
 	
