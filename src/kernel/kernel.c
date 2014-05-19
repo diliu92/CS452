@@ -4,9 +4,9 @@
 #include <common/bwio.h>
 #include <common/ts7200.h>
 
-static void tasksInit(struct kernelGlobal* kernelData){
+static void tasksInit(kernelGlobal* kernelData){
 	int i;
-	struct task* tsk;
+	task* tsk;
 	
 	for (i = 0; i < MAX_TASK; i++)
 	{
@@ -27,9 +27,9 @@ static void tasksInit(struct kernelGlobal* kernelData){
 	
 }
 
-static void queuesInit(struct kernelGlobal* kernelData){
+static void queuesInit(kernelGlobal* kernelData){
 	int i;
-	struct priorityQueue* qItem;
+	priorityQueue* qItem;
 		
 	for (i = 0; i < MAX_PRIORITY; i++)
 	{
@@ -43,7 +43,7 @@ static void queuesInit(struct kernelGlobal* kernelData){
 
 int main( int argc, char* argv[] ) {	
 	
-	struct kernelGlobal kernelData;
+	kernelGlobal kernelData;
 	
 	tasksInit(kernelData);
 	queuesInit(kernelData);
