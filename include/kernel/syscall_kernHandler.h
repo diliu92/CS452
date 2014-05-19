@@ -30,7 +30,7 @@ typedef struct requestMessage_Create{
 
 typedef struct requestMessage_Send{
 	int syscall_uid;
-	int priority;
+	int Tid;
 	void (*code)();
 }requestMessage_Send;
 
