@@ -33,7 +33,7 @@ static int Scheduler_findNextPriorityQueue(kernGlobal* kernelData){
 	
 	for (i = 0; i < MAX_PRIORITY; i++)
 	{
-		if (isQueueEmpty(kernelData, i))
+		if (Scheduler_isQueueEmpty(kernelData, i))
 			continue;
 		return i;
 	}
@@ -59,10 +59,10 @@ static task* Scheduler_popQueue(kernGlobal* kernelData, int qIdx){
 }
 
 task* Scheduler_getNextTask(kernGlobal* kernelData){	
-	int i = findNextPriorityQueue(kernelData);
+	int i = Scheduler_findNextPriorityQueue(kernelData);
 	
 	if (i >= 0)
-		return popQueue(kernelData, i);
+		return Scheduler_popQueue(kernelData, i);
 			
 	return NULL;
 }
@@ -71,7 +71,7 @@ task* Scheduler_getNextTask(kernGlobal* kernelData){
 void Scheduler_pushQueue(kernGlobal* kernelData, int qIdx, task* tsk){
 	priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
 
-	if (isQueueEmpty(kernelData, qIdx)){
+	if (Scheduler_isQueueEmpty(kernelData, qIdx)){
 			qItem->head=tsk;
 			qItem->tail=tsk;
 	}
