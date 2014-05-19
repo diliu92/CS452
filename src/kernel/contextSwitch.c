@@ -1,8 +1,8 @@
  /*
 * mmutest.c
 */
-#include <bwio.h>
-#include <ts7200.h>
+#include <common/bwio.h>
+#include <common/ts7200.h>
 int main( int argc, char* argv[] ) {
 	int data, *junk;
 	data = (int *) junk;
