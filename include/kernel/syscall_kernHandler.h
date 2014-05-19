@@ -14,10 +14,38 @@
 
 
 
+/*
+ * for syscall functions that have no arguments
+ */ 
+typedef struct requestMessage{
+	int syscall_uid;
+}requestMessage;
 
+/*
+typedef struct requestMessage_Create{
+	int syscall_uid;
+	int priority;
+	void (*code)();
+}requestMessage_Create;
 
+typedef struct requestMessage_Send{
+	int syscall_uid;
+	int priority;
+	void (*code)();
+}requestMessage_Send;
 
+typedef struct requestMessage_Create{
+	int syscall_uid;
+	int priority;
+	void (*code)();
+}requestMessage_Create;
 
+typedef struct requestMessage_Create{
+	int syscall_uid;
+	int priority;
+	void (*code)();
+}requestMessage_Create;
+*/
 
 
 #endif
