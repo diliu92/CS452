@@ -4,7 +4,7 @@
 #include <common/bwio.h>
 #include <common/ts7200.h>
 
-static void tasksInit(kernelGlobal* kernelData){
+static void tasksInit(kernGlobal* kernelData){
 	int i;
 	task* tsk;
 	
@@ -27,7 +27,7 @@ static void tasksInit(kernelGlobal* kernelData){
 	
 }
 
-static void queuesInit(kernelGlobal* kernelData){
+static void queuesInit(kernGlobal* kernelData){
 	int i;
 	priorityQueue* qItem;
 		
@@ -43,7 +43,7 @@ static void queuesInit(kernelGlobal* kernelData){
 
 int main( int argc, char* argv[] ) {	
 	
-	kernelGlobal kernelData;
+	kernGlobal kernelData;
 	
 	tasksInit(kernelData);
 	queuesInit(kernelData);
