@@ -2,8 +2,6 @@
 #define __KERNEL_H__
 
 
-
-
 #include <kernel/kernGlobal.h>
 #include <kernel/syscall_kern.h>
 

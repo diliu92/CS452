@@ -5,9 +5,6 @@
 #include <kernel/kernGlobal.h>
 
 
-
-
-
 #define SYSCALL_CREATE 			1
 #define SYSCALL_MY_TID			2
 #define SYSCALL_MY_PARENT_TID	3

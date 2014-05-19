@@ -1,7 +1,8 @@
 #include <kernel.h>
-#include <utils.h>
-#include <bwio.h>
-#include <ts7200.h>
+
+#include <common/utils.h>
+#include <common/bwio.h>
+#include <common/ts7200.h>
 
 static void tasksInit(struct kernelGlobal* kernelData){
 	int i;
