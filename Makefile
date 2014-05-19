@@ -24,8 +24,7 @@ LDFLAGS = -init main -Map $(OUT_DIR)/main.map -N  -T orex.ld -L/u/wbcowan/gnuarm
 
 OBJS = 	$(OUT_DIR)/kernel.o		\
 	$(OUT_DIR)/syscall_kern.o	\
-	$(OUT_DIR)/bwio.o		\
-	$(OUT_DIR)/contextSwitch.o	
+	$(OUT_DIR)/bwio.o			
 
 
 all: kernel.elf
@@ -33,10 +32,10 @@ all: kernel.elf
 kernel.elf: $(OBJS)
 	$(LD) $(LDFLAGS) -o $@ $(OBJS) -lgcc		
 
-$(OUT_DIR)/kernel.o: $(OUT_DIR)/kernel.s
-	$(AS) 	-o $(OUT_DIR)/kernel.o 	$(ASFLAGS) $(OUT_DIR)/kernel.s
-$(OUT_DIR)/kernel.s:
-	$(XCC) 	-o $(OUT_DIR)/kernel.s 	-S $(CFLAGS) $(SRC_KERN_DIR)/kernel.c
+$(OUT_DIR)/kernel.o: $(SRC_KERN_DIR)/kernel.s
+	$(AS) 	-o $(OUT_DIR)/kernel.o 	$(ASFLAGS) $(SRC_KERN_DIR)/kernel.s
+$(SRC_KERN_DIR)/kernel.s:
+	$(XCC) 	-o $(SRC_KERN_DIR)/kernel.s 	-S $(CFLAGS) $(SRC_KERN_DIR)/kernel.c
 
 $(OUT_DIR)/syscall_kern.o: $(OUT_DIR)/syscall_kern.s
 	$(AS) 	-o $(OUT_DIR)/syscall_kern.o 	$(ASFLAGS) $(OUT_DIR)/syscall_kern.s
@@ -49,8 +48,8 @@ $(OUT_DIR)/bwio.o: $(OUT_DIR)/bwio.s
 $(OUT_DIR)/bwio.s: 
 	$(XCC) 	-o $(OUT_DIR)/bwio.s 	-S $(CFLAGS) $(SRC_COMMON_DIR)/bwio.c
 
-$(OUT_DIR)/contextSwitch.o: 
-	$(AS)	-o $(OUT_DIR)/contextSwitch.o 	$(ASFLAGS) $(SRC_KERN_DIR)/contextSwitch.s
+#$(OUT_DIR)/contextSwitch.o: 
+#	$(AS)	-o $(OUT_DIR)/contextSwitch.o 	$(ASFLAGS) $(SRC_KERN_DIR)/contextSwitch.s
 
 #$(OUT_DIR)/contextSwitch.o: $(OUT_DIR)/contextSwitch.s 
 #	$(AS)	-o $(OUT_DIR)/contextSwitch.o 	$(ASFLAGS) $(SRC_KERN_DIR)/contextSwitch.s
@@ -58,4 +57,4 @@ $(OUT_DIR)/contextSwitch.o:
 #	$(XCC) 	-o $(SRC_KERN_DIR)/contextSwitch.s 	-S $(CFLAGS) $(SRC_KERN_DIR)/contextSwitch.c	
 
 clean:
-	-rm -f $(OUT_DIR)/kernel.elf $(OUT_DIR)/*.s $(OUT_DIR)/*.o $(OUT_DIR)/main.map
+	-rm -f kernel.elf $(OUT_DIR)/*.s $(OUT_DIR)/*.o $(OUT_DIR)/main.map

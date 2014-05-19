@@ -4,6 +4,7 @@
 #include <common/bwio.h>
 #include <common/ts7200.h>
 
+/*
 static void tasksInit(kernGlobal* kernelData){
 	int i;
 	task* tsk;
@@ -39,37 +40,21 @@ static void queuesInit(kernGlobal* kernelData){
 		qItem->tail = NULL;
 	}	
 }
+*/
 
-/*
 int main( int argc, char* argv[] ) {	
 	
-	kernGlobal kernelData;
+	//kernGlobal kernelData;
 	
-	tasksInit(&kernelData);
-	queuesInit(&kernelData);
-	
-	
-	
-	
-	
-	
-	
-	char str[] = "Hello\n\r";
+	//tasksInit(&kernelData);
+	//queuesInit(&kernelData);
+	 
 	bwsetfifo( COM2, OFF );
-	bwputstr( COM2, str );
-	bwputw( COM2, 10, '*', str );
 	bwprintf( COM2, "Hello world.\n\r" );
-	bwprintf( COM2, "%s world%u.\n\r", "Well, hello", 23 );
-	bwprintf( COM2, "%d worlds for %u person.\n\r", -23, 1 );
-	bwprintf( COM2, "%x worlds for %d people.\n\r", -23, 723 );
-	str[0] = bwgetc( COM2 );
-	bwprintf( COM2, "%s", str );
-	
-	
 	
 	return 0;
 }
-*/
+
 
 
 
