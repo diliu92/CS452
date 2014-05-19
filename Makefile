@@ -34,7 +34,7 @@ kernel.elf: $(OBJS)
 $(OUT_DIR)/kernel.o: $(OUT_DIR)/kernel.s
 	$(AS) 	-o $(OUT_DIR)/kernel.o 	$(ASFLAGS) $(OUT_DIR)/kernel.s
 $(OUT_DIR)/kernel.s:
-	$(XCC) 	-o $(OUT_DIR)/kernel.s 	-S $(CFLAGS) $(SRC_DIR)/kernel/kernel.c
+	$(XCC) 	-o $(OUT_DIR)/kernel.s 	-S $(CFLAGS) $(SRC_KERN_DIR)/kernel.c
 
 $(OUT_DIR)/syscall_kern.o: $(OUT_DIR)/syscall_kern.s
 	$(AS) 	-o $(OUT_DIR)/syscall_kern.o 	$(ASFLAGS) $(OUT_DIR)/syscall_kern.s
