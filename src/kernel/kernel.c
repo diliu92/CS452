@@ -3,7 +3,7 @@
 #include <common/utils.h>
 #include <common/bwio.h>
 #include <common/ts7200.h>
-
+/*
 
 static void tasksInit(kernGlobal* kernelData){
 	int i;
@@ -40,14 +40,14 @@ static void queuesInit(kernGlobal* kernelData){
 		qItem->tail = NULL;
 	}	
 }
-
+*/
 
 int main( int argc, char* argv[] ) {	
 	
-	kernGlobal kernelData;
+	//kernGlobal kernelData;
 	
-	tasksInit(&kernelData);
-	queuesInit(&kernelData);
+	//tasksInit(&kernelData);
+	//queuesInit(&kernelData);
 	 
 	bwsetfifo( COM2, OFF );
 	bwprintf( COM2, "Hello world.\n\r" );
