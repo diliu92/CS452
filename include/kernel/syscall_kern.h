@@ -7,14 +7,6 @@
 
 /*
 
-typedef struct requestMessage{
-
-}
-
-
-
-
-
 
 
 
