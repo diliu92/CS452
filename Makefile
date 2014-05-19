@@ -49,7 +49,7 @@ $(OUT_DIR)/bwio.o: $(OUT_DIR)/bwio.s
 $(OUT_DIR)/bwio.s: 
 	$(XCC) 	-o $(OUT_DIR)/bwio.s 	-S $(CFLAGS) $(SRC_COMMON_DIR)/bwio.c
 
-$(OUT_DIR)/contextSwitch.o: $(OUT_DIR)/contextSwitch.s
+$(OUT_DIR)/contextSwitch.o: $(OUT_DIR)/contextSwitch.s 
 	$(AS)	-o $(OUT_DIR)/contextSwitch.o 	$(ASFLAGS) $(OUT_DIR)/contextSwitch.s
 #$(OUT_DIR)/contextSwitch.s: 
 #	$(XCC) 	-o $(OUT_DIR)/contextSwitch.s 	-S $(CFLAGS) $(SRC_KERN_DIR)/contextSwitch.c	
