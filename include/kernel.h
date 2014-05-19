@@ -4,6 +4,7 @@
 
 #include <kernel/kernGlobal.h>
 #include <kernel/syscall_kern.h>
+#include <kernel/syscall_kernHandler.h>
 
 
 #endif
