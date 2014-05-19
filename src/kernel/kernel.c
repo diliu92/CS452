@@ -52,6 +52,8 @@ int main( int argc, char* argv[] ) {
 	
 	
 	
+	
+	
 	char str[] = "Hello\n\r";
 	bwsetfifo( COM2, OFF );
 	bwputstr( COM2, str );
