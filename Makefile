@@ -24,7 +24,9 @@ LDFLAGS = -init main -Map $(OUT_DIR)/main.map -N  -T orex.ld -L/u/wbcowan/gnuarm
 
 OBJS = 	$(OUT_DIR)/kernel.o		\
 	$(OUT_DIR)/syscall_kern.o	\
-	$(OUT_DIR)/bwio.o	
+	$(OUT_DIR)/bwio.o		\
+	$(OUT_DIR)/contextSwitch.s	
+
 
 all: kernel.elf
 
@@ -46,6 +48,9 @@ $(OUT_DIR)/bwio.o: $(OUT_DIR)/bwio.s
 	$(AS)	-o $(OUT_DIR)/bwio.o 	$(ASFLAGS) $(OUT_DIR)/bwio.s
 $(OUT_DIR)/bwio.s: 
 	$(XCC) 	-o $(OUT_DIR)/bwio.s 	-S $(CFLAGS) $(SRC_COMMON_DIR)/bwio.c
+
+$(OUT_DIR)/contextSwitch.s: 
+	$(XCC) 	-o $(OUT_DIR)/contextSwitch.s 	-S $(CFLAGS) $(SRC_KERN_DIR)/contextSwitch.c	
 
 clean:
 	-rm -f $(OUT_DIR)/main.elf $(OUT_DIR)/*.s $(OUT_DIR)/*.o $(OUT_DIR)/main.map

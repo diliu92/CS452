@@ -15,6 +15,18 @@
 #define SYSCALL_REPLY			8
 
 
+
+typedef struct requestMessage{
+
+}
+
+
+
+
+
+
+
+
 int CreateTask(int, void (*)());
 
 
