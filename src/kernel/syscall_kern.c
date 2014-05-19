@@ -8,7 +8,7 @@
  * priority(1 to 16, inclusive)
  */ 
 
-int CreateTask(int priority, void (*code)()){
+int Task_Create(int priority, void (*code)()){
 	return 0;
 	
 }
@@ -20,13 +20,13 @@ int CreateTask(int priority, void (*code)()){
  */ 
 
 
-static int isQueueEmpty(struct kernelGlobal* kernelData, int qIdx){
-	struct priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
+static int Scheduler_isQueueEmpty(kernGlobal* kernelData, int qIdx){
+	priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
 	
 	return (qItem->head == NULL && qItem->tail == NULL) ? 1 : 0;
 }
 
-static int findNextPriorityQueue(struct kernelGlobal* kernelData){
+static int Scheduler_findNextPriorityQueue(kernGlobal* kernelData){
 	int i;
 	
 	for (i = 0; i < MAX_PRIORITY; i++)
@@ -38,10 +38,10 @@ static int findNextPriorityQueue(struct kernelGlobal* kernelData){
 	return -1;
 }
 
-static struct task* popQueue(struct kernelGlobal* kernelData, int qIdx){
-	struct priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
+static task* Scheduler_popQueue(kernGlobal* kernelData, int qIdx){
+	priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
 	
-	struct task* retval = qItem->head;
+	task* retval = qItem->head;
 	
 	qItem->head = (retval)->nextTask;
 	
@@ -56,7 +56,7 @@ static struct task* popQueue(struct kernelGlobal* kernelData, int qIdx){
 	return retval;
 }
 
-struct task* getNextTask(struct kernelGlobal* kernelData){	
+task* Scheduler_getNextTask(kernGlobal* kernelData){	
 	int i = findNextPriorityQueue(kernelData);
 	
 	if (i >= 0)
@@ -66,8 +66,8 @@ struct task* getNextTask(struct kernelGlobal* kernelData){
 }
 
 
-void pushQueue(struct kernelGlobal* kernelData, int qIdx, struct task* tsk){
-	struct priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
+void Scheduler_pushQueue(kernGlobal* kernelData, int qIdx, task* tsk){
+	priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
 
 	if (isQueueEmpty(kernelData, qIdx)){
 			qItem->head=tsk;
