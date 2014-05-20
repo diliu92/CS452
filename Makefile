@@ -22,8 +22,9 @@ ASFLAGS	= -mcpu=arm920t -mapcs-32
 
 LDFLAGS = -init main -Map $(OUT_DIR)/main.map -N  -T orex.ld -L/u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2
 
-OBJS = 	$(OUT_DIR)/kernel.o		\
-	$(OUT_DIR)/syscall_kern.o	\
+OBJS = 	$(OUT_DIR)/kernel.o			\
+	$(OUT_DIR)/syscall_kern.o		\
+	$(OUT_DIR)/syscall_kernHandler.o	\
 	$(OUT_DIR)/bwio.o			
 
 
@@ -42,6 +43,10 @@ $(OUT_DIR)/syscall_kern.o: $(OUT_DIR)/syscall_kern.s
 $(OUT_DIR)/syscall_kern.s:
 	$(XCC) 	-o $(OUT_DIR)/syscall_kern.s 	-S $(CFLAGS) $(SRC_KERN_DIR)/syscall_kern.c
 
+$(OUT_DIR)/syscall_kernHandler.o: $(OUT_DIR)/syscall_kernHandler.s
+	$(AS) 	-o $(OUT_DIR)/syscall_kernHandler.o 	$(ASFLAGS) $(OUT_DIR)/syscall_kernHandler.s
+$(OUT_DIR)/syscall_kernHandler.s:
+	$(XCC) 	-o $(OUT_DIR)/syscall_kernHandler.s 	-S $(CFLAGS) $(SRC_KERN_DIR)/syscall_kernHandler.c
 
 $(OUT_DIR)/bwio.o: $(OUT_DIR)/bwio.s
 	$(AS)	-o $(OUT_DIR)/bwio.o 	$(ASFLAGS) $(OUT_DIR)/bwio.s
