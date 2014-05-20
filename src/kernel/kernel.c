@@ -3,7 +3,6 @@
 #include <common/utils.h>
 #include <common/bwio.h>
 #include <common/ts7200.h>
-/*
 
 static void tasksInit(kernGlobal* kernelData){
 	int i;
@@ -41,17 +40,35 @@ static void queuesInit(kernGlobal* kernelData){
 		qItem->tail = NULL;
 	}	
 }
-*/
+
+void kerent(){}
+
+void kerxit( task *active, requestMessage *req ) {
+	bwprintf( COM2, "kerxit.c: Hello.\n\r" );
+	bwprintf( COM2, "kerxit.c: Activating.\n\r" );
+	kerent( );
+	bwprintf( COM2, "kerxit.c: Good-bye.\n\r" );
+}
 
 int main( int argc, char* argv[] ) {	
 	
-	//kernGlobal kernelData;
-	
-	//tasksInit(&kernelData);
-	//queuesInit(&kernelData);
+	kernGlobal kernelData;
+	requestMessage* req;
+	task* active;
+	int i;
+
+	bwsetfifo(COM2, OFF);
+
+	tasksInit(&kernelData);
+	queuesInit(&kernelData);
 	 
-	bwsetfifo( COM2, OFF );
-	bwprintf( COM2, "Hello world.\n\r" );
+	for( i = 0; i < 4; i++ ) {
+		active = Scheduler_getNextReadyTask(&kernelData);
+		if (active != NULL){
+			kerxit (active, req);// req is a pointer to a Request
+			syscall_kernHandler( &kernelData, req );
+		}
+	}
 	
 	return 0;
 }
