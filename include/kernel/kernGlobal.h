@@ -9,6 +9,9 @@
 #define MAX_PRIORITY 16
 
 
+#define PARENT_TID_FOR_FIRST_TASK	-1
+
+
 typedef enum taskState_t{
 	Idle,
 	Ready,
@@ -41,8 +44,8 @@ typedef struct priorityQueue{
 typedef struct kernGlobal{
 	task tasks[MAX_TASK];
 	char tasks_stack[MAX_TASK*STACK_SIZE];
-	int nextIdleTask;
-	int currentActiveTask;
+	int nextTaskUID;
+	task* currentActiveTask;
 	
 	priorityQueue priorityQueues[MAX_PRIORITY];	
 }kernGlobal;

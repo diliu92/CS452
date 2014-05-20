@@ -10,9 +10,25 @@
  * priority(1 to 16, inclusive)
  */ 
 
-int Task_create(int priority, void (*code)()){
-	return 0;
+int Task_create(kernGlobal* kernelData, int priority, void (*code)()){
+	if(!(priority >=1 && priority <=16))
+		return -1;
+	if(kernelData->nextIdleTask == MAX_TASK)
+		return -2;
 	
+	task* tsk = &((kernelData->tasks)[kernelData->nextTaskUID]);
+	
+	tsk->pc = code;
+	
+	tsk->state = Ready;
+	tsk->priority = priority;
+	tsk->parent_tid = (kernelData->currentActiveTask == NULL) ?	PARENT_TID_FOR_FIRST_TASK : kernelData->currentActiveTask->tid;
+	
+	tsk->nextTask = NULL;
+	
+	Scheduler_pushQueue(kernelData, priority-1, tsk);
+	
+	return tsk->tid;
 }
 
 

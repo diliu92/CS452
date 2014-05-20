@@ -13,21 +13,22 @@
 #define SYSCALL_REPLY			8
 
 
-
+ 
 /*
  * for syscall functions that have no arguments
  */ 
 typedef struct requestMessage{
-	int syscall_uid;
+	int syscall_uid;	
 }requestMessage;
 
-/*
+
 typedef struct requestMessage_Create{
 	int syscall_uid;
 	int priority;
 	void (*code)();
 }requestMessage_Create;
 
+/*
 typedef struct requestMessage_Send{
 	int syscall_uid;
 	int Tid;
@@ -47,5 +48,6 @@ typedef struct requestMessage_Create{
 }requestMessage_Create;
 */
 
+int syscall_kernHandler(kernGlobal* kernelData, requestMessage* req);
 
 #endif
