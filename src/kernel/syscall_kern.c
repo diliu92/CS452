@@ -13,7 +13,7 @@
 int Task_create(kernGlobal* kernelData, int priority, void (*code)()){
 	if(!(priority >=1 && priority <=16))
 		return -1;
-	if(kernelData->nextIdleTask == MAX_TASK)
+	if(kernelData->nextTaskUID == MAX_TASK)
 		return -2;
 	
 	task* tsk = &((kernelData->tasks)[kernelData->nextTaskUID]);

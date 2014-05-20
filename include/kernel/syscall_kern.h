@@ -16,7 +16,7 @@
  * priority(1 to 16, inclusive)
  */ 
 
-int Task_create(int priority, void (*code)());
+int Task_create(kernGlobal* kernelData, int priority, void (*code)());
 
 
 
