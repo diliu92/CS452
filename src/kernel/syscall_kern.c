@@ -74,7 +74,7 @@ static task* Scheduler_popQueue(kernGlobal* kernelData, int qIdx){
 	return retval;
 }
 
-task* Scheduler_getNextTask(kernGlobal* kernelData){	
+task* Scheduler_getNextReadyTask(kernGlobal* kernelData){	
 	int i = Scheduler_findNextPriorityQueue(kernelData);
 	
 	if (i >= 0)
