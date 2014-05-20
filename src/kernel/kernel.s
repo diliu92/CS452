@@ -55,8 +55,21 @@ tasksInit:
 	ldr	r3, [fp, #-20]
 	cmp	r3, #63
 	ble	.L3
+	ldr	r1, [fp, #-24]
+	ldr	r2, .L6
+	mov	r3, #0
+	str	r3, [r1, r2]
+	ldr	r1, [fp, #-24]
+	ldr	r2, .L6+4
+	mov	r3, #0
+	str	r3, [r1, r2]
 	sub	sp, fp, #12
 	ldmfd	sp, {fp, sp, pc}
+.L7:
+	.align	2
+.L6:
+	.word	264192
+	.word	264196
 	.size	tasksInit, .-tasksInit
 	.align	2
 	.type	queuesInit, %function
@@ -70,10 +83,10 @@ queuesInit:
 	str	r0, [fp, #-24]
 	mov	r3, #0
 	str	r3, [fp, #-20]
-	b	.L7
-.L8:
+	b	.L9
+.L10:
 	ldr	r3, [fp, #-24]
-	ldr	r2, .L11
+	ldr	r2, .L13
 	add	r2, r3, r2
 	ldr	r3, [fp, #-20]
 	mov	r3, r3, asl #3
@@ -88,15 +101,15 @@ queuesInit:
 	ldr	r3, [fp, #-20]
 	add	r3, r3, #1
 	str	r3, [fp, #-20]
-.L7:
+.L9:
 	ldr	r3, [fp, #-20]
 	cmp	r3, #15
-	ble	.L8
+	ble	.L10
 	sub	sp, fp, #12
 	ldmfd	sp, {fp, sp, pc}
-.L12:
+.L14:
 	.align	2
-.L11:
+.L13:
 	.word	264200
 	.size	queuesInit, .-queuesInit
 	.align	2
@@ -131,33 +144,33 @@ kerxit:
 	stmfd	sp!, {sl, fp, ip, lr, pc}
 	sub	fp, ip, #4
 	sub	sp, sp, #8
-	ldr	sl, .L18
-.L17:
+	ldr	sl, .L20
+.L19:
 	add	sl, pc, sl
 	str	r0, [fp, #-20]
 	str	r1, [fp, #-24]
 	mov	r0, #1
-	ldr	r3, .L18+4
+	ldr	r3, .L20+4
 	add	r3, sl, r3
 	mov	r1, r3
 	bl	bwprintf(PLT)
 	mov	r0, #1
-	ldr	r3, .L18+8
+	ldr	r3, .L20+8
 	add	r3, sl, r3
 	mov	r1, r3
 	bl	bwprintf(PLT)
 	bl	kerent(PLT)
 	mov	r0, #1
-	ldr	r3, .L18+12
+	ldr	r3, .L20+12
 	add	r3, sl, r3
 	mov	r1, r3
 	bl	bwprintf(PLT)
 	sub	sp, fp, #16
 	ldmfd	sp, {sl, fp, sp, pc}
-.L19:
+.L21:
 	.align	2
-.L18:
-	.word	_GLOBAL_OFFSET_TABLE_-(.L17+8)
+.L20:
+	.word	_GLOBAL_OFFSET_TABLE_-(.L19+8)
 	.word	.LC0(GOTOFF)
 	.word	.LC1(GOTOFF)
 	.word	.LC2(GOTOFF)
@@ -174,30 +187,30 @@ main:
 	sub	sp, sp, #262144
 	sub	sp, sp, #2192
 	sub	sp, sp, #12
-	ldr	r3, .L27
+	ldr	r3, .L29
 	sub	r2, fp, #12
 	str	r0, [r2, r3]
-	ldr	r3, .L27+4
+	ldr	r3, .L29+4
 	sub	r2, fp, #12
 	str	r1, [r2, r3]
 	mov	r0, #1
 	mov	r1, #0
 	bl	bwsetfifo(PLT)
-	ldr	r3, .L27+8
+	ldr	r3, .L29+8
 	sub	r2, fp, #12
 	add	r3, r2, r3
 	mov	r0, r3
 	bl	tasksInit(PLT)
-	ldr	r3, .L27+8
+	ldr	r3, .L29+8
 	sub	r2, fp, #12
 	add	r3, r2, r3
 	mov	r0, r3
 	bl	queuesInit(PLT)
 	mov	r3, #0
 	str	r3, [fp, #-16]
-	b	.L21
-.L22:
-	ldr	r3, .L27+8
+	b	.L23
+.L24:
+	ldr	r3, .L29+8
 	sub	r2, fp, #12
 	add	r3, r2, r3
 	mov	r0, r3
@@ -206,31 +219,31 @@ main:
 	str	r3, [fp, #-20]
 	ldr	r3, [fp, #-20]
 	cmp	r3, #0
-	beq	.L23
+	beq	.L25
 	ldr	r0, [fp, #-20]
 	ldr	r1, [fp, #-24]
 	bl	kerxit(PLT)
-	ldr	r3, .L27+8
+	ldr	r3, .L29+8
 	sub	r2, fp, #12
 	add	r3, r2, r3
 	mov	r0, r3
 	ldr	r1, [fp, #-24]
 	bl	syscall_kernHandler(PLT)
-.L23:
+.L25:
 	ldr	r3, [fp, #-16]
 	add	r3, r3, #1
 	str	r3, [fp, #-16]
-.L21:
+.L23:
 	ldr	r3, [fp, #-16]
 	cmp	r3, #3
-	ble	.L22
+	ble	.L24
 	mov	r3, #0
 	mov	r0, r3
 	sub	sp, fp, #12
 	ldmfd	sp, {fp, sp, pc}
-.L28:
+.L30:
 	.align	2
-.L27:
+.L29:
 	.word	-264344
 	.word	-264348
 	.word	-264340
