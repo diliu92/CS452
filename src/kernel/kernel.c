@@ -25,7 +25,7 @@ static void tasksInit(kernGlobal* kernelData){
 	}
 	
 	kernelData->nextTaskUID = 0;
-	kernelData->currentActiveTask = NULL;	
+	kernelData->ecurrentActiveTask = NULL;	
 }
 
 static void queuesInit(kernGlobal* kernelData){
