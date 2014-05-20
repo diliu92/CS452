@@ -22,7 +22,7 @@ int Task_create(kernGlobal* kernelData, int priority, void (*code)()){
 	
 	tsk->state = Ready;
 	tsk->priority = priority;
-	tsk->parent_tid = (kernelData->currentActiveTask == NULL) ?	PARENT_TID_FOR_FIRST_TASK : kernelData->currentActiveTask->tid;
+	tsk->parent_tid = (kernelData->currentActiveTask == NULL) ?	0 : kernelData->currentActiveTask->tid;
 	
 	tsk->nextTask = NULL;
 	
@@ -43,7 +43,6 @@ static int Scheduler_isQueueEmpty(kernGlobal* kernelData, int qIdx){
 	
 	return (qItem->head == NULL && qItem->tail == NULL) ? 1 : 0;
 }
-
 static int Scheduler_findNextPriorityQueue(kernGlobal* kernelData){
 	int i;
 	
@@ -55,7 +54,6 @@ static int Scheduler_findNextPriorityQueue(kernGlobal* kernelData){
 	}
 	return -1;
 }
-
 static task* Scheduler_popQueue(kernGlobal* kernelData, int qIdx){
 	priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
 	
