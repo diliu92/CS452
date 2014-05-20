@@ -30,9 +30,10 @@ tasksInit:
 	ldr	r3, [fp, #-20]
 	mov	r3, r3, asl #12
 	add	r3, r2, r3
-	add	r2, r3, #4096
-	ldr	r3, [fp, #-16]
-	str	r2, [r3, #8]
+	add	r3, r3, #4080
+	add	r3, r3, #3
+	ldr	r2, [fp, #-16]
+	str	r3, [r2, #8]
 	ldr	r2, [fp, #-16]
 	mov	r3, #0
 	str	r3, [r2, #12]
@@ -159,7 +160,50 @@ kerxit:
 	add	r3, sl, r3
 	mov	r1, r3
 	bl	bwprintf(PLT)
+/*before*/
+	/* 1 store kernel reg*/
+	mov	ip, sp
+	stmfd	sp!, {r0-sp} 
+	/* 2 switch to system state*/
+	msr	cpsr_c, #0xdf 
+	/* 3 get sp, spsr*/
+	ldr	sp, [r0, #8]
+	ldr	r3, [r0, #4]
+	/* 4 pop the regs of active task */
+	ldmfd	sp, {r0-r12}
+	/* 6 return to svc state */
+	msr	cpsr_c, #0xd3
+	/* 7 install spsr of the active task*/
+	msr	cpsr, r3
+	/* 8 install the pc of the active task*/
+	ldr pc, [r0, #12]
+/*end before*/
 	bl	kerent(PLT)
+/*after*/
+	/* 1 acquire arguments of the request */
+	/* 2 acquire lr */
+	ldr	r3, [r0, #12]
+	/* 3 change to system state */
+	msr	cpsr_c, #0xdf 
+	/* 4 overwrite lr with value from 2 */
+	ldr	lr, [r3, #0]
+	/* 5 push the registers of the active task onto its stack */
+	ldr	sp, [r0, #8]
+	stmfd	sp!, {r0-r12}
+	/* 6 acquire the sp of the active */
+	/* 7 return to svc state */
+	msr	cpsr_c, #0xd3
+	/* 8 acquire the spsr of the active */
+	ldr	r3, [r0, #4]
+	/* 9 pop the registers of the kernel from its stack*/
+	mov sp, ip
+	ldmfd	sp, {r0-sp} 
+	/* 10 fill in the request with its arguments*/
+	/* 11 put the sp and spsr into the TD of the active task*/
+	str sp, [r0, #8]
+	mrs r3, cpsr
+	str	r3, [r0, #4]
+/*end after*/
 	mov	r0, #1
 	ldr	r3, .L20+12
 	add	r3, sl, r3
@@ -196,23 +240,23 @@ main:
 	mov	r0, #1
 	mov	r1, #0
 	bl	bwsetfifo(PLT)
-	ldr	r3, .L29+8
-	sub	r2, fp, #12
-	add	r3, r2, r3
+	sub	r3, fp, #262144
+	sub	r3, r3, #12
+	sub	r3, r3, #2192
 	mov	r0, r3
 	bl	tasksInit(PLT)
-	ldr	r3, .L29+8
-	sub	r2, fp, #12
-	add	r3, r2, r3
+	sub	r3, fp, #262144
+	sub	r3, r3, #12
+	sub	r3, r3, #2192
 	mov	r0, r3
 	bl	queuesInit(PLT)
 	mov	r3, #0
 	str	r3, [fp, #-16]
 	b	.L23
 .L24:
-	ldr	r3, .L29+8
-	sub	r2, fp, #12
-	add	r3, r2, r3
+	sub	r3, fp, #262144
+	sub	r3, r3, #12
+	sub	r3, r3, #2192
 	mov	r0, r3
 	bl	Scheduler_getNextReadyTask(PLT)
 	mov	r3, r0
@@ -220,14 +264,20 @@ main:
 	ldr	r3, [fp, #-20]
 	cmp	r3, #0
 	beq	.L25
+	ldr	r3, .L29+8
+	sub	r1, fp, #12
+	add	r3, r1, r3
 	ldr	r0, [fp, #-20]
-	ldr	r1, [fp, #-24]
+	mov	r1, r3
 	bl	kerxit(PLT)
 	ldr	r3, .L29+8
-	sub	r2, fp, #12
-	add	r3, r2, r3
+	sub	r1, fp, #12
+	ldr	r2, [r1, r3]
+	sub	r3, fp, #262144
+	sub	r3, r3, #12
+	sub	r3, r3, #2192
 	mov	r0, r3
-	ldr	r1, [fp, #-24]
+	mov	r1, r2
 	bl	syscall_kernHandler(PLT)
 .L25:
 	ldr	r3, [fp, #-16]

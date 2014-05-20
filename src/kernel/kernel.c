@@ -14,7 +14,7 @@ static void tasksInit(kernGlobal* kernelData){
 		
 		tsk->tid = i;
 		tsk->cpsr = 0;
-		tsk->sp = (kernelData->tasks_stack)+(STACK_SIZE*(i+1));
+		tsk->sp = (kernelData->tasks_stack)+(STACK_SIZE*(i+1)) - 13; /*r0-r12*/
 		tsk->pc = NULL;
 		
 		tsk->state = Idle;
@@ -25,7 +25,7 @@ static void tasksInit(kernGlobal* kernelData){
 	}
 	
 	kernelData->nextTaskUID = 0;
-	kernelData->ecurrentActiveTask = NULL;	
+	kernelData->currentActiveTask = NULL;	
 }
 
 static void queuesInit(kernGlobal* kernelData){
@@ -43,7 +43,7 @@ static void queuesInit(kernGlobal* kernelData){
 
 void kerent(){}
 
-void kerxit( task *active, requestMessage *req ) {
+void kerxit( task *active, requestMessage **req ) {
 	bwprintf( COM2, "kerxit.c: Hello.\n\r" );
 	bwprintf( COM2, "kerxit.c: Activating.\n\r" );
 	kerent( );
@@ -65,7 +65,7 @@ int main( int argc, char* argv[] ) {
 	for( i = 0; i < 4; i++ ) {
 		active = Scheduler_getNextReadyTask(&kernelData);
 		if (active != NULL){
-			kerxit (active, req);// req is a pointer to a Request
+			kerxit (active, &req);// req is a pointer to a Request
 			syscall_kernHandler( &kernelData, req );
 		}
 	}
