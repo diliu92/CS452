@@ -9,10 +9,7 @@ int syscall_kernHandler(kernGlobal* kernelData, requestMessage* req){
 	{
 		case SYSCALL_CREATE:
 			return Task_create(kernelData,
-				((requestMessage_Create*)req)->priority, ((requestMessage_Create*)req)->code	);
-			
-		default:
-			
+				((requestMessage_Create*)req)->priority, ((requestMessage_Create*)req)->code	);		
 	}
 	
 	
