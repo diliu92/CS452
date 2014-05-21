@@ -1,9 +1,5 @@
 #include <kernel.h>
 
-#include <common/utils.h>
-#include <common/bwio.h>
-#include <common/ts7200.h>
-
 static void 
 tasksInit(kernGlobal* kernelData){
 	int i;
@@ -47,7 +43,7 @@ void
 kerent(){}
 
 void 
-kerxit( task *active, requestMessage **req ) {
+kerxit( task *active, syscallRequest **req ) {
 	kerent( );
 }
 
@@ -55,7 +51,7 @@ int
 main( int argc, char* argv[] ) {	
 	
 	kernGlobal kernelData;
-	requestMessage* req;
+	syscallRequest* req;
 	task* active;
 	int i;
 
