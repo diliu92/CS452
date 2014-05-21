@@ -60,7 +60,7 @@ main( int argc, char* argv[] ) {
 	tasksInit(&kernelData);
 	queuesInit(&kernelData);
 	
-	Task_create(&kernelData, 3, kernelPartOne)//first_user_task
+	Task_create(&kernelData, 3, kernelPartOne);//first_user_task
 	 
 	for( i = 0; i < 4; i++ ) {
 		active = Scheduler_getNextReadyTask(&kernelData);
