@@ -29,6 +29,8 @@ Task_create(kernGlobal* kernelData, int priority, void (*code)()){
 	
 	Scheduler_pushQueue(kernelData, priority-1, tsk);
 	
+	(kernelData->nextTaskUID)++;
+	
 	return tsk->tid;
 }
 
