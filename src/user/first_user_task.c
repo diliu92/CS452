@@ -4,7 +4,10 @@
 
 static void
 kernelPartOne_worker(){
-	
+	bwprintf( COM2, "My TID: %u, My Parent TID:%u\r\n", MyTid(), MyParentTid());
+	Pass();
+	bwprintf( COM2, "My TID: %u, My Parent TID:%u\r\n", MyTid(), MyParentTid());
+	Exit();	
 }
 
 
@@ -13,8 +16,13 @@ kernelPartOne_worker(){
 
 
 void
-kernelPartOne(){
+kernelPartOne(){	//priority of FUT is 3
+	int Tid_low1 = Create(4,kernelPartOne_worker);
+	int Tid_low2 = Create(4,kernelPartOne_worker);
+	int Tid_high1 = Create(2,kernelPartOne_worker);
+	int Tid_high2 = Create(2,kernelPartOne_worker);	
 	
-	bwprintf( COM2, "Hello world.\n\r" );
+	bwprintf( COM2, "First:exiting\r\n" );
 	
+	Exit();	
 }

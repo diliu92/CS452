@@ -4,7 +4,7 @@
 	.global	kerent
 	.type	kerent, %function
 kerent:
-	@ args = 0, pretend = 0, frame = 4
+	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 1, uses_anonymous_args = 0
 	/* 1 acquire arguments of the request */
 	mov	r2, r0
