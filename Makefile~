@@ -57,7 +57,7 @@ $(OUT_DIR)/syscall_kernHandler.o: $(OUT_DIR)/syscall_kernHandler.s
 $(OUT_DIR)/syscall_kernHandler.s:
 	$(XCC) 	-o $(OUT_DIR)/syscall_kernHandler.s 	-S $(CFLAGS) $(SRC_KERN_DIR)/syscall_kernHandler.c
 
-$(OUT_DIR)/contextSwitch.o: $(SRC_KERN_DIR)/contextSwitch.s: 
+$(OUT_DIR)/contextSwitch.o: $(SRC_KERN_DIR)/contextSwitch.s:
 	$(AS)	-o $(OUT_DIR)/contextSwitch.o 	$(ASFLAGS) $(SRC_KERN_DIR)/contextSwitch.s
 $(SRC_KERN_DIR)/contextSwitch.s: 
 	$(AS)	-o $(SRC_KERN_DIR)/contextSwitch.s	$(ASFLAGS) $(SRC_KERN_DIR)/contextSwitch.c
