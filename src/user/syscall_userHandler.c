@@ -1,4 +1,3 @@
-
 #include <user.h>
 
 
@@ -9,8 +8,8 @@ Create(int priority, void (*code)()){
 	req.priority = priority;
 	req.code = code;
 	
-	//assemblyCode(&req);
-	
+	kerent(&req);
+
 	return req.retval;
 }
 
@@ -19,7 +18,7 @@ MyTid(){
 	syscallRequest req;
 	req.syscall_uid = SYSCALL_MY_TID;
 	
-	//assemblyCode(&req);
+	kerent(&req);
 	
 	return req.retval;
 }
@@ -29,7 +28,7 @@ MyParentTid(){
 	syscallRequest req;
 	req.syscall_uid = SYSCALL_MY_PARENT_TID;
 	
-	//assemblyCode(&req);
+	kerent(&req);
 	
 	return req.retval;	
 }
@@ -39,7 +38,7 @@ Pass(){
 	syscallRequest req;
 	req.syscall_uid = SYSCALL_PASS;
 	
-	//assemblyCode(&req);
+	kerent(&req);
 	
 }
 
@@ -48,7 +47,7 @@ Exit(){
 	syscallRequest req;
 	req.syscall_uid = SYSCALL_EXIT;
 	
-	//assemblyCode(&req);
+	kerent(&req);
 	
 }
 

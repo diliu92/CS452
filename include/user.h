@@ -3,7 +3,7 @@
 
 #include <user/syscall_userHandler.h>
 #include <user/first_user_task.h>
-
+#include <kernel/contextSwitch.h>
 #include <common/syscall_information.h>
 
 #endif

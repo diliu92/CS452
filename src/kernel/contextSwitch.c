@@ -1,9 +1,6 @@
-#include <contextSwitch.h>
+#include <kernel.h>
 
-void
-kerent(){}
+void kerent( syscallRequest *req ){}
 
-void
-kerxit( task *active, syscallRequest **req ) {
-	kerent( );
+void kerxit( task *active, syscallRequest **req ) {
 }

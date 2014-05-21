@@ -1,11 +1,10 @@
 	.file	"contextSwitch.c"
 	.text
 	.align	2
-	.global kerent
+	.global	kerent
 	.type	kerent, %function
-
 kerent:
-	@ args = 0, pretend = 0, frame = 0
+	@ args = 0, pretend = 0, frame = 4
 	@ frame_needed = 1, uses_anonymous_args = 0
 	/* 1 acquire arguments of the request */
 	mov	r2, r0
@@ -24,7 +23,7 @@ kerent:
 	/* 8 acquire the spsr of the active */
 	mrs ip, spsr
 	/* 9 pop the registers of the kernel from its stack*/
-	ldmfd	sp, {r0,r1,r4,r5,r6,r7,r8,r9,r10,r11,r12,lr}
+	ldmfd	sp, {r0,r1,r4,r5,r6,r7,r8,r9,r10,fp}
 	/* 10 fill in the request with its arguments*/
 	str r2, [r1, #0]
 	/* 11 put the sp and spsr into the TD of the active task*/
@@ -39,7 +38,7 @@ kerxit:
 	@ args = 0, pretend = 0, frame = 8
 	@ frame_needed = 1, uses_anonymous_args = 0
 	/* 1 store kernel reg */
-	stmfd	sp!, {r0,r1,r4,r5,r6,r7,r8,r9,r10,r11,r12,lr}
+	stmfd	sp!, {r0,r1,r4,r5,r6,r7,r8,r9,r10,fp}
 	/* 2 switch to system state*/
 	msr	cpsr_c, #0xdf
 	/* 3 get sp, spsr of active */
@@ -54,8 +53,5 @@ kerxit:
 	/* 8 install the pc of the active task*/
 	ldr r3, [r0, #12]
 	movs pc, r3
-	b	kerent
 	.size	kerxit, .-kerxit
-	.align	2
-	.global	main
-	.type	main, %function
+	.ident	"GCC: (GNU) 4.0.2"

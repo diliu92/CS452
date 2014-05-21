@@ -1,15 +1,5 @@
 #include <kernel.h>
 
-
-
-void 
-kerent(){}
-
-void 
-kerxit( task *active, syscallRequest **req ) {
-	kerent( );
-}
-
 int 
 main( int argc, char* argv[] ) {	
 	int i;
