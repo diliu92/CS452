@@ -4,7 +4,8 @@
 #include <common/bwio.h>
 #include <common/ts7200.h>
 
-static void tasksInit(kernGlobal* kernelData){
+static void 
+tasksInit(kernGlobal* kernelData){
 	int i;
 	task* tsk;
 	
@@ -28,7 +29,8 @@ static void tasksInit(kernGlobal* kernelData){
 	kernelData->currentActiveTask = NULL;	
 }
 
-static void queuesInit(kernGlobal* kernelData){
+static void 
+queuesInit(kernGlobal* kernelData){
 	int i;
 	priorityQueue* qItem;
 		
@@ -50,7 +52,8 @@ void kerxit( task *active, requestMessage **req ) {
 	bwprintf( COM2, "kerxit.c: Good-bye.\n\r" );
 }
 
-int main( int argc, char* argv[] ) {	
+int 
+main( int argc, char* argv[] ) {	
 	
 	kernGlobal kernelData;
 	requestMessage* req;
@@ -61,6 +64,8 @@ int main( int argc, char* argv[] ) {
 
 	tasksInit(&kernelData);
 	queuesInit(&kernelData);
+	
+	Task_create(&kernelData,1,	)//first_user_task
 	 
 	for( i = 0; i < 4; i++ ) {
 		active = Scheduler_getNextReadyTask(&kernelData);

@@ -9,8 +9,6 @@
 #define MAX_PRIORITY 16
 
 
-#define PARENT_TID_FOR_FIRST_TASK	-1
-
 
 typedef enum taskState_t{
 	Idle,

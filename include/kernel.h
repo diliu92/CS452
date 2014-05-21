@@ -6,6 +6,9 @@
 #include <kernel/syscall_kern.h>
 #include <kernel/syscall_kernHandler.h>
 
+#include <user/first_user_task.h>
+
+#include <common/syscall_information.h>
 
 #endif
 
