@@ -23,6 +23,7 @@ ASFLAGS	= -mcpu=arm920t -mapcs-32
 LDFLAGS = -init main -Map $(OUT_DIR)/main.map -N  -T orex.ld -L/u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2
 
 OBJS = 	$(OUT_DIR)/kernel.o			\
+	$(OUT_DIR)/kernInit.o			\
 	$(OUT_DIR)/syscall_kern.o		\
 	$(OUT_DIR)/syscall_kernHandler.o	\
 	$(OUT_DIR)/contextSwitch.o		\
@@ -41,6 +42,11 @@ $(OUT_DIR)/kernel.o: $(SRC_KERN_DIR)/kernel.s
 $(SRC_KERN_DIR)/kernel.s:
 	$(XCC) 	-o $(SRC_KERN_DIR)/kernel.s 	-S $(CFLAGS) $(SRC_KERN_DIR)/kernel.c
 
+$(OUT_DIR)/kernInit.o: $(OUT_DIR)/kernInit.s
+	$(AS) 	-o $(OUT_DIR)/kernInit.o 	$(ASFLAGS) $(OUT_DIR)/kernInit.s
+$(OUT_DIR)/kernInit.s:
+	$(XCC) 	-o $(OUT_DIR)/kernInit.s 	-S $(CFLAGS) $(SRC_KERN_DIR)/kernInit.c
+
 $(OUT_DIR)/syscall_kern.o: $(OUT_DIR)/syscall_kern.s
 	$(AS) 	-o $(OUT_DIR)/syscall_kern.o 	$(ASFLAGS) $(OUT_DIR)/syscall_kern.s
 $(OUT_DIR)/syscall_kern.s:
@@ -53,6 +59,8 @@ $(OUT_DIR)/syscall_kernHandler.s:
 
 $(OUT_DIR)/contextSwitch.o: 
 	$(AS)	-o $(OUT_DIR)/contextSwitch.o 	$(ASFLAGS) $(SRC_KERN_DIR)/contextSwitch.s
+$(SRC_KERN_DIR)/contextSwitch.s: 
+	$(AS)	-o $(SRC_KERN_DIR)/contextSwitch.s	$(ASFLAGS) $(SRC_KERN_DIR)/contextSwitch.c
 
 $(OUT_DIR)/syscall_userHandler.o: $(OUT_DIR)/syscall_userHandler.s
 	$(AS) 	-o $(OUT_DIR)/syscall_userHandler.o 	$(ASFLAGS) $(OUT_DIR)/syscall_userHandler.s

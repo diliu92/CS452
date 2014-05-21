@@ -5,6 +5,8 @@
 #include <kernel/kernGlobal.h>
 #include <kernel/syscall_kern.h>
 #include <kernel/syscall_kernHandler.h>
+#include <kernel/kernInit.h>
+#include <kernel/contextSwitch.h>
 
 #include <user/first_user_task.h>
 
