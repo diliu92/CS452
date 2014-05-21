@@ -53,6 +53,7 @@ Scheduler_findNextPriorityQueue(kernGlobal* kernelData){
 	{
 		if (Scheduler_isQueueEmpty(kernelData, i))
 			continue;
+		bwprintf( COM2, "found next %u .\n\r",i );
 		return i;
 	}
 	return -1;

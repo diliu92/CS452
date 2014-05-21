@@ -8,8 +8,9 @@ Create(int priority, void (*code)()){
 	req.priority = priority;
 	req.code = code;
 	
+	bwprintf( COM2, "before kerent.\n\r" );
 	kerent(&req);
-
+	bwprintf( COM2, "after kerent.\n\r" );
 	return req.retval;
 }
 

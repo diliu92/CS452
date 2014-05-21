@@ -9,12 +9,16 @@ main( int argc, char* argv[] ) {
 	task* active;
 
 	Init(&kernelData);
-		 
-	for( i = 0; i < 4; i++ ) {
+
+	bwprintf( COM2, "Hello world.\n\r" );
+
+	for(;;) {
 		active = Scheduler_getNextReadyTask(&kernelData);
 		if (active != NULL){
-			kerxit (active, &req);// req is a pointer to a Request
-			syscall_kernHandler( &kernelData, req );
+			bwprintf( COM2, "Tid=%u\n\r",active->tid);
+			//kerxit (active, &req);// req is a pointer to a Request
+			bwprintf( COM2, "after kerxit.\n\r" );
+			//syscall_kernHandler( &kernelData, req );
 		}
 	}
 	
