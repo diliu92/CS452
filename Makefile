@@ -69,8 +69,5 @@ $(OUT_DIR)/bwio.o: $(OUT_DIR)/bwio.s
 $(OUT_DIR)/bwio.s: 
 	$(XCC) 	-o $(OUT_DIR)/bwio.s 	-S $(CFLAGS) $(SRC_COMMON_DIR)/bwio.c
 
-#$(OUT_DIR)/contextSwitch.o: 
-#	$(AS)	-o $(OUT_DIR)/contextSwitch.o 	$(ASFLAGS) $(SRC_KERN_DIR)/contextSwitch.s
-
 clean:
 	-rm -f kernel.elf $(OUT_DIR)/*.s $(OUT_DIR)/*.o $(OUT_DIR)/main.map
