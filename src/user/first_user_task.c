@@ -15,6 +15,6 @@ kernelPartOne_worker(){
 void
 kernelPartOne(){
 	
-	
+	bwprintf( COM2, "Hello world.\n\r" );
 	
 }
