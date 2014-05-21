@@ -37,10 +37,10 @@ all: kernel.elf
 kernel.elf: $(OBJS)
 	$(LD) $(LDFLAGS) -o $@ $(OBJS) -lgcc		
 
-$(OUT_DIR)/kernel.o: $(SRC_KERN_DIR)/kernel.s
-	$(AS) 	-o $(OUT_DIR)/kernel.o 	$(ASFLAGS) $(SRC_KERN_DIR)/kernel.s
-$(SRC_KERN_DIR)/kernel.s:
-	$(XCC) 	-o $(SRC_KERN_DIR)/kernel.s 	-S $(CFLAGS) $(SRC_KERN_DIR)/kernel.c
+$(OUT_DIR)/kernel.o: $(OUT_DIR)/kernel.s
+	$(AS) 	-o $(OUT_DIR)/kernel.o 	$(ASFLAGS) $(OUT_DIR)/kernel.s
+$(OUT_DIR)/kernel.s:
+	$(XCC) 	-o $(OUT_DIR)/kernel.s 	-S $(CFLAGS) $(SRC_KERN_DIR)/kernel.c
 
 $(OUT_DIR)/kernInit.o: $(OUT_DIR)/kernInit.s
 	$(AS) 	-o $(OUT_DIR)/kernInit.o 	$(ASFLAGS) $(OUT_DIR)/kernInit.s
