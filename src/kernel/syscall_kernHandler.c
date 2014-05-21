@@ -21,9 +21,7 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 											kernelData->currentActiveTask);	
 		case SYSCALL_EXIT:
 			kernelData->currentActiveTask->state = Zombie;
-	}
-	
-	
-	
-	
+	}	
 }
+
+

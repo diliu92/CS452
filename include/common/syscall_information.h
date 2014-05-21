@@ -19,7 +19,7 @@
 typedef struct syscallRequest{
 	int syscall_uid;
 	int retval;
-}requestMessage;
+}syscallRequest;
 
 
 typedef struct syscallRequest_Create{
@@ -27,7 +27,7 @@ typedef struct syscallRequest_Create{
 	int	retval;
 	int priority;
 	void (*code)();
-}requestMessage_Create;
+}syscallRequest_Create;
 
 /*
 typedef struct syscallRequest_Send{
