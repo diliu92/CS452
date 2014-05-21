@@ -3,9 +3,6 @@
 
 
 
-
-
-
 void
 kernelPartOne();
 
