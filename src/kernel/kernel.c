@@ -1,43 +1,6 @@
 #include <kernel.h>
 
-static void 
-tasksInit(kernGlobal* kernelData){
-	int i;
-	task* tsk;
-	
-	for (i = 0; i < MAX_TASK; i++)
-	{
-		tsk = &((kernelData->tasks)[i]);
-		
-		tsk->tid = i;
-		tsk->cpsr = 0;
-		tsk->sp = (kernelData->tasks_stack)+(STACK_SIZE*(i+1)) - 13; /*r0-r12*/
-		tsk->pc = NULL;
-		
-		tsk->state = Idle;
-		tsk->priority = -1;
-		tsk->parent_tid = -1;
-		
-		tsk->nextTask = NULL;
-	}
-	
-	kernelData->nextTaskUID = 0;
-	kernelData->currentActiveTask = NULL;	
-}
 
-static void 
-queuesInit(kernGlobal* kernelData){
-	int i;
-	priorityQueue* qItem;
-		
-	for (i = 0; i < MAX_PRIORITY; i++)
-	{
-		qItem = &((kernelData->priorityQueues)[i]);
-		
-		qItem->head = NULL;
-		qItem->tail = NULL;
-	}	
-}
 
 void 
 kerent(){}
@@ -49,19 +12,14 @@ kerxit( task *active, syscallRequest **req ) {
 
 int 
 main( int argc, char* argv[] ) {	
+	int i;
 	
 	kernGlobal kernelData;
 	syscallRequest* req;
 	task* active;
-	int i;
 
-	bwsetfifo(COM2, OFF);
-
-	tasksInit(&kernelData);
-	queuesInit(&kernelData);
-	
-	Task_create(&kernelData, 3, kernelPartOne);//first_user_task
-	 
+	Init(&kernelData);
+		 
 	for( i = 0; i < 4; i++ ) {
 		active = Scheduler_getNextReadyTask(&kernelData);
 		if (active != NULL){

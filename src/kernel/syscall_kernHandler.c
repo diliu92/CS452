@@ -2,7 +2,6 @@
 #include <kernel.h>
 
 
-
 void 
 syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 	switch (req->syscall_uid)
