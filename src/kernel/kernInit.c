@@ -59,4 +59,5 @@ Init(kernGlobal* kernelData){
 	Task_create(kernelData, 2, kernelPartOne);//first_user_task	//tid:2
 	Task_create(kernelData, 4, kernelPartOne);//first_user_task	//tid:3
 	Task_create(kernelData, 4, kernelPartOne);//first_user_task	//tid:4
+	Task_create(kernelData, 3, kernelPartOne);//first_user_task	//tid:5
 }
