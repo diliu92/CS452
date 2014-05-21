@@ -53,5 +53,6 @@ kerxit:
 	/* 8 install the pc of the active task*/
 	ldr r3, [r0, #12]
 	movs pc, r3
+	b kerent
 	.size	kerxit, .-kerxit
 	.ident	"GCC: (GNU) 4.0.2"
