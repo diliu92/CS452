@@ -43,13 +43,12 @@ queuesInit(kernGlobal* kernelData){
 	}	
 }
 
-void kerent(){}
+void 
+kerent(){}
 
-void kerxit( task *active, requestMessage **req ) {
-	bwprintf( COM2, "kerxit.c: Hello.\n\r" );
-	bwprintf( COM2, "kerxit.c: Activating.\n\r" );
+void 
+kerxit( task *active, requestMessage **req ) {
 	kerent( );
-	bwprintf( COM2, "kerxit.c: Good-bye.\n\r" );
 }
 
 int 
