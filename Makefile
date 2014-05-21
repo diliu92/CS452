@@ -25,6 +25,7 @@ LDFLAGS = -init main -Map $(OUT_DIR)/main.map -N  -T orex.ld -L/u/wbcowan/gnuarm
 OBJS = 	$(OUT_DIR)/kernel.o			\
 	$(OUT_DIR)/syscall_kern.o		\
 	$(OUT_DIR)/syscall_kernHandler.o	\
+	$(OUT_DIR)/contextSwitch.o		\
 	$(OUT_DIR)/syscall_userHandler.o	\
 	$(OUT_DIR)/first_user_task.o		\
 	$(OUT_DIR)/bwio.o			
@@ -49,6 +50,9 @@ $(OUT_DIR)/syscall_kernHandler.o: $(OUT_DIR)/syscall_kernHandler.s
 	$(AS) 	-o $(OUT_DIR)/syscall_kernHandler.o 	$(ASFLAGS) $(OUT_DIR)/syscall_kernHandler.s
 $(OUT_DIR)/syscall_kernHandler.s:
 	$(XCC) 	-o $(OUT_DIR)/syscall_kernHandler.s 	-S $(CFLAGS) $(SRC_KERN_DIR)/syscall_kernHandler.c
+
+$(OUT_DIR)/contextSwitch.o: 
+	$(AS)	-o $(OUT_DIR)/contextSwitch.o 	$(ASFLAGS) $(SRC_KERN_DIR)/contextSwitch.s
 
 $(OUT_DIR)/syscall_userHandler.o: $(OUT_DIR)/syscall_userHandler.s
 	$(AS) 	-o $(OUT_DIR)/syscall_userHandler.o 	$(ASFLAGS) $(OUT_DIR)/syscall_userHandler.s
