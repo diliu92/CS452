@@ -18,7 +18,7 @@ tasksInit(kernGlobal* kernelData){
 		
 		tsk->tid = i;
 		tsk->cpsr = 0;
-		tsk->sp = (kernelData->tasks_stack)+(STACK_SIZE*(i+1)) - 13; /*r0-r12*/
+		tsk->sp = (kernelData->tasks_stack)+(STACK_SIZE*(i+1)) - 13*4; /*r0-r12*/
 		tsk->pc = NULL;
 		
 		tsk->state = Idle;
