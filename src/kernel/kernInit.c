@@ -54,8 +54,8 @@ Init(kernGlobal* kernelData){
 	tasksInit(kernelData);
 	queuesInit(kernelData);
 	
-	Task_create(kernelData, 3, kernelPartOne);//first_user_task
-	Task_create(kernelData, 1, kernelPartOne);//first_user_task
-	Task_create(kernelData, 2, kernelPartOne);//first_user_task
-	Task_create(kernelData, 4, kernelPartOne);//first_user_task
+	Task_create(kernelData, 3, kernelPartOne);//first_user_task	//tid:0
+	Task_create(kernelData, 1, kernelPartOne);//first_user_task	//tid:1
+	Task_create(kernelData, 2, kernelPartOne);//first_user_task	//tid:2
+	Task_create(kernelData, 4, kernelPartOne);//first_user_task	//tid:3
 }
