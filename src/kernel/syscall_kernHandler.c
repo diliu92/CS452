@@ -3,24 +3,29 @@
 
 
 
-int 
+void 
 syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 	switch (req->syscall_uid)
 	{
 		case SYSCALL_CREATE:
 			req->retval = Task_create(kernelData,
 										((syscallRequest_Create*)req)->priority, 
-											((syscallRequest_Create*)req)->code);		
+											((syscallRequest_Create*)req)->code);
+			break;		
 		case SYSCALL_MY_TID:
-			req->retval =  kernelData->currentActiveTask->tid;	
+			req->retval =  kernelData->currentActiveTask->tid;
+			break;	
 		case SYSCALL_MY_PARENT_TID:
-			req->retval =  kernelData->currentActiveTask->parent_tid;	
+			req->retval =  kernelData->currentActiveTask->parent_tid;
+			break;	
 		case SYSCALL_PASS:
 			Scheduler_pushQueue(kernelData, 
 									(kernelData->currentActiveTask->priority)-1, 
 											kernelData->currentActiveTask);	
+			break;
 		case SYSCALL_EXIT:
 			kernelData->currentActiveTask->state = Zombie;
+			break;
 	}	
 }
 

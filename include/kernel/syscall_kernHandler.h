@@ -4,7 +4,7 @@
 #include <kernel/kernGlobal.h>
 #include <common/syscall_information.h>
 
-int 
+void 
 syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req);
 
 #endif

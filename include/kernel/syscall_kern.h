@@ -16,8 +16,6 @@
 int 
 Task_create(kernGlobal* kernelData, int priority, void (*code)());
 
-
-
 /*
  * Scheduler Related Functions
  */ 
