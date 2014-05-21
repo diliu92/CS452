@@ -13,18 +13,19 @@
  * priority(1 to 16, inclusive)
  */ 
 
-int Task_create(kernGlobal* kernelData, int priority, void (*code)());
+int 
+Task_create(kernGlobal* kernelData, int priority, void (*code)());
 
 
 
 /*
  * Scheduler Related Functions
  */ 
+void 
+Scheduler_pushQueue(kernGlobal* kernelData, int qIdx, task* tsk);
 
-
-
-
-task* Scheduler_getNextReadyTask(kernGlobal* kernelData);
+task* 
+Scheduler_getNextReadyTask(kernGlobal* kernelData);
 
 
 

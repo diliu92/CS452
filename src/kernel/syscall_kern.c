@@ -10,7 +10,8 @@
  * priority(1 to 16, inclusive)
  */ 
 
-int Task_create(kernGlobal* kernelData, int priority, void (*code)()){
+int 
+Task_create(kernGlobal* kernelData, int priority, void (*code)()){
 	if(!(priority >=1 && priority <=16))
 		return -1;
 	if(kernelData->nextTaskUID == MAX_TASK)
@@ -38,12 +39,14 @@ int Task_create(kernGlobal* kernelData, int priority, void (*code)()){
  */ 
 
 
-static int Scheduler_isQueueEmpty(kernGlobal* kernelData, int qIdx){
+static int 
+Scheduler_isQueueEmpty(kernGlobal* kernelData, int qIdx){
 	priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
 	
 	return (qItem->head == NULL && qItem->tail == NULL) ? 1 : 0;
 }
-static int Scheduler_findNextPriorityQueue(kernGlobal* kernelData){
+static int 
+Scheduler_findNextPriorityQueue(kernGlobal* kernelData){
 	int i;
 	
 	for (i = 0; i < MAX_PRIORITY; i++)
@@ -54,7 +57,9 @@ static int Scheduler_findNextPriorityQueue(kernGlobal* kernelData){
 	}
 	return -1;
 }
-static task* Scheduler_popQueue(kernGlobal* kernelData, int qIdx){
+
+static task* 
+Scheduler_popQueue(kernGlobal* kernelData, int qIdx){
 	priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
 	
 	task* retval = qItem->head;
@@ -71,18 +76,8 @@ static task* Scheduler_popQueue(kernGlobal* kernelData, int qIdx){
 			
 	return retval;
 }
-
-task* Scheduler_getNextReadyTask(kernGlobal* kernelData){	
-	int i = Scheduler_findNextPriorityQueue(kernelData);
-	
-	if (i >= 0)
-		return Scheduler_popQueue(kernelData, i);
-			
-	return NULL;
-}
-
-
-void Scheduler_pushQueue(kernGlobal* kernelData, int qIdx, task* tsk){
+void 
+Scheduler_pushQueue(kernGlobal* kernelData, int qIdx, task* tsk){
 	priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
 
 	if (Scheduler_isQueueEmpty(kernelData, qIdx)){
@@ -94,4 +89,15 @@ void Scheduler_pushQueue(kernGlobal* kernelData, int qIdx, task* tsk){
 			qItem->tail = (qItem->tail)->nextTask;
 	}
 }
+
+task* 
+Scheduler_getNextReadyTask(kernGlobal* kernelData){	
+	int i = Scheduler_findNextPriorityQueue(kernelData);
+	
+	if (i >= 0)
+		return Scheduler_popQueue(kernelData, i);
+			
+	return NULL;
+}
+
 
