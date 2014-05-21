@@ -161,12 +161,11 @@ kerxit:
 	mov	r1, r3
 	bl	bwprintf(PLT)
 /*before*/
-	/* 1 store kernel reg*/
-	mov	ip, sp
-	stmfd	sp!, {r0-sp} 
+	/* 1 store kernel reg */
+	stmfd	sp!, {r0,r1,r4-sp} 
 	/* 2 switch to system state*/
 	msr	cpsr_c, #0xdf 
-	/* 3 get sp, spsr*/
+	/* 3 get sp, spsr of active */
 	ldr	sp, [r0, #8]
 	ldr	r3, [r0, #4]
 	/* 4 pop the regs of active task */
@@ -174,35 +173,37 @@ kerxit:
 	/* 6 return to svc state */
 	msr	cpsr_c, #0xd3
 	/* 7 install spsr of the active task*/
-	msr	cpsr, r3
+	msr	spsr, r3
 	/* 8 install the pc of the active task*/
-	ldr pc, [r0, #12]
+	ldr r3, [r0, #12]
+	movs pc, r3
 /*end before*/
 	bl	kerent(PLT)
 /*after*/
 	/* 1 acquire arguments of the request */
+	mov	r2, r0
 	/* 2 acquire lr */
-	ldr	r3, [r0, #12]
+	mov	r3, lr
 	/* 3 change to system state */
 	msr	cpsr_c, #0xdf 
 	/* 4 overwrite lr with value from 2 */
-	ldr	lr, [r3, #0]
+	mov	lr, r3
 	/* 5 push the registers of the active task onto its stack */
-	ldr	sp, [r0, #8]
 	stmfd	sp!, {r0-r12}
 	/* 6 acquire the sp of the active */
+	mov r3, sp
 	/* 7 return to svc state */
 	msr	cpsr_c, #0xd3
 	/* 8 acquire the spsr of the active */
-	ldr	r3, [r0, #4]
+	mrs ip, spsr
 	/* 9 pop the registers of the kernel from its stack*/
-	mov sp, ip
-	ldmfd	sp, {r0-sp} 
+	ldmfd	sp, {r0,r1,r4-sp}
 	/* 10 fill in the request with its arguments*/
+	str r2, [r1, #0]
 	/* 11 put the sp and spsr into the TD of the active task*/
-	str sp, [r0, #8]
-	mrs r3, cpsr
-	str	r3, [r0, #4]
+	str r3, [r0, #8]
+	str	ip, [r0, #4]
+	mov pc, lr
 /*end after*/
 	mov	r0, #1
 	ldr	r3, .L20+12
