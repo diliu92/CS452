@@ -26,12 +26,11 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 		default:
 			//invalid syscall_uid
 			break;
-		}
-		
 	}
+	
 	Scheduler_pushQueue(kernelData, 
 							(kernelData->currentActiveTask->priority)-1, 
-									kernelData->currentActiveTask);		
+								kernelData->currentActiveTask);		
 }
 
 
