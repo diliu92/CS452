@@ -4,7 +4,7 @@
 
 
 #define MAX_TASK 	64
-#define STACK_SIZE	4096	//4KB is the best!
+#define STACK_SIZE	8192	//4KB is the best!
 
 #define MAX_PRIORITY 16
 
@@ -41,11 +41,12 @@ typedef struct priorityQueue{
 
 typedef struct kernGlobal{
 	task tasks[MAX_TASK];
-	char tasks_stack[MAX_TASK*STACK_SIZE];
 	int nextTaskUID;
 	task* currentActiveTask;
 	
 	priorityQueue priorityQueues[MAX_PRIORITY];	
+	
+	char tasks_stack[MAX_TASK*STACK_SIZE];	//should be last member of kernGlobal(memory protection)
 }kernGlobal;
 
 #endif

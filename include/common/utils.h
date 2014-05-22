@@ -2,7 +2,7 @@
 #define __UTILS_H__
 
 
-#define NULL 0
+#define NULL (void*)0
 
 
 

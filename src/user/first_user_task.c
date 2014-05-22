@@ -17,6 +17,8 @@ kernelPartOne_worker(){
 
 void
 kernelPartOne(){	//priority of FUT is 3
+	bwprintf( COM2, "First:entering\r\n" );
+	
 	int Tid_low1 = Create(4,kernelPartOne_worker);
 	int Tid_low2 = Create(4,kernelPartOne_worker);
 	int Tid_high1 = Create(2,kernelPartOne_worker);
