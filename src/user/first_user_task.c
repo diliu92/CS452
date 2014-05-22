@@ -25,7 +25,9 @@ kernelPartOne(){	//priority of FUT is 3
 	//int Tid_high1 = Create(2,kernelPartOne_code);
 	//int Tid_high2 = Create(2,kernelPartOne_code);	
 	
-	Pass();
+	//Pass();
+	
+	MyTid();
 	
 	bwprintf( COM2, "First:exiting\r\n" );
 	
