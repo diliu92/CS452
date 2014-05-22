@@ -19,12 +19,12 @@ Task_create(kernGlobal* kernelData, int priority, void (*code)()){
 	
 	task* tsk = &((kernelData->tasks)[kernelData->nextTaskUID]);
 
-	tsk->tid = code;	
-	tsk->cpsr = code;
-	tsk->pc = code;	
+	//tsk->tid = code;	
+	//tsk->cpsr = code;
+	//tsk->pc = code;	
 	
-	//tsk->cpsr = 0xdf;
-	//tsk->pc = code;
+	tsk->cpsr = 0x10;
+	tsk->pc = code;
 	
 	tsk->state = Ready;
 	tsk->priority = priority;
