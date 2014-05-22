@@ -18,7 +18,7 @@ kernelPartOne_code(){
 
 void
 kernelPartOne(){	//priority of FUT is 3
-
+	bwprintf( COM2, "\r\n");
 	int Tid_low1 = Create(4,kernelPartOne_code);
 	bwprintf( COM2, "Created: %u\r\n", Tid_low1);
 		
