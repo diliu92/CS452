@@ -25,6 +25,7 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 			return;
 		default:
 			//invalid syscall_uid
+			break;
 		}
 		
 	}
