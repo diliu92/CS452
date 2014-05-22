@@ -38,7 +38,7 @@ kerent:
 	.global	kerxit
 	.type	kerxit, %function
 kerxit:
-	@ args = 0, pretend = 0, frame = 8
+	@ args = 0, pretend = 0, frame = 4
 	@ frame_needed = 1, uses_anonymous_args = 0
 	/* 1 store kernel reg */
 	stmfd	sp!, {r0,r4,r5,r6,r7,r8,r9,r10,fp,lr}
