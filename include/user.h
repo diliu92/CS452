@@ -7,5 +7,6 @@
 
 #include <common/contextSwitch.h>
 #include <common/syscall_information.h>
+#include <common/bwio.h>
 
 #endif
