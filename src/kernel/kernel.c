@@ -18,9 +18,9 @@ main( int argc, char* argv[] ) {
 			break;
 			
 		bwprintf( COM2, "Tid=%u\n\r",active->tid);
-		//kerxit (active, &req);// req is a pointer to a Request
+		kerxit (active, &req);// req is a pointer to a Request
 		bwprintf( COM2, "after kerxit.\n\r" );
-		//syscall_kernHandler( &kernelData, req );
+		syscall_kernHandler( &kernelData, req );
 	}
 	
 	bwprintf( COM2, "Bye, world.\n\r" );

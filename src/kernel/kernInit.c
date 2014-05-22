@@ -5,6 +5,9 @@
 static void
 hardwareInit(){
 	bwsetfifo(COM2, OFF);
+	//add kerent to swi jump table
+	int * addr = (int *) 0x28;
+	*addr = &kerent;
 }
 
 static void 

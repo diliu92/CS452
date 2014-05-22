@@ -1,6 +1,5 @@
 #include <user.h>
 
-
 int 
 Create(int priority, void (*code)()){
 	syscallRequest_Create req;
@@ -8,9 +7,8 @@ Create(int priority, void (*code)()){
 	req.priority = priority;
 	req.code = code;
 	
-	//bwprintf( COM2, "before kerent.\n\r" );
-	//kerent(&req);
-	//bwprintf( COM2, "after kerent.\n\r" );
+	prekerent(&req);
+	
 	return req.retval;
 }
 
@@ -19,8 +17,8 @@ MyTid(){
 	syscallRequest req;
 	req.syscall_uid = SYSCALL_MY_TID;
 	
-	//kerent(&req);
-	
+	prekerent(&req);
+
 	return req.retval;
 }
 
@@ -29,8 +27,8 @@ MyParentTid(){
 	syscallRequest req;
 	req.syscall_uid = SYSCALL_MY_PARENT_TID;
 	
-	//kerent(&req);
-	
+	prekerent(&req);
+
 	return req.retval;	
 }
 
@@ -39,8 +37,7 @@ Pass(){
 	syscallRequest req;
 	req.syscall_uid = SYSCALL_PASS;
 	
-	//kerent(&req);
-	
+	prekerent(&req);
 }
 
 void 
@@ -48,8 +45,7 @@ Exit(){
 	syscallRequest req;
 	req.syscall_uid = SYSCALL_EXIT;
 	
-	//kerent(&req);
-	
+	prekerent(&req);
 }
 
 
