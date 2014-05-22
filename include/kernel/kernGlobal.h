@@ -24,7 +24,7 @@ typedef enum taskState_t{
 typedef struct task{
 	int tid;
 	unsigned int cpsr;
-	void* sp;	//a pointer to its private stack
+	void* sp;	
 	void* pc;
 	
 	taskState_t state;	

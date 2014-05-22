@@ -25,6 +25,7 @@ main( int argc, char* argv[] ) {
 		bwprintf(COM2, "before handler\n");
 		syscall_kernHandler( &kernelData, req );
 		bwprintf(COM2, "after handler\n");
+		
 	}
 	
 	bwprintf( COM2, "Bye, world.\n\r" );
