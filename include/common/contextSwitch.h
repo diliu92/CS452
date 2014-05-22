@@ -3,6 +3,8 @@
 
 #include <kernel/kernGlobal.h>
 
+#include <common/syscall_information.h>
+
 void 
 kerent();
 
