@@ -11,6 +11,7 @@ Create(int priority, void (*code)()){
 	req.syscall_uid = SYSCALL_CREATE;
 	req.priority = priority;
 	req.code = code;
+	
 	putReqInR0(&req);
 	asm("swi");
 
@@ -35,7 +36,7 @@ MyParentTid(){
 	
 	putReqInR0(&req);
 	asm("swi");
-	//bwprintf( COM2, "after swi.\n\r" );
+
 	return req.retval;	
 }
 
@@ -46,7 +47,6 @@ Pass(){
 	
 	putReqInR0(&req);
 	asm("swi");
-	//bwprintf( COM2, "after swi.\n\r" );
 }
 
 void 
@@ -56,7 +56,6 @@ Exit(){
 	
 	putReqInR0(&req);
 	asm("swi");
-	//bwprintf( COM2, "after swi.\n\r" );
 }
 
 
