@@ -16,15 +16,15 @@ main( int argc, char* argv[] ) {
 
 	for(;;) {
 		i++;
-		bwprintf(COM2, "loop: %d\n", i);
+		//bwprintf(COM2, "loop: %d\n", i);
 		active = Scheduler_getNextReadyTask(&kernelData);
 		if (active == NULL)
 			break;
-		bwprintf(COM2, "active is not null\n");
+		//bwprintf(COM2, "active is not null\n");
 		req = kerxit (active, req);// req is a pointer to a Request
-		bwprintf(COM2, "before handler\n");
+		//bwprintf(COM2, "before handler\n");
 		syscall_kernHandler( &kernelData, req );
-		bwprintf(COM2, "after handler\n");
+		//bwprintf(COM2, "after handler\n");
 		
 	}
 	

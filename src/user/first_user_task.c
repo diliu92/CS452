@@ -4,9 +4,9 @@
 
 void
 kernelPartOne_code(){
-	//bwprintf( COM2, "My TID: %u, My Parent TID:%u\r\n", MyTid(), MyParentTid());
-	//Pass();
-	//bwprintf( COM2, "My TID: %u, My Parent TID:%u\r\n", MyTid(), MyParentTid());
+	bwprintf( COM2, "My TID: %u, My Parent TID:%u\r\n", MyTid(), MyParentTid());
+	Pass();
+	bwprintf( COM2, "My TID: %u, My Parent TID:%u\r\n", MyTid(), MyParentTid());
 	bwprintf( COM2, "kernelPartOne_code\r\n" );	
 	Exit();	
 }
