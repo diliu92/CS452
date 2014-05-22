@@ -28,6 +28,7 @@ kerent:
 	/* 11 put the sp and spsr into the TD of the active task*/
 	str r3, [r0, #8]
 	str	ip, [r0, #4]
+	/* str	  , [r0, #12] */
 	/* 10 fill in the request with its arguments*/
 	mov r0, r2
 	mov pc, lr
