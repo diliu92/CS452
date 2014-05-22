@@ -58,14 +58,17 @@ Exit(){
 	asm("swi");
 }
 
-
 /*
 int 
-Send(int Tid, void* msg, int msglen, void* reply, int replylen);
+Send(int Tid, void* msg, int msglen, void* reply, int replylen){
+	
+}
 
 int 
-Receieve(int* Tid, void* msg, int msglen);
+Receieve(int* Tid, void* msg, int msglen){
+}
 
 int 
-Reply(int Tid, void* reply, int replylen);
+Reply(int Tid, void* reply, int replylen){
+}
 */

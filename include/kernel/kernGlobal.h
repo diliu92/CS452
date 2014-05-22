@@ -1,13 +1,10 @@
 #ifndef __KERNELGLOBAL_H__
 #define __KERNELGLOBAL_H__
 
-
-
 #define MAX_TASK 	64
 #define STACK_SIZE	128*1024	//4KB is the best!
 
 #define MAX_PRIORITY 16
-
 
 
 typedef enum taskState_t{

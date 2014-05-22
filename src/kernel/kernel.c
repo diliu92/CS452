@@ -9,8 +9,6 @@ main( int argc, char* argv[] ) {
 
 	Init(&kernelData);
 
-	bwprintf( COM2, "Hello, world.\n\r" );
-
 	for(;;) {
 		active = Scheduler_getNextReadyTask(&kernelData);
 		if (active == NULL)
@@ -18,9 +16,7 @@ main( int argc, char* argv[] ) {
 		req = kerxit (active);
 		syscall_kernHandler(&kernelData, req);		
 	}
-	
-	bwprintf( COM2, "Bye, world.\n\r" );
-	
+		
 	return 0;
 }
 

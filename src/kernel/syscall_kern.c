@@ -105,4 +105,9 @@ Scheduler_getNextReadyTask(kernGlobal* kernelData){
 	return NULL;
 }
 
+/*
+ * Message Related Functions
+ */ 
+ 
+
 
