@@ -13,7 +13,7 @@ Create(int priority, void (*code)()){
 	req.code = code;
 	putReqInR0(&req);
 	asm("swi");
-	bwprintf( COM2, "after swi.\n\r" );
+
 	return req.retval;
 }
 
@@ -24,7 +24,7 @@ MyTid(){
 	
 	putReqInR0(&req);
 	asm("swi");
-	bwprintf( COM2, "after swi.\n\r" );
+
 	return req.retval;
 }
 
@@ -35,7 +35,7 @@ MyParentTid(){
 	
 	putReqInR0(&req);
 	asm("swi");
-	bwprintf( COM2, "after swi.\n\r" );
+	//bwprintf( COM2, "after swi.\n\r" );
 	return req.retval;	
 }
 
@@ -46,7 +46,7 @@ Pass(){
 	
 	putReqInR0(&req);
 	asm("swi");
-	bwprintf( COM2, "after swi.\n\r" );
+	//bwprintf( COM2, "after swi.\n\r" );
 }
 
 void 
@@ -56,7 +56,7 @@ Exit(){
 	
 	putReqInR0(&req);
 	asm("swi");
-	bwprintf( COM2, "after swi.\n\r" );
+	//bwprintf( COM2, "after swi.\n\r" );
 }
 
 
