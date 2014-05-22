@@ -4,7 +4,7 @@
 
 
 #define MAX_TASK 	64
-#define STACK_SIZE	8192	//4KB is the best!
+#define STACK_SIZE	256*1024	//4KB is the best!
 
 #define MAX_PRIORITY 16
 

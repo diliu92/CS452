@@ -31,6 +31,8 @@ Task_create(kernGlobal* kernelData, int priority, void (*code)()){
 	
 	(kernelData->nextTaskUID)++;
 	
+	bwprintf( COM2, "Tid: %u cpsr:%x sp:%x pc:%x \n\r",tsk->tid,tsk->cpsr,tsk->sp,tsk->pc);
+	
 	return tsk->tid;
 }
 

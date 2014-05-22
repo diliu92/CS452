@@ -29,18 +29,33 @@ typedef struct syscallRequest_Create{
 	void (*code)();
 }syscallRequest_Create;
 
-/*
+
 typedef struct syscallRequest_Send{
 	int syscall_uid;
-	int priority;
-	void (*code)();
-}requestMessage_Create;
+	int	retval;
+	int Tid;
+	void* msg;
+	int msglen;
+	void* reply;
+	int replylen;
+}syscallRequest_Send;
 
 typedef struct syscallRequest_Receive{
 	int syscall_uid;
-	int priority;
-	void (*code)();
-}requestMessage_Create;
-*/
+	int	retval;
+	int* Tid;
+	void* msg;
+	int msglen;
+}syscallRequest_Receive;
+
+typedef struct syscallRequest_Reply{
+	int syscall_uid;
+	int	retval;
+	int Tid;
+	void* reply;
+	int replylen;
+}syscallRequest_Reply;
+
+
 
 #endif
