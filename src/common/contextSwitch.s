@@ -17,7 +17,7 @@ kerent:
 	mov	lr, r3
 	mov r1, r3
 	/* 5 push the registers of the active task onto its stack */
-	stmfd	sp!, {r0,r1,r4,r5,r6,r7,r8,r9,r10,fp}
+	stmfd	sp!, {r0,r4,r5,r6,r7,r8,r9,r10,fp}
 	/* 6 acquire the sp of the active */
 	mov r3, sp
 	/* 7 return to svc state */
@@ -25,7 +25,7 @@ kerent:
 	/* 8 acquire the spsr of the active */
 	mrs ip, spsr
 	/* 9 pop the registers of the kernel from its stack*/
-	ldmfd	sp!, {r0,r4,r5,r6,r7,r8,r9,r10,fp, lr}
+	ldmfd	sp!, {r0,r4,r5,r6,r7,r8,r9,r10,fp,lr}
 	/* 11 put the sp and spsr into the TD of the active task*/
 	str	ip, [r0, #4]
 	str r3, [r0, #8]
@@ -41,7 +41,7 @@ kerxit:
 	@ args = 0, pretend = 0, frame = 8
 	@ frame_needed = 1, uses_anonymous_args = 0
 	/* 1 store kernel reg */
-	stmfd	sp!, {r0,r4,r5,r6,r7,r8,r9,r10,fp, lr}
+	stmfd	sp!, {r0,r4,r5,r6,r7,r8,r9,r10,fp,lr}
 	/* 2 switch to system state*/
 	msr	cpsr_c, #0xdf
 	/* 3 get sp, spsr, pc of active */
@@ -49,7 +49,7 @@ kerxit:
 	ldr	sp, [r0, #8]
 	ldr	r2, [r0, #12]
 	/* 4 pop the regs of active task */
-	ldmfd	sp!, {r0,r1,r4,r5,r6,r7,r8,r9,r10,fp}
+	ldmfd	sp!, {r0,r4,r5,r6,r7,r8,r9,r10,fp}
 	/* 6 return to svc state */
 	msr	cpsr_c, #0xd3	
 	/* 7 install spsr of the active task*/
