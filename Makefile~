@@ -22,21 +22,23 @@ ASFLAGS	= -mcpu=arm920t -mapcs-32
 
 LDFLAGS = -init main -Map $(OUT_DIR)/main.map -N  -T orex.ld -L/u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2
 
-OBJS = 	$(OUT_DIR)/kernel.o			\
-	$(OUT_DIR)/kernInit.o			\
-	$(OUT_DIR)/syscall_kern.o		\
-	$(OUT_DIR)/syscall_kernHandler.o	\
-	$(OUT_DIR)/contextSwitch.o		\
-	$(OUT_DIR)/syscall_userHandler.o	\
-	$(OUT_DIR)/first_user_task.o		\
-	$(OUT_DIR)/bwio.o			
+KERN_OBJS = 	$(OUT_DIR)/kernel.o			\
+		$(OUT_DIR)/kernInit.o			\
+		$(OUT_DIR)/syscall_kern.o		\
+		$(OUT_DIR)/syscall_kernHandler.o				
 
+USER_OBJS=	$(OUT_DIR)/syscall_userHandler.o	\
+		$(OUT_DIR)/first_user_task.o	
+
+COMMON_OBJS=	$(OUT_DIR)/contextSwitch.o		\
+		$(OUT_DIR)/bwio.o
 
 all: kernel.elf
 
-kernel.elf: $(OBJS)
-	$(LD) $(LDFLAGS) -o $@ $(OBJS) -lgcc		
-
+kernel.elf: $(KERN_OBJS) $(USER_OBJS) $(COMMON_OBJS) 
+	$(LD) $(LDFLAGS) -o $@ $(KERN_OBJS) $(USER_OBJS) $(COMMON_OBJS) -lgcc	
+	
+#-------------------------------------kernel related----------------------------------------#
 $(OUT_DIR)/kernel.o: $(OUT_DIR)/kernel.s
 	$(AS) 	-o $(OUT_DIR)/kernel.o 	$(ASFLAGS) $(OUT_DIR)/kernel.s
 $(OUT_DIR)/kernel.s:
@@ -57,11 +59,8 @@ $(OUT_DIR)/syscall_kernHandler.o: $(OUT_DIR)/syscall_kernHandler.s
 $(OUT_DIR)/syscall_kernHandler.s:
 	$(XCC) 	-o $(OUT_DIR)/syscall_kernHandler.s 	-S $(CFLAGS) $(SRC_KERN_DIR)/syscall_kernHandler.c
 
-$(OUT_DIR)/contextSwitch.o: $(SRC_KERN_DIR)/contextSwitch.s
-	$(AS)	-o $(OUT_DIR)/contextSwitch.o 	$(ASFLAGS) $(SRC_KERN_DIR)/contextSwitch.s
-$(SRC_KERN_DIR)/contextSwitch.s: 
-	$(AS)	-o $(SRC_KERN_DIR)/contextSwitch.s	$(ASFLAGS) $(SRC_KERN_DIR)/contextSwitch.c
 
+#-------------------------------------user related----------------------------------------#
 $(OUT_DIR)/syscall_userHandler.o: $(OUT_DIR)/syscall_userHandler.s
 	$(AS) 	-o $(OUT_DIR)/syscall_userHandler.o 	$(ASFLAGS) $(OUT_DIR)/syscall_userHandler.s
 $(OUT_DIR)/syscall_userHandler.s:
@@ -72,10 +71,17 @@ $(OUT_DIR)/first_user_task.o: $(OUT_DIR)/first_user_task.s
 $(OUT_DIR)/first_user_task.s:
 	$(XCC) 	-o $(OUT_DIR)/first_user_task.s 	-S $(CFLAGS) $(SRC_USER_DIR)/first_user_task.c
 
+
+#-------------------------------------common related----------------------------------------#
+$(OUT_DIR)/contextSwitch.o: 
+	$(AS)	-o $(OUT_DIR)/contextSwitch.o 	$(ASFLAGS) $(SRC_COMMON_DIR)/contextSwitch.s
+
 $(OUT_DIR)/bwio.o: $(OUT_DIR)/bwio.s
 	$(AS)	-o $(OUT_DIR)/bwio.o 	$(ASFLAGS) $(OUT_DIR)/bwio.s
 $(OUT_DIR)/bwio.s: 
 	$(XCC) 	-o $(OUT_DIR)/bwio.s 	-S $(CFLAGS) $(SRC_COMMON_DIR)/bwio.c
+
+
 
 clean:
 	-rm -f kernel.elf $(OUT_DIR)/*.s $(OUT_DIR)/*.o $(OUT_DIR)/main.map

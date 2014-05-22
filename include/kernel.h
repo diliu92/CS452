@@ -3,9 +3,9 @@
 
 
 #include <kernel/kernGlobal.h>
+#include <kernel/kernInit.h>
 #include <kernel/syscall_kern.h>
 #include <kernel/syscall_kernHandler.h>
-#include <kernel/kernInit.h>
 #include <kernel/contextSwitch.h>	//to be changed
 
 #include <user/first_user_task.h>

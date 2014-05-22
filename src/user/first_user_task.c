@@ -27,7 +27,7 @@ kernelPartOne(){	//priority of FUT is 3
 	
 	//Pass();
 	
-	MyTid();
+	//MyTid();
 	
 	bwprintf( COM2, "First:exiting\r\n" );
 	
