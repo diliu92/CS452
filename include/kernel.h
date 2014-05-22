@@ -6,10 +6,10 @@
 #include <kernel/kernInit.h>
 #include <kernel/syscall_kern.h>
 #include <kernel/syscall_kernHandler.h>
-#include <kernel/contextSwitch.h>	//to be changed
 
 #include <user/first_user_task.h>
 
+#include <common/contextSwitch.h>
 #include <common/syscall_information.h>
 #include <common/utils.h>
 #include <common/bwio.h>

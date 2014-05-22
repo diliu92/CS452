@@ -30,7 +30,6 @@ kernelPartOne(){	//priority of FUT is 3
 	int Tid_high2 = Create(2,kernelPartOne_code);
 	bwprintf( COM2, "Created: %u\r\n", Tid_high2);	
 	
-	
 	bwprintf( COM2, "First:exiting\r\n" );
 	
 	Exit();	
