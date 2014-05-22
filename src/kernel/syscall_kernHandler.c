@@ -4,9 +4,12 @@
 
 void 
 syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
+	bwprintf(COM2,"syscall_uid: %u\n", req->syscall_uid);
 	switch (req->syscall_uid)
 	{
 		case SYSCALL_CREATE:
+	bwprintf(COM2,"priority: %u\n", ((syscallRequest_Create*)req)->priority);
+	bwprintf(COM2,"code: %x\n", ((syscallRequest_Create*)req)->code);		
 			req->retval = Task_create(kernelData,
 										((syscallRequest_Create*)req)->priority, 
 											((syscallRequest_Create*)req)->code);

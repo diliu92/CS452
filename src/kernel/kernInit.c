@@ -7,7 +7,7 @@ hardwareInit(){
 	bwsetfifo(COM2, OFF);
 	//add kerent to swi jump table
 	int * addr = (int *) 0x28;
-	*addr = &kerent;
+	*addr = (int) &kerent;
 }
 
 static void 
@@ -21,7 +21,7 @@ tasksInit(kernGlobal* kernelData){
 		
 		tsk->tid = i;
 		tsk->cpsr = 0;
-		tsk->sp = (kernelData->tasks_stack)+(STACK_SIZE*(i+1)) - 13*4; /*r0-r12*/
+		tsk->sp = (kernelData->tasks_stack)+(STACK_SIZE*(i+1)) - 10*4; /*r0-r12*/
 		tsk->pc = NULL;
 		
 		tsk->state = Idle;
@@ -57,8 +57,7 @@ Init(kernGlobal* kernelData){
 	tasksInit(kernelData);
 	queuesInit(kernelData);
 	
-	bwprintf( COM2, "kernalPartOne= pc:%x\n\r",&kernelPartOne);
-	Task_create(kernelData, 3, &kernelPartOne);//first_user_task	//tid:0
+	Task_create(kernelData, 3, kernelPartOne);//first_user_task	//tid:0
 	//Task_create(kernelData, 2, kernelPartOne);//first_user_task	//tid:1
 	//Task_create(kernelData, 2, kernelPartOne);//first_user_task	//tid:2
 	//Task_create(kernelData, 4, kernelPartOne);//first_user_task	//tid:3

@@ -1,14 +1,19 @@
 #include <user.h>
 
+static syscallRequest * 
+putReqInR0( syscallRequest *req ){
+	return req;
+}
+
 int 
 Create(int priority, void (*code)()){
 	syscallRequest_Create req;
 	req.syscall_uid = SYSCALL_CREATE;
 	req.priority = priority;
 	req.code = code;
-	
-	prekerent(&req);
-	
+	putReqInR0(&req);
+	asm("swi");
+	bwprintf( COM2, "after swi.\n\r" );
 	return req.retval;
 }
 
@@ -17,8 +22,9 @@ MyTid(){
 	syscallRequest req;
 	req.syscall_uid = SYSCALL_MY_TID;
 	
-	prekerent(&req);
-
+	putReqInR0(&req);
+	asm("swi");
+	bwprintf( COM2, "after swi.\n\r" );
 	return req.retval;
 }
 
@@ -27,8 +33,9 @@ MyParentTid(){
 	syscallRequest req;
 	req.syscall_uid = SYSCALL_MY_PARENT_TID;
 	
-	prekerent(&req);
-
+	putReqInR0(&req);
+	asm("swi");
+	bwprintf( COM2, "after swi.\n\r" );
 	return req.retval;	
 }
 
@@ -37,7 +44,9 @@ Pass(){
 	syscallRequest req;
 	req.syscall_uid = SYSCALL_PASS;
 	
-	prekerent(&req);
+	putReqInR0(&req);
+	asm("swi");
+	bwprintf( COM2, "after swi.\n\r" );
 }
 
 void 
@@ -45,7 +54,9 @@ Exit(){
 	syscallRequest req;
 	req.syscall_uid = SYSCALL_EXIT;
 	
-	prekerent(&req);
+	putReqInR0(&req);
+	asm("swi");
+	bwprintf( COM2, "after swi.\n\r" );
 }
 
 

@@ -3,8 +3,7 @@
 
 #include <kernel.h>
 
-void prekerent( syscallRequest *req );
 void kerent();
-void kerxit( task *active, syscallRequest **req );
+syscallRequest * kerxit( task *active, syscallRequest **req );
 
 #endif
