@@ -13,6 +13,7 @@ Create(int priority, void (*code)()){
 	req.code = code;
 	
 	putReqInR0(&req);
+	//to be fixed, hardware-interrupt
 	asm("swi");
 
 	return req.retval;

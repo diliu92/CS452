@@ -7,9 +7,6 @@
 #define MAX_PRIORITY 16
 
 
-
-
-
 typedef enum taskState_t{
 	Idle,
 	Ready,
@@ -21,30 +18,27 @@ typedef enum taskState_t{
 	Event_blocked 
 }taskState_t;
 
-//struct sendQueue;
-
 typedef struct task{
 	int tid;
 	unsigned int cpsr;
 	void* sp;	
 	void* pc;
-	
+
 	taskState_t state;	
 	int priority;
 	int parent_tid;
 	
-	struct task* nextTask;
-	
+	struct task* nextPriorityQueueTask;	
+
 	struct sendQueue{
 		struct task* head;
 		struct task* tail;
-	} sendQueue;
+	}sendQueue;	
+	struct task* nextSendQueueTask;	
+	
+	syscallRequest* whyBlocked;		
 }task; 
 
-//typedef struct sendQueue{
-	//task* head;
-	//task* tail;
-//}sendQueue;
 
 typedef struct priorityQueue{
 	task* head;	
@@ -54,6 +48,7 @@ typedef struct priorityQueue{
 typedef struct kernGlobal{
 	task tasks[MAX_TASK];
 	int nextTaskUID;
+	
 	task* currentActiveTask;
 	
 	priorityQueue priorityQueues[MAX_PRIORITY];	
