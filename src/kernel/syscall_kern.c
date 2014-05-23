@@ -117,7 +117,7 @@ Message_isSendQueueEmpty(kernGlobal* kernelData, int tid){	//0-63
 
 static task* 
 Message_popSendQueue(kernGlobal* kernelData, int qIdx){
-	sendQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
+	void* sendQ = &(kernelData->tasks[tid].sendQueue);
 	
 	task* retval = qItem->head;
 	
