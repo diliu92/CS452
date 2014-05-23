@@ -38,7 +38,7 @@ typedef struct task{
 	}sendQueue;	
 	struct task* nextSendQueueTask;	
 	
-	syscallRequest* whyBlocked;		
+	syscallRequest* whyBlocked;	//Send,Recv,Reply		
 }task; 
 
 

@@ -23,6 +23,16 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 		case SYSCALL_EXIT:
 			kernelData->currentActiveTask->state = Zombie;
 			return;
+		case SYSCALL_SEND:
+			/*
+			 * 
+			 */ 
+			break;	
+		case SYSCALL_RECEIVE:
+			break;
+		case SYSCALL_REPLY:
+			
+			return;
 		default:
 			//invalid syscall_uid
 			break;
