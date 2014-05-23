@@ -2,6 +2,7 @@
 #define __KERNELGLOBAL_H__
 
 #include <common/syscall_information.h>
+#include <common/utils.h>
 
 #define MAX_TASK 	64
 #define STACK_SIZE	128*1024	//4KB is the best!
@@ -32,20 +33,12 @@ typedef struct task{
 	
 	struct task* nextPriorityQueueTask;	
 
-	struct sendQueue{
-		struct task* head;
-		struct task* tail;
-	}sendQueue;	
+	Queue sendQueue;	
 	struct task* nextSendQueueTask;	
 	
-	syscallRequest* whyBlocked;	//Send,Recv,Reply		
+	syscallRequest* whyBlocked;		//Send,Recv,Reply		
 }task; 
 
-
-typedef struct priorityQueue{
-	task* head;	
-	task* tail;		
-}priorityQueue; 
 
 typedef struct kernGlobal{
 	task tasks[MAX_TASK];
@@ -53,7 +46,7 @@ typedef struct kernGlobal{
 	
 	task* currentActiveTask;
 	
-	priorityQueue priorityQueues[MAX_PRIORITY];	
+	Queue priorityQueues[MAX_PRIORITY];	
 	
 	char tasks_stack[MAX_TASK*STACK_SIZE];	//should be last member of kernGlobal(memory protection)
 }kernGlobal;

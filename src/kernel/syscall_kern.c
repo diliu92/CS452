@@ -1,9 +1,6 @@
 
 #include <kernel.h>
 
-#include <common/utils.h>
-
-
 /*
  * Task Related Functions
  * 
@@ -119,7 +116,7 @@ static task*
 Message_popSendQueue(kernGlobal* kernelData, int tid){
 	void* sendQ = &(kernelData->tasks[tid].sendQueue);
 	
-	task* retval = qItem->head;
+	task* retval = sendQ->head;
 	
 	qItem->head = (retval)->nextPriorityQueueTask;
 	
