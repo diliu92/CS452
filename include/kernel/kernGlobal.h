@@ -21,7 +21,7 @@ typedef enum taskState_t{
 	Event_blocked 
 }taskState_t;
 
-struct sendQueue;
+//struct sendQueue;
 
 typedef struct task{
 	int tid;
@@ -35,13 +35,16 @@ typedef struct task{
 	
 	struct task* nextTask;
 	
-	struct sendQueue sendQ;
+	struct sendQueue{
+		struct task* head;
+		struct task* tail;
+	} sendQ;
 }task; 
 
-typedef struct sendQueue{
-	task* head;
-	task* tail;
-}sendQueue;
+//typedef struct sendQueue{
+	//task* head;
+	//task* tail;
+//}sendQueue;
 
 typedef struct priorityQueue{
 	task* head;	
