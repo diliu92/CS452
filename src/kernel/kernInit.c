@@ -17,7 +17,7 @@ tasksInit(kernGlobal* kernelData){
 	
 	for (i = 0; i < MAX_TASK; i++)
 	{
-		tsk = &((kernelData->tasks)[i]);
+		tsk = &(kernelData->tasks[i]);
 		
 		tsk->tid = i;
 		tsk->cpsr = 0;
@@ -49,7 +49,7 @@ queuesInit(kernGlobal* kernelData){
 		
 	for (i = 0; i < MAX_PRIORITY; i++)
 	{
-		qItem = &((kernelData->priorityQueues)[i]);
+		qItem = &(kernelData->priorityQueues[i]);
 		
 		qItem->head = NULL;
 		qItem->tail = NULL;

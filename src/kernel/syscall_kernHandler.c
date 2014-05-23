@@ -9,8 +9,8 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 	{
 		case SYSCALL_CREATE:		
 			req->retval = Task_create(kernelData,
-										((syscallRequest_Create*)req)->priority, 
-											((syscallRequest_Create*)req)->code);																					
+										(syscallRequest_Create*)req->priority, 
+											(syscallRequest_Create*)req->code);																					
 			break;		
 		case SYSCALL_MY_TID:
 			req->retval =  kernelData->currentActiveTask->tid;
