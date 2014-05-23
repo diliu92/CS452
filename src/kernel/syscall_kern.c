@@ -110,26 +110,14 @@ Scheduler_getNextReadyTask(kernGlobal* kernelData){
  
 static int 
 Message_isSendQueueEmpty(kernGlobal* kernelData, int tid){	//0-63
-	task* tsk = &((kernelData->tasks)[tid]);
+	task* tsk = &(kernelData->tasks[tid]);
 	
 	return (tsk->sendQueue.head == NULL && tsk->sendQueue.tail == NULL) ? 1 : 0;
 }
-static int 
-Message_findNextPriorityQueue(kernGlobal* kernelData){
-	int i;
-	
-	for (i = 0; i < MAX_PRIORITY; i++)
-	{
-		if (Scheduler_isQueueEmpty(kernelData, i))
-			continue;
-		return i;
-	}
-	return -1;
-}
 
 static task* 
-Message_popQueue(kernGlobal* kernelData, int qIdx){
-	priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
+Message_popSendQueue(kernGlobal* kernelData, int qIdx){
+	sendQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
 	
 	task* retval = qItem->head;
 	
@@ -148,7 +136,7 @@ Message_popQueue(kernGlobal* kernelData, int qIdx){
 	return retval;
 }
 void 
-Message_pushQueue(kernGlobal* kernelData, int qIdx, task* tsk){
+Message_pushSendQueue(kernGlobal* kernelData, int qIdx, task* tsk){
 	priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
 
 	if (Scheduler_isQueueEmpty(kernelData, qIdx)){
