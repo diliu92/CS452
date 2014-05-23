@@ -40,7 +40,7 @@ Task_create(kernGlobal* kernelData, int priority, void (*code)()){
 
 static int 
 Scheduler_isQueueEmpty(kernGlobal* kernelData, int qIdx){
-	priorityQueue* qItem = &(kernelData->priorityQueues[qIdx]);
+	Queue* qItem = &(kernelData->priorityQueues[qIdx]);
 	
 	return (qItem->head == NULL && qItem->tail == NULL) ? 1 : 0;
 }
@@ -59,7 +59,7 @@ Scheduler_findNextPriorityQueue(kernGlobal* kernelData){
 
 static task* 
 Scheduler_popQueue(kernGlobal* kernelData, int qIdx){
-	priorityQueue* qItem = &(kernelData->priorityQueues[qIdx]);
+	Queue* qItem = &(kernelData->priorityQueues[qIdx]);
 	
 	task* retval = qItem->head;
 	
@@ -79,15 +79,15 @@ Scheduler_popQueue(kernGlobal* kernelData, int qIdx){
 }
 void 
 Scheduler_pushQueue(kernGlobal* kernelData, int qIdx, task* tsk){
-	priorityQueue* qItem = &(kernelData->priorityQueues[qIdx]);
+	Queue* qItem = &(kernelData->priorityQueues[qIdx]);
 
 	if (Scheduler_isQueueEmpty(kernelData, qIdx)){
 			qItem->head=tsk;
 			qItem->tail=tsk;
 	}
 	else{
-			qItem->tail->nextPriorityQueueTask = tsk;
-			qItem->tail = qItem->tail->nextPriorityQueueTask;
+			((task*)qItem->tail)->nextPriorityQueueTask = tsk;
+			qItem->tail = ((task*)qItem->tail)->nextPriorityQueueTask;
 	}
 }
 
