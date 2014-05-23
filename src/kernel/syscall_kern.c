@@ -26,7 +26,7 @@ Task_create(kernGlobal* kernelData, int priority, void (*code)()){
 	tsk->priority = priority;
 	tsk->parent_tid = (kernelData->currentActiveTask == NULL) ?	0 : kernelData->currentActiveTask->tid;
 	
-	tsk->nextTask = NULL;
+	tsk->nextPriorityQueueTask = NULL;
 	
 	Scheduler_pushQueue(kernelData, priority-1, tsk);
 	
@@ -67,9 +67,9 @@ Scheduler_popQueue(kernGlobal* kernelData, int qIdx){
 	
 	task* retval = qItem->head;
 	
-	qItem->head = (retval)->nextTask;
+	qItem->head = (retval)->nextPriorityQueueTask;
 	
-	(retval)->nextTask = NULL;
+	(retval)->nextPriorityQueueTask = NULL;
 	/*
 	 * EQC(Empty Queue Check)
 	 */ 
@@ -90,8 +90,8 @@ Scheduler_pushQueue(kernGlobal* kernelData, int qIdx, task* tsk){
 			qItem->tail=tsk;
 	}
 	else{
-			(qItem->tail)->nextTask = tsk;
-			qItem->tail = (qItem->tail)->nextTask;
+			(qItem->tail)->nextPriorityQueueTask = tsk;
+			qItem->tail = (qItem->tail)->nextPriorityQueueTask;
 	}
 }
 
