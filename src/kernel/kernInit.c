@@ -45,7 +45,7 @@ tasksInit(kernGlobal* kernelData){
 static void 
 queuesInit(kernGlobal* kernelData){
 	int i;
-	priorityQueue* qItem;
+	Queue* qItem;
 		
 	for (i = 0; i < MAX_PRIORITY; i++)
 	{
