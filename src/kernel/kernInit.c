@@ -28,7 +28,14 @@ tasksInit(kernGlobal* kernelData){
 		tsk->priority = -1;
 		tsk->parent_tid = -1;
 		
-		tsk->nextTask = NULL;
+		tsk->nextPriorityQueueTask = NULL;
+		
+		tsk->sendQueue.head = NULL;
+		tsk->sendQueue.tail = NULL;
+			
+		tsk->nextSendQueueTask = NULL;	
+	
+		tsk->whyBlocked = NULL;
 	}
 	
 	kernelData->nextTaskUID = 0;
