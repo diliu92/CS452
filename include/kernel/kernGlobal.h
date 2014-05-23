@@ -1,6 +1,8 @@
 #ifndef __KERNELGLOBAL_H__
 #define __KERNELGLOBAL_H__
 
+#include <common/syscall_information.h>
+
 #define MAX_TASK 	64
 #define STACK_SIZE	128*1024	//4KB is the best!
 
