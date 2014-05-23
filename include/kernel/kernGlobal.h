@@ -7,6 +7,9 @@
 #define MAX_PRIORITY 16
 
 
+
+
+
 typedef enum taskState_t{
 	Idle,
 	Ready,
@@ -29,7 +32,14 @@ typedef struct task{
 	int parent_tid;
 	
 	struct task* nextTask;
+	
+	struct sendQueue sendQ;
 }task; 
+
+typedef struct sendQueue{
+	task* head;
+	task* tail;
+}sendQueue;
 
 typedef struct priorityQueue{
 	task* head;	
