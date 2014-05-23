@@ -17,20 +17,20 @@ Task_create(kernGlobal* kernelData, int priority, void (*code)()){
 	if(kernelData->nextTaskUID == MAX_TASK)
 		return -2;
 	
-	task* tsk = &((kernelData->tasks)[kernelData->nextTaskUID]);
+	task* tsk = &(kernelData->tasks[kernelData->nextTaskUID]);
 	
 	tsk->cpsr = 0x50;
 	tsk->pc = code;
 	
 	tsk->state = Ready;
 	tsk->priority = priority;
-	tsk->parent_tid = (kernelData->currentActiveTask == NULL) ?	0 : kernelData->currentActiveTask->tid;
+	tsk->parent_tid = kernelData->currentActiveTask == NULL ?	0 : kernelData->currentActiveTask->tid;
 	
 	tsk->nextPriorityQueueTask = NULL;
 	
 	Scheduler_pushQueue(kernelData, priority-1, tsk);
 	
-	(kernelData->nextTaskUID)++;
+	kernelData->nextTaskUID++;
 	
 	return tsk->tid;
 }
@@ -40,7 +40,6 @@ Task_create(kernGlobal* kernelData, int priority, void (*code)()){
 /*
  * Scheduler Related Functions
  */ 
-
 
 static int 
 Scheduler_isQueueEmpty(kernGlobal* kernelData, int qIdx){
