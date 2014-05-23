@@ -21,6 +21,8 @@ typedef enum taskState_t{
 	Event_blocked 
 }taskState_t;
 
+struct sendQueue;
+
 typedef struct task{
 	int tid;
 	unsigned int cpsr;
