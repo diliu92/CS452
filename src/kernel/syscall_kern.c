@@ -109,5 +109,66 @@ Scheduler_getNextReadyTask(kernGlobal* kernelData){
  * Message Related Functions
  */ 
  
+static int 
+Message_isSendQueueEmpty(kernGlobal* kernelData, int tid){	//0-63
+	task* tsk = &((kernelData->tasks)[tid]);
+	
+	return (tsk->sendQueue.head == NULL && tsk->sendQueue.tail == NULL) ? 1 : 0;
+}
+static int 
+Message_findNextPriorityQueue(kernGlobal* kernelData){
+	int i;
+	
+	for (i = 0; i < MAX_PRIORITY; i++)
+	{
+		if (Scheduler_isQueueEmpty(kernelData, i))
+			continue;
+		return i;
+	}
+	return -1;
+}
 
+static task* 
+Message_popQueue(kernGlobal* kernelData, int qIdx){
+	priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
+	
+	task* retval = qItem->head;
+	
+	qItem->head = (retval)->nextPriorityQueueTask;
+	
+	(retval)->nextPriorityQueueTask = NULL;
+	/*
+	 * EQC(Empty Queue Check)
+	 */ 
+	if(qItem->head == NULL && qItem->tail == retval){	
+		qItem->tail = NULL;
+	}
+	
+	kernelData->currentActiveTask = retval;
+
+	return retval;
+}
+void 
+Message_pushQueue(kernGlobal* kernelData, int qIdx, task* tsk){
+	priorityQueue* qItem = &((kernelData->priorityQueues)[qIdx]);
+
+	if (Scheduler_isQueueEmpty(kernelData, qIdx)){
+			qItem->head=tsk;
+			qItem->tail=tsk;
+	}
+	else{
+			(qItem->tail)->nextPriorityQueueTask = tsk;
+			qItem->tail = (qItem->tail)->nextPriorityQueueTask;
+	}
+}
+
+task* 
+Message_getNextReadyTask(kernGlobal* kernelData){	
+	int i = Scheduler_findNextPriorityQueue(kernelData);
+	
+	if (i >= 0)
+		return Scheduler_popQueue(kernelData, i);
+			
+	return NULL;
+}
 
