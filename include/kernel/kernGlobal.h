@@ -38,7 +38,7 @@ typedef struct task{
 	struct sendQueue{
 		struct task* head;
 		struct task* tail;
-	} sendQ;
+	} sendQueue;
 }task; 
 
 //typedef struct sendQueue{
