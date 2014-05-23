@@ -139,8 +139,8 @@ Message_pushSendQueue(kernGlobal* kernelData, int tid, task* tsk){
 			sendQ->tail=tsk;
 	}
 	else{
-			(sendQ->tail)->nextSendQueueTask = tsk;
-			sendQ->tail = (sendQ->tail)->nextSendQueueTask;
+			((task*)sendQ->tail)->nextSendQueueTask = tsk;
+			sendQ->tail = ((task*)sendQ->tail)->nextSendQueueTask;
 	}
 }
 
