@@ -38,9 +38,14 @@ static void
 kernelPartTwo_Sender(){
 	char sendMSG[2];
 	char replyMSG[2];
+	int i = 2;
+	int j = 0;
+	
+	memcpy(&j,&i,sizeof(int));
+	
 	Send(2, sendMSG, 2, replyMSG, 2);
 	
-	bwprintf( COM2, "Send Passed\r\n");
+	bwprintf( COM2, "Send Passed:%u\r\n",j);
 	
 	Exit();
 }

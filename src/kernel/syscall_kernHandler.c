@@ -121,7 +121,7 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 	}
 	
 	Scheduler_pushQueue(kernelData, 
-							kernelData->currentActiveTask->priority-1, 
+							(kernelData->currentActiveTask->priority)-1, 
 								kernelData->currentActiveTask);		
 }
 
