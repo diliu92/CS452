@@ -13,4 +13,7 @@ typedef struct Queue{
 void*
 memcpy(char* src, char* dest, int size);
 
+int
+strlen(char* str);
+
 #endif

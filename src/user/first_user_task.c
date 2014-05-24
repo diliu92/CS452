@@ -74,3 +74,11 @@ kernelPartTwo(){
 	
 	Exit();
 }
+
+void
+firstUserTask()
+{
+	/* DO NOT CHANGE THE OREDER OF THE FOLLOWING FUNCTION CALLS	*/ 
+	
+	/* 	                         END							*/
+}

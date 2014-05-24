@@ -14,6 +14,8 @@
 #define SYSCALL_REGISTER_AS		9
 #define	SYSCALL_WHO_IS			10
 
+
+
  
 /*
  * for syscall functions that have no arguments
@@ -56,6 +58,10 @@ typedef struct syscallRequest_Reply{
 	void* reply;
 	int replylen;
 }syscallRequest_Reply;
+
+
+
+
 
 typedef struct syscallRequest_RegisterAs{
 	int syscall_uid;
