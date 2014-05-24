@@ -36,15 +36,21 @@ kernelPartOne(){	//priority of FUT is 3
 
 static void
 kernelPartTwo_Sender(){
-	Send(2,(void*),2,(void*),2);
+	char sendMSG[2];
+	char replyMSG[2]
+	Send(2, sendMSG, 2, replyMSG, 2);
 	
 	Exit();
 }
 
 static void
 kernelPartTwo_Receiver(){
-	Receieve((void*),(void*),2);
-	Reply(1,(void*),2);
+	int tid;
+	char recvMSG[2];
+	char replyMSG[2]
+		
+	Receieve(&tid,recvMSG,2);
+	Reply(1,replyMSG,2);
 	
 	Exit();
 }
