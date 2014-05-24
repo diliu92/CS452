@@ -43,21 +43,19 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 				sendTask->whyBlocked = sendReq;
 				
 				if (recvTask->state == Send_blocked){
+					
+					
+					
 					/*
 					 * To be added, hard-copy msg
 					 */ 
-					memcpy(sendTask,recvTask, sizeof(task));
 					
-					recvTask->state == Ready;
 					Scheduler_pushQueue(kernelData, recvTask->priority-1, recvTask);	
 																
 					sendTask->state = Reply_blocked;					
 				}
-				else{					
+				else				
 					Message_pushSendQueue(kernelData, recvTask->tid, sendTask);
-							
-					sendTask->state = Receive_blocked;
-				}
 				
 				return;			
 			}
@@ -82,8 +80,6 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 				/*
 				 * To be added, hard-copy msg
 				 */ 
-				 
-				 sendTask->state = Reply_blocked;
 			}
 			
 			break;
@@ -109,8 +105,11 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 				
 				/*
 				 * To be added, hard-copy msg
-				 */ 
-				sendTask->state == Ready;
+				 */
+				replyReq->retval = 0; 
+				
+				 
+				sendTask->whyBlocked->retval = replyReq->replylen;  
 				Scheduler_pushQueue(kernelData, (sendTask->priority)-1, sendTask);					
 			}					
 			
@@ -122,7 +121,7 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 	}
 	
 	Scheduler_pushQueue(kernelData, 
-							(kernelData->currentActiveTask->priority)-1, 
+							kernelData->currentActiveTask->priority-1, 
 								kernelData->currentActiveTask);		
 }
 

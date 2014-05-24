@@ -74,13 +74,16 @@ Scheduler_popQueue(kernGlobal* kernelData, int qIdx){
 	}
 	
 	kernelData->currentActiveTask = retval;
+	kernelData->currentActiveTask->state = Active;
 
 	return retval;
 }
 void 
 Scheduler_pushQueue(kernGlobal* kernelData, int qIdx, task* tsk){
-	Queue* qItem = &(kernelData->priorityQueues[qIdx]);
-
+	Queue* qItem = &(kernelData->priorityQueues[qIdx]);	
+	
+	tsk->state = Ready;
+	
 	if (Scheduler_isQueueEmpty(kernelData, qIdx)){
 			qItem->head=tsk;
 			qItem->tail=tsk;
@@ -128,11 +131,14 @@ Message_popSendQueue(kernGlobal* kernelData, int tid){
 		sendQ->tail = NULL;
 	}
 	
+	retval->state = Reply_blocked;
 	return retval;
 }
 void 
 Message_pushSendQueue(kernGlobal* kernelData, int tid, task* tsk){
 	Queue* sendQ = &(kernelData->tasks[tid].sendQueue);
+
+	tsk->state = Receive_blocked;
 
 	if (Message_isSendQueueEmpty(kernelData, tid)){
 			sendQ->head=tsk;
