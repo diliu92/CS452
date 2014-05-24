@@ -31,7 +31,8 @@ USER_OBJS=	$(OUT_DIR)/syscall_userHandler.o	\
 		$(OUT_DIR)/first_user_task.o	
 
 COMMON_OBJS=	$(OUT_DIR)/contextSwitch.o		\
-		$(OUT_DIR)/bwio.o
+		$(OUT_DIR)/bwio.o			\
+		$(OUT_DIR)/utils.o
 
 all: kernel.elf
 
@@ -81,6 +82,10 @@ $(OUT_DIR)/bwio.o: $(OUT_DIR)/bwio.s
 $(OUT_DIR)/bwio.s: 
 	$(XCC) 	-o $(OUT_DIR)/bwio.s 	-S $(CFLAGS) $(SRC_COMMON_DIR)/bwio.c
 
+$(OUT_DIR)/utils.o: $(OUT_DIR)/utils.s
+	$(AS)	-o $(OUT_DIR)/utils.o 	$(ASFLAGS) $(OUT_DIR)/utils.s
+$(OUT_DIR)/utils.s: 
+	$(XCC) 	-o $(OUT_DIR)/utils.s 	-S $(CFLAGS) $(SRC_COMMON_DIR)/utils.c
 
 
 clean:

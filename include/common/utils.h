@@ -10,5 +10,7 @@ typedef struct Queue{
 	void* tail;		
 }Queue;
 
+void*
+memcpy(void* src, void* dest, int size);
 
 #endif

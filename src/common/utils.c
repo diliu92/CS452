@@ -1,6 +1,9 @@
-#include <common/utils.h>
 
 
 
-
-
+void*
+memcpy(void* src, void* dest, int size){
+	
+	
+	return;
+}
