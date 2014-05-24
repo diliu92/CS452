@@ -105,7 +105,9 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 			}
 			else if( ((syscallRequest_Send*)(kernelData->tasks[replyTask->tid].whyBlocked))->replylen < replyReq->replylen ){
 				replyReq->retval = -4;	
-				bwprintf( COM2, "-4\r\n");			
+				bwprintf( COM2, "-4\r\n");	
+				bwprintf( COM2, "sender_replylen:%u\r\n", ((syscallRequest_Send*)(kernelData->tasks[replyTask->tid].whyBlocked))->replylen);
+				bwprintf( COM2, "reply_replylen:%u\r\n", replyReq->replylen);	
 			}
 			else{
 				task* sendTask = &(kernelData->tasks[replyReq->Tid]);
