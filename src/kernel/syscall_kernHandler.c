@@ -46,6 +46,7 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 					/*
 					 * To be added, hard-copy msg
 					 */ 
+					memcpy();
 					
 					recvTask->state == Ready;
 					Scheduler_pushQueue(kernelData, recvTask->priority-1, recvTask);	
