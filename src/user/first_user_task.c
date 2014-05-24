@@ -41,7 +41,7 @@ kernelPartTwo_Sender(){
 	
 	Send(2, sendMSG, 2, replyMSG, 2);
 	
-	bwprintf( COM2, "Send Passed\r\n",msg2);
+	bwprintf( COM2, "Send Passed\r\n");
 	
 	Exit();
 }
