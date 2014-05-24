@@ -39,7 +39,7 @@ kernelPartTwo_Sender(){
 	char sendMSG[20] = "Hello, Receiver";
 	char replyMSG[20];
 
-	bwprintf( COM2, "Sender-%u sent (%s) to Receiver-2\r\n", MyTid(), sendMSG);	
+	bwprintf( COM2, "Sender-%u sent (%s) to Receiver-2 Size:%u\r\n", MyTid(), sendMSG, strlen(sendMSG));	
 	Send(2, sendMSG, 20, replyMSG, 20);
 	bwprintf( COM2, "Sender-%u got a reply(%s) from Receiver-2\r\n", MyTid(), replyMSG);
 	
