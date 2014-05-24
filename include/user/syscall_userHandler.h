@@ -17,7 +17,7 @@ Pass();
 void 
 Exit();
 
-/*
+
 int 
 Send(int Tid, void* msg, int msglen, void* reply, int replylen);
 
@@ -26,7 +26,7 @@ Receieve(int* Tid, void* msg, int msglen);
 
 int 
 Reply(int Tid, void* reply, int replylen);
-*/
+
 
 
 #endif

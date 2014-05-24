@@ -4,6 +4,9 @@
 void
 kernelPartOne();
 
+void
+kernelPartTwo();
+
 /*
  * To be added
  */

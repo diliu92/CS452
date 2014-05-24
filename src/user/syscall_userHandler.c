@@ -1,7 +1,7 @@
 #include <user.h>
 
-static syscallRequest * 
-putReqInR0( syscallRequest *req ){
+static syscallRequest* 
+putReqInR0(syscallRequest* req){
 	return req;
 }
 
@@ -59,17 +59,42 @@ Exit(){
 	asm("swi");
 }
 
-/*
+
 int 
 Send(int Tid, void* msg, int msglen, void* reply, int replylen){
+	syscallRequest_Send req;
+	req.syscall_uid = SYSCALL_SEND;
+	req.Tid = Tid;
+	req.msg = msg;
+	req.msglen = msglen;
+	req.reply = reply;
+	req.replylen = replylen;
 	
+	putReqInR0(&req);
+	asm("swi");
 }
 
 int 
 Receieve(int* Tid, void* msg, int msglen){
+	syscallRequest_Receive req;
+	req.syscall_uid = SYSCALL_RECEIVE;
+	req.Tid = Tid;
+	req.msg = msg;
+	req.msglen = msglen;
+	
+	putReqInR0(&req);
+	asm("swi");
 }
 
 int 
 Reply(int Tid, void* reply, int replylen){
+	syscallRequest_Reply req;
+	req.syscall_uid = SYSCALL_REPLY;
+	req.Tid = Tid;
+	req.reply = reply;
+	req.replylen = replylen;
+	
+	putReqInR0(&req);
+	asm("swi");
 }
-*/
+

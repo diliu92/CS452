@@ -32,3 +32,34 @@ kernelPartOne(){	//priority of FUT is 3
 	
 	Exit();	
 }
+
+
+static void
+kernelPartTwo_Sender(){
+	Send(2,(void*),2,(void*),2);
+	
+	Exit();
+}
+
+static void
+kernelPartTwo_Receiver(){
+	Receieve((void*),(void*),2);
+	Reply(1,(void*),2);
+	
+	Exit();
+}
+
+
+
+void
+kernelPartTwo(){
+	bwprintf( COM2, "\r\n");
+	
+	int Tid_low1 = Create(4,kernelPartTwo_Sender);		//1
+	//bwprintf( COM2, "Created: %u\r\n", Tid_low1);
+		
+	int Tid_low2 = Create(5,kernelPartTwo_Receiver); 	//2
+	//bwprintf( COM2, "Created: %u\r\n", Tid_low2);
+	
+	Exit();
+}
