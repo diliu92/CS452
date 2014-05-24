@@ -3,16 +3,13 @@
 
 
 
-void
+static void
 kernelPartOne_code(){
 	bwprintf( COM2, "My TID: %u, My Parent TID:%u\r\n", MyTid(), MyParentTid());
 	Pass();
 	bwprintf( COM2, "My TID: %u, My Parent TID:%u\r\n", MyTid(), MyParentTid());
 	Exit();	
 }
-
-
-
 
 
 
