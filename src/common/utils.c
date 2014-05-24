@@ -2,10 +2,9 @@
 
 
 void*
-memcpy(void* src, void* dest, int size){
-	char* src = src;
-	char* dest = dest;
+memcpy(char* src, char* dest, int size){
+	while(size--)
+		*dest++ = *src++;
 	
-	
-	return;
+	return dest;
 }

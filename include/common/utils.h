@@ -11,6 +11,6 @@ typedef struct Queue{
 }Queue;
 
 void*
-memcpy(void* src, void* dest, int size);
+memcpy(char* src, char* dest, int size);
 
 #endif

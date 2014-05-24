@@ -36,7 +36,7 @@ kernelPartOne(){	//priority of FUT is 3
 
 static void
 kernelPartTwo_Sender(){
-	char sendMSG[2];
+	char sendMSG[2] = "A";
 	char replyMSG[2];
 	
 	Send(2, sendMSG, 2, replyMSG, 2);
