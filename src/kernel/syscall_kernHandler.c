@@ -91,7 +91,7 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 		{
 			syscallRequest_Reply* replyReq = (syscallRequest_Reply*)req;
 			
-			task* replyTask = kernelData->currentLy_ActiveTask;
+			task* replyTask = kernelData->currentActiveTask;
 				
 			if(!(replyReq->Tid >=0 && replyReq->Tid <=63))
 				replyReq->retval = -1;
