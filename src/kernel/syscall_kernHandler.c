@@ -92,8 +92,6 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 			syscallRequest_Reply* replyReq = (syscallRequest_Reply*)req;
 			
 			task* replyTask = kernelData->currentActiveTask;
-			
-			bwprintf( COM2, "SYSCALL_REPLY\r\n");
 				
 			if(!(replyReq->Tid >=0 && replyReq->Tid <=63))
 				replyReq->retval = -1;
@@ -101,13 +99,9 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 				replyReq->retval = -2;
 			else if(kernelData->tasks[replyReq->Tid].state != Reply_blocked){
 				replyReq->retval = -3;
-				bwprintf( COM2, "-3\r\n");
 			}
 			else if( ((syscallRequest_Send*)(kernelData->tasks[replyReq->Tid].whyBlocked))->replylen < replyReq->replylen ){
-				replyReq->retval = -4;	
-				bwprintf( COM2, "-4\r\n");	
-				bwprintf( COM2, "sender_replylen:%u\r\n", ((syscallRequest_Send*)(kernelData->tasks[replyTask->tid].whyBlocked))->replylen);
-				bwprintf( COM2, "reply_replylen:%u\r\n", replyReq->replylen);	
+				replyReq->retval = -4;		
 			}
 			else{
 				task* sendTask = &(kernelData->tasks[replyReq->Tid]);
@@ -115,8 +109,6 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 				/*
 				 * To be added, hard-copy msg
 				 */ 
-				bwprintf( COM2, "Sender_TID: %u \r\n", sendTask->tid);
-				
 				sendTask->state == Ready;
 				Scheduler_pushQueue(kernelData, (sendTask->priority)-1, sendTask);					
 			}					
