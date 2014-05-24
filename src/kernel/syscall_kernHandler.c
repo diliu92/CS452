@@ -93,16 +93,20 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 			
 			task* replyTask = kernelData->currentActiveTask;
 			
-			//bwprintf( COM2, "xxx\r\n");
+			bwprintf( COM2, "SYSCALL_REPLY\r\n");
 				
 			if(!(replyReq->Tid >=0 && replyReq->Tid <=63))
 				replyReq->retval = -1;
 			else if(kernelData->tasks[replyReq->Tid].state == Idle || kernelData->tasks[replyReq->Tid].state == Zombie )
 				replyReq->retval = -2;
-			else if(kernelData->tasks[replyReq->Tid].state != Reply_blocked)
+			else if(kernelData->tasks[replyReq->Tid].state != Reply_blocked){
 				replyReq->retval = -3;
-			else if( ((syscallRequest_Send*)(kernelData->tasks[replyTask->tid].whyBlocked))->replylen < replyReq->replylen )
-				replyReq->retval = -4;				
+				bwprintf( COM2, "-3\r\n");
+			}
+			else if( ((syscallRequest_Send*)(kernelData->tasks[replyTask->tid].whyBlocked))->replylen < replyReq->replylen ){
+				replyReq->retval = -4;	
+				bwprintf( COM2, "-4\r\n");			
+			}
 			else{
 				task* sendTask = &(kernelData->tasks[replyReq->Tid]);
 				
