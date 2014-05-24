@@ -64,10 +64,56 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 			break;
 		}	
 		case SYSCALL_RECEIVE:
-			break;
-		case SYSCALL_REPLY:
+		{
+			syscallRequest_Receive* recvReq = (syscallRequest_Receive*)req;
 			
-			return;
+			task* sendTask;
+			task* recvTask = kernelData->currentActiveTask;
+				
+			if (Message_isSendQueueEmpty(kernelData,recvTask->tid)){
+				recvTask->state = Send_blocked;
+				recvTask->whyBlocked = recvReq;
+				
+				return;
+			}
+			else{
+				sendTask = Message_popSendQueue(kernelData, recvTask->tid);			
+				/*
+				 * To be added, hard-copy msg
+				 */ 
+				 
+				 sendTask->state = Reply_blocked;
+			}
+			
+			break;
+		}
+		case SYSCALL_REPLY:
+		{
+			syscallRequest_Reply* replyReq = (syscallRequest_Reply*)req;
+			
+			task* replyTask = kernelData->currentLy_ActiveTask;
+				
+			if(!(replyReq->Tid >=0 && replyReq->Tid <=63))
+				replyReq->retval = -1;
+			else if(kernelData->tasks[replyReq->Tid].state == Idle || kernelData->tasks[replyReq->Tid].state == Zombie )
+				replyReq->retval = -2;
+			else if(kernelData->tasks[replyReq->Tid].state == Reply_blocked)
+				replyReq->retval = -3;
+			else if( (syscallRequest_Send*(kernelData->tasks[replyTask->Tid].whyBlocked))->replylen < replyReq->replylen )
+				replyReq->retval = -4;				
+			else{
+				task* sendTask = &(kernelData->tasks[replyReq->Tid]);
+				
+				/*
+				 * To be added, hard-copy msg
+				 */ 
+				
+				sendTask->state == Ready;
+				Scheduler_pushQueue(kernelData, sendTask->priority-1, sendTask);					
+			}					
+			
+			break;
+		}
 		default:
 			//invalid syscall_uid
 			break;
