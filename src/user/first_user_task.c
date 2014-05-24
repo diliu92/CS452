@@ -53,7 +53,8 @@ kernelPartTwo_Receiver(){
 		
 	Receieve(&tid,recvMSG,2);
 	bwprintf( COM2, "Recv Passed\r\n");
-	//Reply(1,replyMSG,2);
+	Reply(1,replyMSG,2);
+	bwprintf( COM2, "Reply Passed\r\n");
 	
 	Exit();
 }
