@@ -11,6 +11,6 @@ memcpy(const char* src, char* dest, int size){
 int
 strlen(const char* str){	
 	char* s;	
-	for (s = str; *s; ++s);	
-	return s - str;	
+	for (s = str; *s; s++);	
+	return s - str + 1;	
 }
