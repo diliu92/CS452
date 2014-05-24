@@ -27,9 +27,17 @@ Scheduler_getNextReadyTask(kernGlobal* kernelData);
 
 
 /*
- * To be added
+ * Message Related Functions
  */ 
+ 
+int 
+Message_isSendQueueEmpty(kernGlobal* kernelData, int tid);
 
+task* 
+Message_popSendQueue(kernGlobal* kernelData, int tid);
+
+void 
+Message_pushSendQueue(kernGlobal* kernelData, int tid, task* tsk);
 
 
 
