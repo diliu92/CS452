@@ -109,7 +109,7 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 				/*
 				 * To be added, hard-copy msg
 				 */ 
-				//bwprintf( COM2, "Sender_TID: %u \r\n", sendTask->tid);
+				bwprintf( COM2, "Sender_TID: %u \r\n", sendTask->tid);
 				
 				sendTask->state == Ready;
 				Scheduler_pushQueue(kernelData, (sendTask->priority)-1, sendTask);					
