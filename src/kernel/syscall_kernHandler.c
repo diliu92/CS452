@@ -99,7 +99,7 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 				replyReq->retval = -2;
 			else if(kernelData->tasks[replyReq->Tid].state == Reply_blocked)
 				replyReq->retval = -3;
-			else if( (syscallRequest_Send*(kernelData->tasks[replyTask->Tid].whyBlocked))->replylen < replyReq->replylen )
+			else if( ((syscallRequest_Send*)(kernelData->tasks[replyTask->Tid].whyBlocked))->replylen < replyReq->replylen )
 				replyReq->retval = -4;				
 			else{
 				task* sendTask = &(kernelData->tasks[replyReq->Tid]);
