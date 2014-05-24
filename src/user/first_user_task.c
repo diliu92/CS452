@@ -41,7 +41,7 @@ kernelPartTwo_Sender(){
 
 	bwprintf( COM2, "Sender-%u sent (%s) to Receiver-2\r\n", MyTid(), sendMSG);	
 	Send(2, sendMSG, 20, replyMSG, 20);
-	bwprintf( COM2, "Sender-%u got a msg(%s) from Receiver-2\r\n", MyTid(), replyMSG);
+	bwprintf( COM2, "Sender-%u got a reply(%s) from Receiver-2\r\n", MyTid(), replyMSG);
 	
 	Exit();
 }
@@ -54,8 +54,8 @@ kernelPartTwo_Receiver(){
 		
 	Receieve(&tid,recvMSG,20);
 	bwprintf( COM2, "Receiver-%u got a msg(%s) from Sender-%u\r\n", MyTid(), recvMSG, tid);
+	bwprintf( COM2, "Receiver-%u sent a reply(%s) from Sender-%u\r\n", MyTid(), replyMSG, tid);
 	Reply(tid,replyMSG,20);
-	bwprintf( COM2, "Receiver-%u sent a msg(%s) from Sender-%u\r\n", MyTid(), replyMSG, tid);
 	
 	Exit();
 }
