@@ -38,10 +38,10 @@ static void
 kernelPartTwo_Sender(){
 	char sendMSG[2] = "A";
 	char replyMSG[2];
-	
+
+	bwprintf( COM2, "Sender-%u sent %s to Reciever-2\r\n", MyTid(), sendMSG);	
 	Send(2, sendMSG, 2, replyMSG, 2);
-	
-	bwprintf( COM2, "Send Passed\r\n");
+	bwprintf( COM2, "Sender->%s\r\n", sendMSG);
 	
 	Exit();
 }
@@ -50,10 +50,10 @@ static void
 kernelPartTwo_Receiver(){
 	int tid;
 	char recvMSG[2];
-	char replyMSG[2];
+	char replyMSG[2] = "B";
 		
 	Receieve(&tid,recvMSG,2);
-	bwprintf( COM2, "Recv Passed\r\n");
+	bwprintf( COM2, "Reciever-2 got a msg(%s) from Sender-%u\r\n", recvMSG, tid);
 	Reply(1,replyMSG,2);
 	bwprintf( COM2, "Reply Passed\r\n");
 	
