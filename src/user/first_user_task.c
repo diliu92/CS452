@@ -49,7 +49,7 @@ kernelPartTwo_Receiver(){
 	char recvMSG[2];
 	char replyMSG[2];
 		
-	Receieve(&tid,recvMSG,2);
+	//Receieve(&tid,recvMSG,2);
 	//Reply(1,replyMSG,2);
 	
 	Exit();
