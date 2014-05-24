@@ -40,6 +40,8 @@ kernelPartTwo_Sender(){
 	char replyMSG[2];
 	Send(2, sendMSG, 2, replyMSG, 2);
 	
+	bwprintf( COM2, "Send Passed\r\n");
+	
 	Exit();
 }
 
@@ -49,7 +51,8 @@ kernelPartTwo_Receiver(){
 	char recvMSG[2];
 	char replyMSG[2];
 		
-	//Receieve(&tid,recvMSG,2);
+	Receieve(&tid,recvMSG,2);
+	bwprintf( COM2, "Recv Passed\r\n");
 	//Reply(1,replyMSG,2);
 	
 	Exit();
