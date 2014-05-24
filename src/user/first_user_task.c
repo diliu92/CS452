@@ -36,12 +36,12 @@ kernelPartOne(){	//priority of FUT is 3
 
 static void
 kernelPartTwo_Sender(){
-	char sendMSG[2] = "A";
-	char replyMSG[2];
+	char sendMSG[20] = "Hello, Receiver";
+	char replyMSG[20];
 
-	bwprintf( COM2, "Sender-%u sent %s to Reciever-2\r\n", MyTid(), sendMSG);	
-	Send(2, sendMSG, 2, replyMSG, 2);
-	bwprintf( COM2, "Sender->%s\r\n", sendMSG);
+	bwprintf( COM2, "Sender-%u sent (%s) to Receiver-2\r\n", MyTid(), sendMSG);	
+	Send(2, sendMSG, 20, replyMSG, 20);
+	bwprintf( COM2, "Sender-%u got a msg(%s) from Receiver-2\r\n", MyTid(), replyMSG);
 	
 	Exit();
 }
@@ -49,13 +49,13 @@ kernelPartTwo_Sender(){
 static void
 kernelPartTwo_Receiver(){
 	int tid;
-	char recvMSG[2];
-	char replyMSG[2] = "B";
+	char recvMSG[20];
+	char replyMSG[20] = "Hello, Sender";
 		
-	Receieve(&tid,recvMSG,2);
-	bwprintf( COM2, "Reciever-2 got a msg(%s) from Sender-%u\r\n", recvMSG, tid);
-	Reply(1,replyMSG,2);
-	bwprintf( COM2, "Reply Passed\r\n");
+	Receieve(&tid,recvMSG,20);
+	bwprintf( COM2, "Receiver-%u got a msg(%s) from Sender-%u\r\n", MyTid(), recvMSG, tid);
+	Reply(tid,replyMSG,20);
+	bwprintf( COM2, "Receiver-%u sent a msg(%s) from Sender-%u\r\n", MyTid(), replyMSG, tid);
 	
 	Exit();
 }
