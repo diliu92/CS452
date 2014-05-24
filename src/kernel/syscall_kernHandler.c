@@ -92,6 +92,8 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 			syscallRequest_Reply* replyReq = (syscallRequest_Reply*)req;
 			
 			task* replyTask = kernelData->currentActiveTask;
+			
+			bwprintf( COM2, "Sender_TID: %u \r\n", sendTask->tid);
 				
 			if(!(replyReq->Tid >=0 && replyReq->Tid <=63))
 				replyReq->retval = -1;
