@@ -105,14 +105,14 @@ Scheduler_getNextReadyTask(kernGlobal* kernelData){
  * Message Related Functions
  */ 
  
-static int 
+int 
 Message_isSendQueueEmpty(kernGlobal* kernelData, int tid){	//0-63
 	task* tsk = &(kernelData->tasks[tid]);
 	
 	return (tsk->sendQueue.head == NULL && tsk->sendQueue.tail == NULL) ? 1 : 0;
 }
 
-static task* 
+task* 
 Message_popSendQueue(kernGlobal* kernelData, int tid){
 	Queue* sendQ = &(kernelData->tasks[tid].sendQueue);
 	
