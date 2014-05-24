@@ -38,7 +38,7 @@ static void
 kernelPartTwo_Sender(){
 	char sendMSG[2];
 	char replyMSG[2];
-	//Send(2, sendMSG, 2, replyMSG, 2);
+	Send(2, sendMSG, 2, replyMSG, 2);
 	
 	bwprintf( COM2, "Send Passed\r\n");
 	
