@@ -14,10 +14,10 @@ void*
 memcpy(const char* src, char* dest, int size);
 
 int
-strlen(const char* str);
+strLen(const char* str);
 
 int
-strcomp(const char* str1, const char* str2);
+strEnq(const char* str1, const char* str2);
 
 
 
