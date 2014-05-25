@@ -70,6 +70,7 @@ testNameServer(){
 		
 	bwprintf( COM2, "%d\r\n", WhoIs("Yange1"));
 	bwprintf( COM2, "%d\r\n", WhoIs("Yange5"));
+	bwprintf( COM2, "%d\r\n", WhoIs("Yang2"));
 	//bwprintf( COM2, "%d\r\n", WhoIs("Yang2"));
 	
 	Exit();
