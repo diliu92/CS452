@@ -50,7 +50,7 @@ kernelPartTwo_Receiver(){
 	int tid;
 	char recvMSG[20];
 	char replyMSG[20] = "Hello, Sender";
-		
+
 	Receieve(&tid,recvMSG,20);
 	bwprintf( COM2, "Receiver-%u got a msg(%s) from Sender-%u\r\n", MyTid(), recvMSG, tid);
 	bwprintf( COM2, "Receiver-%u sent a reply(%s) from Sender-%u\r\n", MyTid(), replyMSG, tid);
@@ -67,7 +67,7 @@ testNameServer(){
 	RegisterAs("Yang4");
 	RegisterAs("Yange5");
 	//RegisterAs("Yang3");
-		
+	long long i;	
 	bwprintf( COM2, "%d\r\n", WhoIs("Yange1"));
 	bwprintf( COM2, "%d\r\n", WhoIs("Yange5"));
 	bwprintf( COM2, "%d\r\n", WhoIs("Yang2"));
