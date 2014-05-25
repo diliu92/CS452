@@ -4,7 +4,6 @@
 
 #define NULL (void*)0
 
-
 typedef struct Queue{
 	void* head;	
 	void* tail;		

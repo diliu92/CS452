@@ -61,7 +61,7 @@ typedef struct syscallRequest_Reply{
 typedef struct syscallRequest_NameServer{
 	int syscall_uid;
 	char* name;
-}
+}syscallRequest_NameServer;
 
 
 #endif

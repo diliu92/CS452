@@ -3,7 +3,7 @@
 
 static void
 InitNameServer(){
-	//to be added
+	return;//to be added
 }
 
 
