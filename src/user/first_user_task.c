@@ -91,7 +91,7 @@ firstUserTask()
 	//serialserver	//tid:3
 	
 	/* 	                         END							*/
-	
-	kernelPartTwo();
+	int Tid_low1 = Create(4,test);		//1
+	//kernelPartTwo();
 	
 }
