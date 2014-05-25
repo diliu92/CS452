@@ -19,7 +19,7 @@ nameServer(){
 		switch (req.syscall_uid)
 		{
 			case SYSCALL_REGISTERAS:
-				response = 3
+				response = 3;
 				Reply(tid,&response, sizeof(int));
 				break;
 			case SYSCALL_WHOIS:
