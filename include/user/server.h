@@ -19,7 +19,7 @@ typedef struct nameServerEntry{
 	int tid;
 	int nextSpot;
 	name names[4];
-}
+}nameServerEntry;
 
 typedef struct nameServerTable{
 	nameServerEntry entries;
