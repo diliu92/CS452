@@ -66,10 +66,10 @@ void
 kernelPartTwo(){
 	bwprintf( COM2, "\r\n");
 	
-	int Tid_low1 = Create(4,kernelPartTwo_Sender);		//1
+	int Tid_low1 = Create(2,kernelPartTwo_Sender);		//1
 	//bwprintf( COM2, "Created: %u\r\n", Tid_low1);
 		
-	int Tid_low2 = Create(4,kernelPartTwo_Receiver); 	//2
+	int Tid_low2 = Create(1,kernelPartTwo_Receiver); 	//2
 	//bwprintf( COM2, "Created: %u\r\n", Tid_low2);
 	
 	Exit();
