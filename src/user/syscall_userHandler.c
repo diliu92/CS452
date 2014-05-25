@@ -108,7 +108,9 @@ int
 RegisterAs(char* name){
 	syscallRequest_NameServer req;
 	req.syscall_uid = SYSCALL_REGISTERAS;
+	req.tid = MyTid();
 	req.name = name;
+	req.size = strLen(name);
 	
 	int retval;
 	
@@ -122,10 +124,11 @@ WhoIs(char* name){
 	syscallRequest_NameServer req;
 	req.syscall_uid = SYSCALL_WHOIS;
 	req.name = name;
-	
+	req.size = strLen(name);
+		
 	int retval;
 	
-	Send(NAMESERVER_TID, &req, sizeof(syscallRequest_NameServer), &retval, sizeof(int));
+	Send(NAMESERVER_TID, &req, sizeof(syscallRequest_NameServer), &(req.tid), sizeof(int));
 	
 	return retval; 	
 }

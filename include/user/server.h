@@ -9,16 +9,17 @@
 #define NAMESERVER_TID	1
 
 #define MAX_NAME_SIZE 32 
+#define MAX_NAME_ENTRY_PER_TID	4
  
-typedef struct name{
+typedef struct nameEntry{
 	int size;
 	char data[MAX_NAME_SIZE];
-}name; 
+}nameEntry; 
  
 typedef struct nameServerEntry{
 	int tid;
 	int nextSpot;
-	name names[4];
+	nameEntry names[4];
 }nameServerEntry;
 
 typedef struct nameServerTable{
@@ -28,7 +29,6 @@ typedef struct nameServerTable{
 
 void
 nameServer();
-
 
 
 /*

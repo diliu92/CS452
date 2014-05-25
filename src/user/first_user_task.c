@@ -67,19 +67,7 @@ kernelPartTwo(){
 		
 	int Tid_low2 = Create(4,kernelPartTwo_Receiver); 	//2
 	
-	Exit();
 }
-
-static void
-test(){
-	bwprintf( COM2, "Cool\r\n");
-	//char testing[20] = "";
-	
-	bwprintf( COM2, "size of empty string:%u\r\n", strLen(""));
-	
-	Exit();
-}
-
 
 void
 firstUserTask()
@@ -91,7 +79,8 @@ firstUserTask()
 	//serialserver	//tid:3
 	
 	/* 	                         END							*/
-	int Tid_low1 = Create(4,test);		//1
-	//kernelPartTwo();
+	
+	kernelPartTwo();
+	
 	Exit();
 }

@@ -13,7 +13,7 @@ void*
 memcpy(const char* src, char* dest, int size);
 
 int
-strLen(const char* str);
+strLen(const char* str);	//doesn't include null terminator
 
 int
 strEnq(const char* str1, const char* str2);
