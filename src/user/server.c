@@ -2,15 +2,27 @@
 #include <user.h>
 
 static void
-InitNameServer(){
-	return;//to be added
+InitNameServer(nameServer* nameServerData){
+	int i;
+	
+	for (i = 0; i < MAX_TASK; i++)
+	{
+		nameServerData->entries[i].tid = i;
+		nameServerData->entries[i].tid = i;
+		
+		entryStatus[i] = 0;
+	}
+	
 }
 
 
 void 
 nameServer(){
+	nameServerTable nameServerData;	
 	syscallRequest_NameServer req;
 	int tid, response;
+	
+	InitNameServer(&nameServerData);
 		
 	for (;;){
 		Receieve(&tid, &req, sizeof(syscallRequest_NameServer));

@@ -45,7 +45,6 @@ kernelPartTwo_Sender(){
 	
 	Exit();
 }
-
 static void
 kernelPartTwo_Receiver(){
 	int tid;
@@ -60,8 +59,6 @@ kernelPartTwo_Receiver(){
 	Exit();
 }
 
-
-
 static void
 kernelPartTwo(){
 	bwprintf( COM2, "\r\n");
@@ -73,12 +70,23 @@ kernelPartTwo(){
 	Exit();
 }
 
+static void
+test(){
+	bwprintf( COM2, "\r\n");
+	char testing[20] = "";
+	
+	bwprintf( COM2, "size of empty string:%u\r\n", strLen(testing));
+	
+	Exit();
+}
+
+
 void
 firstUserTask()
 {
 	/* DO NOT CHANGE THE ORDER OF THE FOLLOWING FUNCTION CALLS	*/ 
 	
-	bwprintf( COM2, "nameServer initialized.\nTID of nameServer: %u(should be 1)\r\n", Create(2,nameServer));		//tid:1
+	//bwprintf( COM2, "nameServer initialized.\nTID of nameServer: %u(should be 1)\r\n", Create(2,nameServer));		//tid:1
 	//clockserver	//tid:2
 	//serialserver	//tid:3
 	

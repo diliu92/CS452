@@ -22,7 +22,7 @@ typedef struct nameServerEntry{
 }nameServerEntry;
 
 typedef struct nameServerTable{
-	nameServerEntry entries;
+	nameServerEntry entries[MAX_TASK];
 	int entryStatus[MAX_TASK];
 }nameServerTable;
 
