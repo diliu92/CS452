@@ -34,14 +34,14 @@ nameServer();
 /*
  * clockServer Related 
  */
-#define CLOCKSERVER		2 
+#define CLOCKSERVER_TID		2 
 void
 clockServer();
 
 /*
  * serialServer Related 
  */
-#define SERIALSERVER	3 
+#define SERIALSERVER_TID	3 
 void
 serialServer();
 
