@@ -59,14 +59,23 @@ kernelPartTwo_Receiver(){
 	Exit();
 }
 
+static void()
+testNameServer(){
+	RegisterAs("Yang1");
+	RegisterAs("Yang3");
+	
+	bwprintf( COM2, "%u\r\n", WhoIs("Yang1"));
+}
+
 static void
 kernelPartTwo(){
 	bwprintf( COM2, "\r\n");
 	
-	int Tid_low1 = Create(4,kernelPartTwo_Sender);		//1
+	//int Tid_low1 = Create(4,kernelPartTwo_Sender);		//1
 		
-	int Tid_low2 = Create(4,kernelPartTwo_Receiver); 	//2
+	//int Tid_low2 = Create(4,kernelPartTwo_Receiver); 	//2
 	
+	int Tid_low1 = Create(4,testNameServer);
 }
 
 void
