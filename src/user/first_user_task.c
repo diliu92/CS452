@@ -75,7 +75,7 @@ test(){
 	bwprintf( COM2, "Cool\r\n");
 	//char testing[20] = "";
 	
-	bwprintf( COM2, "size of empty string:%u\r\n", strLen("ABCD"));
+	bwprintf( COM2, "size of empty string:%u\r\n", strLen(""));
 	
 	Exit();
 }
