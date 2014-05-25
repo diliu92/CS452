@@ -72,10 +72,10 @@ kernelPartTwo(){
 
 static void
 test(){
-	bwprintf( COM2, "\r\n");
+	bwprintf( COM2, "Cool\r\n");
 	//char testing[20] = "";
 	
-	bwprintf( COM2, "size of empty string:%u\r\n", strLen(""));
+	bwprintf( COM2, "size of empty string:%u\r\n", strLen("ABCD"));
 	
 	Exit();
 }
@@ -93,5 +93,5 @@ firstUserTask()
 	/* 	                         END							*/
 	int Tid_low1 = Create(4,test);		//1
 	//kernelPartTwo();
-	
+	Exit();
 }
