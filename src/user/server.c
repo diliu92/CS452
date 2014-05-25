@@ -10,7 +10,7 @@ InitNameServer(nameServerTable* nameServerData){
 		nameServerData->entries[i].tid = i;
 		nameServerData->entries[i].tid = i;
 		
-		entryStatus[i] = 0;
+		nameServerData->entryStatus[i] = 0;
 	}
 	
 }
