@@ -83,7 +83,7 @@ firstUserTask()
 {
 	/* DO NOT CHANGE THE ORDER OF THE FOLLOWING FUNCTION CALLS	*/ 
 	
-	//bwprintf( COM2, "nameServer initialized.\nTID of nameServer: %u(should be 1)\r\n", Create(2,nameServer));		//tid:1
+	bwprintf( COM2, "nameServer initialized.\nTID of nameServer: %u(should be 1)\r\n", Create(2,nameServer));		//tid:1
 	//clockserver	//tid:2
 	//serialserver	//tid:3
 	
