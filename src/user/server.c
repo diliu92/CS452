@@ -54,8 +54,8 @@ nameServer(){
 				memcpy(req.name, name->data, (req.size) + 1);
 				
 				entry->nextSpot = (entry->nextSpot + 1) % MAX_NAME_ENTRY_PER_TID;
-				nameServerData.entryStatus[req.tid] = nameServerData.entryStatus[i] == MAX_NAME_ENTRY_PER_TID ?
-														MAX_NAME_ENTRY_PER_TID : nameServerData.entryStatus[i] + 1 ;
+				nameServerData.entryStatus[req.tid] = nameServerData.entryStatus[req.tid] == MAX_NAME_ENTRY_PER_TID ?
+														MAX_NAME_ENTRY_PER_TID : nameServerData.entryStatus[req.tid] + 1 ;
 			
 				reply = 0;				
 				Reply(tid,&reply, sizeof(int));
