@@ -48,7 +48,7 @@ nameServer(){
 				// error checking to be added
 				
 				nameServerEntry* entry = &(nameServerData.entries[req.tid]);
-				nameEntry* name = &(entry->names[entry->nextSpot])
+				nameEntry* name = &(entry->names[entry->nextSpot]);
 				
 				name->size = req.size;
 				memcpy(req.name, name->data, (req.size) + 1);
