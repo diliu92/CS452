@@ -2,11 +2,7 @@
 #define __FIRSTUSERTASK_H__
 
 void
-kernelPartOne();
-
-void
-kernelPartTwo();
-
+firstUserTask();
 /*
  * To be added
  */

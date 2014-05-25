@@ -9,7 +9,7 @@ main( int argc, char* argv[] ) {
 
 	Init(&kernelData);
 
-	for(;;) {
+	for(;;){
 		active = Scheduler_getNextReadyTask(&kernelData);
 		if (active == NULL)
 			break;

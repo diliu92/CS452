@@ -2,7 +2,7 @@
 #include <user.h>
 
 
-
+/*
 static void
 kernelPartOne_code(){
 	bwprintf( COM2, "My TID: %u, My Parent TID:%u\r\n", MyTid(), MyParentTid());
@@ -13,7 +13,7 @@ kernelPartOne_code(){
 
 
 
-void
+static void
 kernelPartOne(){	//priority of FUT is 3
 	bwprintf( COM2, "\r\n");
 	int Tid_low1 = Create(4,kernelPartOne_code);
@@ -32,7 +32,7 @@ kernelPartOne(){	//priority of FUT is 3
 	
 	Exit();	
 }
-
+*/
 
 static void
 kernelPartTwo_Sender(){
@@ -62,15 +62,13 @@ kernelPartTwo_Receiver(){
 
 
 
-void
+static void
 kernelPartTwo(){
 	bwprintf( COM2, "\r\n");
 	
 	int Tid_low1 = Create(4,kernelPartTwo_Sender);		//1
-	//bwprintf( COM2, "Created: %u\r\n", Tid_low1);
 		
 	int Tid_low2 = Create(4,kernelPartTwo_Receiver); 	//2
-	//bwprintf( COM2, "Created: %u\r\n", Tid_low2);
 	
 	Exit();
 }
@@ -78,7 +76,14 @@ kernelPartTwo(){
 void
 firstUserTask()
 {
-	/* DO NOT CHANGE THE OREDER OF THE FOLLOWING FUNCTION CALLS	*/ 
+	/* DO NOT CHANGE THE ORDER OF THE FOLLOWING FUNCTION CALLS	*/ 
+	
+	bwprintf( COM2, "nameServer initialized.\nTID of nameServer: %u(should be 1)\r\n", Create(2,nameServer));		//tid:1
+	//clockserver	//tid:2
+	//serialserver	//tid:3
 	
 	/* 	                         END							*/
+	
+	kernelPartTwo();
+	
 }

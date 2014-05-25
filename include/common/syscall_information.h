@@ -11,10 +11,9 @@
 #define SYSCALL_SEND			6
 #define SYSCALL_RECEIVE			7
 #define SYSCALL_REPLY			8
-#define SYSCALL_REGISTER_AS		9
-#define	SYSCALL_WHO_IS			10
 
-
+#define SYSCALL_REGISTERAS		9
+#define SYSCALL_WHOIS			10
 
  
 /*
@@ -59,20 +58,10 @@ typedef struct syscallRequest_Reply{
 	int replylen;
 }syscallRequest_Reply;
 
-
-
-
-
-typedef struct syscallRequest_RegisterAs{
+typedef struct syscallRequest_NameServer{
 	int syscall_uid;
-	int	retval;
 	char* name;
-}syscallRequest_RegisterAs;
+}
 
-typedef struct syscallRequest_WhoIs{
-	int syscall_uid;
-	int	retval;
-	char* name;
-}syscallRequest_WhoIs;
 
 #endif

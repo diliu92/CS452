@@ -6,5 +6,4 @@
 void
 Init(kernGlobal* kernelData);
 
-
 #endif

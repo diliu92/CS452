@@ -27,6 +27,11 @@ Receieve(int* Tid, void* msg, int msglen);
 int 
 Reply(int Tid, void* reply, int replylen);
 
+int
+RegisterAs(char* name);
+
+int
+WhoIs(char* name);
 
 
 #endif

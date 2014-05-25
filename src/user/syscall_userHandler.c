@@ -72,6 +72,8 @@ Send(int Tid, void* msg, int msglen, void* reply, int replylen){
 	
 	putReqInR0(&req);
 	asm("swi");
+	
+	return req.retval;	
 }
 
 int 
@@ -84,6 +86,8 @@ Receieve(int* Tid, void* msg, int msglen){
 	
 	putReqInR0(&req);
 	asm("swi");
+	
+	return req.retval;	
 }
 
 int 
@@ -96,5 +100,33 @@ Reply(int Tid, void* reply, int replylen){
 	
 	putReqInR0(&req);
 	asm("swi");
+	
+	return req.retval;	
+}
+
+int
+RegisterAs(char* name){
+	syscallRequest_NameServer req;
+	req.syscall_uid = SYSCALL_REGISTERAS;
+	req.name = name;
+	
+	int retval;
+	
+	Send(NAMESERVER_TID, &req, sizeof(syscallRequest_NameServer), &retval, sizeof(int));
+	
+	return retval; 	
+}
+
+int
+WhoIs(char* name){
+	syscallRequest_NameServer req;
+	req.syscall_uid = SYSCALL_WHOIS;
+	req.name = name;
+	
+	int retval;
+	
+	Send(NAMESERVER_TID, &req, sizeof(syscallRequest_NameServer), &retval, sizeof(int));
+	
+	return retval; 	
 }
 
