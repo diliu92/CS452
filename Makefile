@@ -28,7 +28,8 @@ KERN_OBJS = 	$(OUT_DIR)/kernel.o			\
 		$(OUT_DIR)/syscall_kernHandler.o				
 
 USER_OBJS=	$(OUT_DIR)/syscall_userHandler.o	\
-		$(OUT_DIR)/first_user_task.o	
+		$(OUT_DIR)/first_user_task.o		\
+		$(OUT_DIR)/server.o		
 
 COMMON_OBJS=	$(OUT_DIR)/contextSwitch.o		\
 		$(OUT_DIR)/bwio.o			\
@@ -71,6 +72,11 @@ $(OUT_DIR)/first_user_task.o: $(OUT_DIR)/first_user_task.s
 	$(AS) 	-o $(OUT_DIR)/first_user_task.o 	$(ASFLAGS) $(OUT_DIR)/first_user_task.s
 $(OUT_DIR)/first_user_task.s:
 	$(XCC) 	-o $(OUT_DIR)/first_user_task.s 	-S $(CFLAGS) $(SRC_USER_DIR)/first_user_task.c
+
+$(OUT_DIR)/server.o: $(OUT_DIR)/server.s
+	$(AS) 	-o $(OUT_DIR)/server.o 	$(ASFLAGS) $(OUT_DIR)/server.s
+$(OUT_DIR)/server.s:
+	$(XCC) 	-o $(OUT_DIR)/server.s 	-S $(CFLAGS) $(SRC_USER_DIR)/server.c
 
 
 #-------------------------------------common related----------------------------------------#
