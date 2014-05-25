@@ -2,7 +2,7 @@
 #include <user.h>
 
 static void
-InitNameServer(nameServer* nameServerData){
+InitNameServer(nameServerTable* nameServerData){
 	int i;
 	
 	for (i = 0; i < MAX_TASK; i++)
