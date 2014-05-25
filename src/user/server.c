@@ -79,7 +79,7 @@ nameServer(){
 						}
 					}
 				}
-				
+				bwprintf( COM2, "%u\r\n", reply);
 				Reply(tid,&reply, sizeof(int));
 				break;	
 			}		
