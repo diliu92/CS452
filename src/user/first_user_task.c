@@ -59,7 +59,7 @@ kernelPartTwo_Receiver(){
 	Exit();
 }
 
-static void()
+static void
 testNameServer(){
 	RegisterAs("Yang1");
 	RegisterAs("Yang3");
