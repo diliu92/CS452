@@ -61,15 +61,15 @@ kernelPartTwo_Receiver(){
 
 static void
 testNameServer(){
-	RegisterAs("Yang1");
+	RegisterAs("Yange1");
 	RegisterAs("Yang2");
-	RegisterAs("Yang3");
+	RegisterAs("Yange3");
 	RegisterAs("Yang4");
-	RegisterAs("Yang5");
+	RegisterAs("Yange5");
 	//RegisterAs("Yang3");
 		
-	bwprintf( COM2, "%d\r\n", WhoIs("Yang1"));
-	//bwprintf( COM2, "%d\r\n", WhoIs("Yang3"));
+	bwprintf( COM2, "%d\r\n", WhoIs("Yange1"));
+	bwprintf( COM2, "%d\r\n", WhoIs("Yange5"));
 	//bwprintf( COM2, "%d\r\n", WhoIs("Yang2"));
 	
 	Exit();
