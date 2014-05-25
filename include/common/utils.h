@@ -11,9 +11,14 @@ typedef struct Queue{
 }Queue;
 
 void*
-memcpy(char* src, char* dest, int size);
+memcpy(const char* src, char* dest, int size);
 
 int
-strlen(char* str);
+strlen(const char* str);
+
+int
+strcomp(const char* str1, const char* str2);
+
+
 
 #endif

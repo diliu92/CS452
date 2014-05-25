@@ -39,7 +39,7 @@ kernelPartTwo_Sender(){
 	char sendMSG[20] = "Hello, Receiver";
 	char replyMSG[20];
 
-	bwprintf( COM2, "Sender-%u sent (%s) to Receiver-2 Size:%u\r\n", MyTid(), sendMSG, strlen(sendMSG));	
+	bwprintf( COM2, "Sender-%u sent (%s) to Receiver-2\r\n", MyTid(), sendMSG);	
 	Send(2, sendMSG, 20, replyMSG, 20);
 	bwprintf( COM2, "Sender-%u got a reply(%s) from Receiver-2\r\n", MyTid(), replyMSG);
 	
@@ -66,10 +66,10 @@ void
 kernelPartTwo(){
 	bwprintf( COM2, "\r\n");
 	
-	int Tid_low1 = Create(6,kernelPartTwo_Sender);		//1
+	int Tid_low1 = Create(2,kernelPartTwo_Sender);		//1
 	//bwprintf( COM2, "Created: %u\r\n", Tid_low1);
 		
-	int Tid_low2 = Create(4,kernelPartTwo_Receiver); 	//2
+	int Tid_low2 = Create(1,kernelPartTwo_Receiver); 	//2
 	//bwprintf( COM2, "Created: %u\r\n", Tid_low2);
 	
 	Exit();
