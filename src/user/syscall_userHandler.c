@@ -126,10 +126,8 @@ WhoIs(char* name){
 	req.name = name;
 	req.size = strLen(name);
 		
-	int retval;
-	
 	Send(NAMESERVER_TID, &req, sizeof(syscallRequest_NameServer), &(req.tid), sizeof(int));
 	
-	return retval; 	
+	return req.tid; 	
 }
 
