@@ -73,9 +73,9 @@ kernelPartTwo(){
 static void
 test(){
 	bwprintf( COM2, "\r\n");
-	char testing[20] = "";
+	//char testing[20] = "";
 	
-	bwprintf( COM2, "size of empty string:%u\r\n", strLen(testing));
+	bwprintf( COM2, "size of empty string:%u\r\n", strLen(""));
 	
 	Exit();
 }
