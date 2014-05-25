@@ -54,8 +54,8 @@ nameServer(){
 				memcpy(req.name, name->data, (req.size) + 1);
 				
 				entry->nextSpot = (entry->nextSpot + 1) % MAX_NAME_ENTRY_PER_TID;
-				nameServerData->entryStatus[req.tid] = nameServerData->entryStatus[i] == MAX_NAME_ENTRY_PER_TID ?
-														MAX_NAME_ENTRY_PER_TID : nameServerData->entryStatus[i]	+1 ;
+				nameServerData.entryStatus[req.tid] = nameServerData.entryStatus[i] == MAX_NAME_ENTRY_PER_TID ?
+														MAX_NAME_ENTRY_PER_TID : nameServerData.entryStatus[i] + 1 ;
 			
 				reply = 0;				
 				Reply(tid,&reply, sizeof(int));
@@ -69,8 +69,8 @@ nameServer(){
 				reply = -3;	//not found
 				for (i = 0; i < MAX_TASK; i++)
 				{
-					nameServerEntry* entry = &(nameServerData->entries[i]);
-					howMany = nameServerData->entryStatus[i];
+					nameServerEntry* entry = &(nameServerData.entries[i]);
+					howMany = nameServerData.entryStatus[i];
 					
 					if(howMany){
 						if (findMatchInNameServerEntry(entry, howMany, req.name, req.size)){
