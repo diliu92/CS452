@@ -38,8 +38,15 @@ RPS_ServerInit(RPS* rps){
 	}
 }
 
+static int
+RPS_FindNextSpot(RPS* rps){
+	
+}
 
 
+/*
+ * Error Checking: to be added
+ */ 
 void
 RPS_Server(){
 	RPS rps;
@@ -48,16 +55,53 @@ RPS_Server(){
 	int playerTid;
 	RPS_clientRequest req;
 
+	clientPair* pair;	
+	int i;
+	
 	for(;;){
 		Receieve(&playerTid, &req, sizeof(RPS_clientRequest));
 		switch (req.rpscall_uid)
-		{
+		{		
 			case RPSCALL_SIGNUP:
+			{
+				int whichTable;	
+							
+				for (i = 0; i < MAX_PAIR_OF_CLIENTS; i++)
+				{
+					pair = &(rps.clientPairs[i]);
+					if(rps.clientPairs[i].status == WAITING){
+						if(pair->clientOne ==  -1)
+							pair->clientOne = req.tid;				
+						else{
+							pair->clientTwo = req.tid;
+							
+							pair->status = PLAYING;
+							whichTable = i;
+							
+							Reply(pair->clientOne, &whichTable, sizeof(int));
+							Reply(pair->clientTwo, &whichTable, sizeof(int));
+						}
+						break;
+					}
+				} 
 				
+				// error checking to be added
 				break;
+			}
 			case RPSCALL_PLAY:
+			{
+				int matchResult;	
+				pair = &(rps.clientPairs[req.whichTable]);
+							
+				if (){
+					
+				}
+				else
 				
-				break;	
+				
+				// error checking to be added
+				break;
+			}					
 			case RPSCALL_QUIT:
 				
 				break;					

@@ -25,6 +25,7 @@ typedef struct RPS_clientRequest{
 	int retval;
 	
 	int tid;
+	int whichTable;		//used to indicate which table they are in(after the call of signup)
 	int data;
 }RPS_clientRequest;
 
