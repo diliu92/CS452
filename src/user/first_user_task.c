@@ -80,11 +80,11 @@ static void
 kernelPartTwo(){
 	bwprintf( COM2, "\r\n");
 	
-	//int Tid_low1 = Create(4,kernelPartTwo_Sender);		//1
+	int Tid_low1 = Create(4,kernelPartTwo_Sender);		//1
 		
-	//int Tid_low2 = Create(4,kernelPartTwo_Receiver); 	//2
+	int Tid_low2 = Create(4,kernelPartTwo_Receiver); 	//2
 	
-	int Tid_low1 = Create(4,testNameServer);
+	//int Tid_low1 = Create(4,testNameServer);
 }
 
 void
@@ -92,7 +92,7 @@ firstUserTask()
 {
 	/* DO NOT CHANGE THE ORDER OF THE FOLLOWING FUNCTION CALLS	*/ 
 	
-	bwprintf( COM2, "nameServer initialized.\nTID of nameServer: %u(should be 1)\r\n", Create(2,nameServer));		//tid:1
+	//bwprintf( COM2, "nameServer initialized.\nTID of nameServer: %u(should be 1)\r\n", Create(2,nameServer));		//tid:1
 	//clockserver	//tid:2
 	//serialserver	//tid:3
 	
