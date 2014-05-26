@@ -67,7 +67,7 @@ testNameServer(){
 	RegisterAs("Yang4");
 	RegisterAs("Yange5");
 	//RegisterAs("Yang3");
-	long long i;	
+	
 	bwprintf( COM2, "%d\r\n", WhoIs("Yange1"));
 	bwprintf( COM2, "%d\r\n", WhoIs("Yange5"));
 	bwprintf( COM2, "%d\r\n", WhoIs("Yang2"));
