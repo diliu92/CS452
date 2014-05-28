@@ -38,11 +38,6 @@ RPS_ServerInit(RPS* rps){
 	}
 }
 
-static int
-RPS_FindNextSpot(RPS* rps){
-	
-}
-
 
 /*
  * Error Checking: to be added
@@ -106,6 +101,7 @@ RPS_Server(){
 				
 				break;					
 		}
+		
 		
 	}
 }

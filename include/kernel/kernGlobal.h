@@ -36,7 +36,7 @@ typedef struct task{
 	Queue sendQueue;	
 	struct task* nextSendQueueTask;	
 	
-	syscallRequest* whyBlocked;		//Send,Recv,to be changed to requestPointer	
+	syscallRequest* whyBlocked;		//Send,Recv,to be changed to comReq
 }task; 
 
 
