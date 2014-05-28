@@ -76,13 +76,125 @@ testNameServer(){
 	Exit();
 }
 
+static void RPS_client1(){
+	RPS_clientRequest req;
+	req.rpscall_uid = RPSCALL_SIGNUP;
+	req.tid = MyTid();
+	int target_tid = WhoIs("RPS Server");
+	Send(target_tid, &req, sizeof(RPS_clientRequest), &(req.whichTable), sizeof(int));
+	bwprintf( COM2, "client1 is sitting on table #%d\r\n", req.whichTable);
+
+	req.rpscall_uid = RPSCALL_PLAY;
+	req.data = ROCK;
+	Send(target_tid, &req, sizeof(RPS_clientRequest), &(req.retval), sizeof(int));
+
+	req.rpscall_uid = RPSCALL_PLAY;
+	req.data = ROCK;
+	Send(target_tid, &req, sizeof(RPS_clientRequest), &(req.retval), sizeof(int));
+
+	req.rpscall_uid = RPSCALL_PLAY;
+	req.data = ROCK;
+	Send(target_tid, &req, sizeof(RPS_clientRequest), &(req.retval), sizeof(int));
+
+	req.rpscall_uid = RPSCALL_PLAY;
+	req.data = ROCK;
+	Send(target_tid, &req, sizeof(RPS_clientRequest), &(req.retval), sizeof(int));
+
+	Exit();
+}
+
+static void RPS_client2(){
+	RPS_clientRequest req;
+	req.rpscall_uid = RPSCALL_SIGNUP;
+	req.tid = MyTid();
+	int target_tid = WhoIs("RPS Server");
+	Send(target_tid, &req, sizeof(RPS_clientRequest), &(req.whichTable), sizeof(int));
+	bwprintf( COM2, "client2 is sitting on table #%d\r\n", req.whichTable);
+
+	req.rpscall_uid = RPSCALL_PLAY;
+	req.data = ROCK;
+	Send(target_tid, &req, sizeof(RPS_clientRequest), &(req.retval), sizeof(int));
+
+	req.rpscall_uid = RPSCALL_PLAY;
+	req.data = PAPER;
+	Send(target_tid, &req, sizeof(RPS_clientRequest), &(req.retval), sizeof(int));
+
+	req.rpscall_uid = RPSCALL_PLAY;
+	req.data = SCISSORS;
+	Send(target_tid, &req, sizeof(RPS_clientRequest), &(req.retval), sizeof(int));
+
+	req.rpscall_uid = RPSCALL_QUIT;
+	Send(target_tid, &req, sizeof(RPS_clientRequest), &(req.retval), sizeof(int));
+
+	Exit();
+}
+
+static void RPS_client3(){
+	RPS_clientRequest req;
+	req.rpscall_uid = RPSCALL_SIGNUP;
+	req.tid = MyTid();
+	int target_tid = WhoIs("RPS Server");
+	Send(target_tid, &req, sizeof(RPS_clientRequest), &(req.whichTable), sizeof(int));
+	bwprintf( COM2, "client3 is sitting on table #%d\r\n", req.whichTable);
+
+	req.rpscall_uid = RPSCALL_PLAY;
+	req.data = SCISSORS;
+	Send(target_tid, &req, sizeof(RPS_clientRequest), &(req.retval), sizeof(int));
+
+	req.rpscall_uid = RPSCALL_PLAY;
+	req.data = PAPER;
+	Send(target_tid, &req, sizeof(RPS_clientRequest), &(req.retval), sizeof(int));
+
+	req.rpscall_uid = RPSCALL_PLAY;
+	req.data = ROCK;
+	Send(target_tid, &req, sizeof(RPS_clientRequest), &(req.retval), sizeof(int));
+
+	req.rpscall_uid = RPSCALL_QUIT;
+	Send(target_tid, &req, sizeof(RPS_clientRequest), &(req.retval), sizeof(int));
+
+	Exit();
+}
+
+static void RPS_client4(){
+	RPS_clientRequest req;
+	req.rpscall_uid = RPSCALL_SIGNUP;
+	req.tid = MyTid();
+	int target_tid = WhoIs("RPS Server");
+	Send(target_tid, &req, sizeof(RPS_clientRequest), &(req.whichTable), sizeof(int));
+	bwprintf( COM2, "client4 is sitting on table #%d\r\n", req.whichTable);
+
+	req.rpscall_uid = RPSCALL_PLAY;
+	req.data = PAPER;
+	Send(target_tid, &req, sizeof(RPS_clientRequest), &(req.retval), sizeof(int));
+
+	req.rpscall_uid = RPSCALL_PLAY;
+	req.data = SCISSORS;
+	Send(target_tid, &req, sizeof(RPS_clientRequest), &(req.retval), sizeof(int));
+
+	req.rpscall_uid = RPSCALL_PLAY;
+	req.data = ROCK;
+	Send(target_tid, &req, sizeof(RPS_clientRequest), &(req.retval), sizeof(int));
+
+	req.rpscall_uid = RPSCALL_QUIT;
+	Send(target_tid, &req, sizeof(RPS_clientRequest), &(req.retval), sizeof(int));
+
+	Exit();
+}
+
+
 static void
 kernelPartTwo(){
 	bwprintf( COM2, "\r\n");
+
+	int server = Create(4, RPS_Server);
+	int client1 = Create(5, RPS_client1);
+	int client2 = Create(5, RPS_client2);
+	int client3 = Create(5, RPS_client3);
+	int client4 = Create(5, RPS_client4);
 	
-	int Tid_low1 = Create(4,kernelPartTwo_Sender);		//1
+	//int Tid_low1 = Create(4,kernelPartTwo_Sender);		//1
 		
-	int Tid_low2 = Create(4,kernelPartTwo_Receiver); 	//2
+	//int Tid_low2 = Create(4,kernelPartTwo_Receiver); 	//2
 	
 	//int Tid_low1 = Create(4,testNameServer);
 }
@@ -92,7 +204,7 @@ firstUserTask()
 {
 	/* DO NOT CHANGE THE ORDER OF THE FOLLOWING FUNCTION CALLS	*/ 
 	
-	//bwprintf( COM2, "nameServer initialized.\nTID of nameServer: %u(should be 1)\r\n", Create(2,nameServer));		//tid:1
+	bwprintf( COM2, "nameServer initialized.\nTID of nameServer: %u(should be 1)\r\n", Create(2,nameServer));		//tid:1
 	//clockserver	//tid:2
 	//serialserver	//tid:3
 	

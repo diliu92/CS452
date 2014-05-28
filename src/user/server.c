@@ -3,7 +3,7 @@
 
 static void
 InitNameServer(nameServerTable* nameServerData){
-	int i, j;
+	int i;
 	
 	for (i = 0; i < MAX_TASK; i++)
 	{
@@ -39,8 +39,7 @@ nameServer(){
 		
 	for (;;){
 		Receieve(&tid, &req, sizeof(syscallRequest_NameServer));
-		bwprintf( COM2, "NameServer: got a request\n");	
-		
+				
 		switch (req.syscall_uid)
 		{
 			case SYSCALL_REGISTERAS:

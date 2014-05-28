@@ -36,9 +36,9 @@ COMMON_OBJS=	$(OUT_DIR)/contextSwitch.o		\
 		$(OUT_DIR)/bwio.o			\
 		$(OUT_DIR)/utils.o
 
-all: kernel.elf
+all: kernel2.elf
 
-kernel.elf: $(KERN_OBJS) $(USER_OBJS) $(COMMON_OBJS) 
+kernel2.elf: $(KERN_OBJS) $(USER_OBJS) $(COMMON_OBJS) 
 	$(LD) $(LDFLAGS) -o $@ $(KERN_OBJS) $(USER_OBJS) $(COMMON_OBJS) -lgcc	
 	
 #-------------------------------------kernel related----------------------------------------#
@@ -101,4 +101,4 @@ $(OUT_DIR)/utils.s:
 
 
 clean:
-	-rm -f kernel.elf $(OUT_DIR)/*.s $(OUT_DIR)/*.o $(OUT_DIR)/main.map
+	-rm -f kernel2.elf $(OUT_DIR)/*.s $(OUT_DIR)/*.o $(OUT_DIR)/main.map

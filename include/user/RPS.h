@@ -1,9 +1,9 @@
 #ifndef __RPS_H__
 #define __RPS_H__
 
-
-#define WIN		0
-#define LOSE	1
+#define TIE		2
+#define WIN		1
+#define LOSE	0
 
 #define IDLE		0
 #define	ROCK		1
