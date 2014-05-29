@@ -17,7 +17,6 @@ memcpy(const char* src1, char* dest1, int size){
 	char* char_src = (char*) int_src;
 	char* char_dest = (char*) int_dest;
 	int char_size = size%sizeof(int);	
-	
 	while(char_size--)
 		*char_dest++ = *char_src++;
 		
