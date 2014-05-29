@@ -2,25 +2,23 @@
 
 void*
 memcpy(const char* src1, char* dest1, int size){
-	long long* long_src = (long long*) src1;
-	long long* long_dest = (long long*) dest1;	
-	int longlong_size 	= size / sizeof(long long);	
-	while(longlong_size--)
-		*long_dest++ = *long_src++;
+	int* src = (int*) src1;
+	int* dest = (int*) dest1;
 	
-	int* int_src = (int*) long_dest;
-	int* int_dest = (int*) long_src;	
-	int int_size = 	(size % sizeof(long long)) / sizeof(int);	
+	int int_size = size / sizeof(int);
+	int char_size = size % sizeof(int);
+	
 	while(int_size--)
-		*int_dest++ = *int_src++;
+		*dest++ = *src++;
 	
-	char* char_src = (char*) int_src;
-	char* char_dest = (char*) int_dest;
-	int char_size = size % sizeof(int);	
+	char* char_src = (char*) src;
+	char* char_dest = (char*) dest;
+	
 	while(char_size--)
 		*char_dest++ = *char_src++;
-		
-	return dest1;
+	
+	return dest;
+	
 	
 	/*
 	while(size--)
