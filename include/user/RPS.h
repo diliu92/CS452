@@ -33,6 +33,6 @@ typedef struct RPS_clientRequest{
 void
 RPS_Server();
 
-
+void wait();
 
 #endif

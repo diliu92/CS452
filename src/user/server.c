@@ -63,7 +63,7 @@ nameServer(){
 			case SYSCALL_WHOIS:
 			{
 				int i, howMany;
-				nameServerEntry* entry;
+				//nameServerEntry* entry;
 				
 				reply = -3;	//not found
 				for (i = 0; i < MAX_TASK; i++)

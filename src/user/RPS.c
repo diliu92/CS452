@@ -11,6 +11,7 @@ typedef struct clientPair{
 	int clientTwoChoice;
 	
 	int status;
+	int roundCount;
 }clientPair;
 
 typedef struct RPS{
@@ -33,7 +34,8 @@ RPS_ServerInit(RPS* rps){
 		pair->clientOneChoice = IDLE;
 		pair->clientTwoChoice = IDLE;
 		
-		pair->status = WAITING;		
+		pair->status = WAITING;
+		pair->roundCount = 0;		
 	}
 }
 
@@ -56,6 +58,12 @@ static char* choiceMap(int choice, char * retval){
 	return retval;
 }
 
+void wait(){	
+	bwprintf(COM2, "\033[0mPress any key to continue...");
+	bwgetc(COM2);
+	bwprintf(COM2, "\r\n\r\n");
+}
+
 /*
  * Error Checking: to be added
  */ 
@@ -74,6 +82,7 @@ RPS_Server(){
 
 	for(;;){
 		Receieve(&playerTid, &req, sizeof(RPS_clientRequest));
+		bwprintf(COM2, "\033[32mRPS Server:\r\n");
 		switch (req.rpscall_uid){
 			case RPSCALL_SIGNUP:{
 				int whichTable;	
@@ -82,8 +91,10 @@ RPS_Server(){
 				{
 					pair = &(rps.clientPairs[i]);
 					if(rps.clientPairs[i].status == WAITING){
-						if(pair->clientOne ==  -1)
-							pair->clientOne = req.tid;				
+						if(pair->clientOne ==  -1){
+							pair->clientOne = req.tid;
+							bwprintf(COM2, "Player %d is signed to table #%d, waiting for another player\r\n", req.tid, i);
+						}
 						else{
 							pair->clientTwo = req.tid;
 							
@@ -92,7 +103,11 @@ RPS_Server(){
 							
 							Reply(pair->clientOne, &whichTable, sizeof(int));
 							Reply(pair->clientTwo, &whichTable, sizeof(int));
+							bwprintf(COM2, "Player %d is signed to table #%d, the other player on this table is player %d\r\n", pair->clientTwo, whichTable, pair->clientOne);
+							bwprintf(COM2, "Table #%d status changed to PLAYING\r\n", whichTable);
+
 						}
+						wait();
 						break;
 					}
 				} 
@@ -112,51 +127,54 @@ RPS_Server(){
 					pair->clientOneChoice = IDLE;
 					pair->clientTwoChoice = IDLE;
 					pair->status = WAITING;	
+					pair->roundCount = 0;	
 
-					bwprintf( COM2, "Both player on table #%d quit\r\n", req.whichTable);
+					bwprintf( COM2, "Player %d on table #%d forced to quit because the other player quitted\r\n", req.tid, req.whichTable);
 					whichTable = -1;
 					Reply(req.tid, &whichTable, sizeof(int));
 				}
 				char * temp;
-				if (pair->clientOneChoice == IDLE){
+				if (req.tid == pair->clientOne && pair->clientOneChoice == IDLE){
 					pair->clientOneChoice = req.data;
-					bwprintf( COM2, "Player 1 on table #%d chose: %s\r\n", req.whichTable, choiceMap(req.data, temp));
+					bwprintf( COM2, "Table #%d Round %d - Player %d chose: %s\r\n", req.whichTable, pair->roundCount + 1, pair->clientOne, choiceMap(req.data, temp));
 				}
-				else if (pair->clientTwoChoice == IDLE){
+				else if (req.tid == pair->clientTwo && pair->clientTwoChoice == IDLE){
 					pair->clientTwoChoice = req.data;
-					bwprintf( COM2, "Player 2 on table #%d chose: %s\r\n", req.whichTable, choiceMap(req.data, temp));
+					bwprintf( COM2, "Table #%d Round %d - Player %d chose: %s\r\n", req.whichTable, pair->roundCount + 1, pair->clientTwo, choiceMap(req.data, temp));
 				}
 
 				if (pair->clientOneChoice != IDLE && pair->clientTwoChoice != IDLE){
+					bwprintf( COM2, "Table #%d Round %d - Result: ", req.whichTable, pair->roundCount + 1);
 					if (pair->clientOneChoice == pair->clientTwoChoice){
 						matchResult1 = TIE;
 						matchResult2 = TIE;	
-						bwprintf( COM2, "Table #%d result: %s\r\n", req.whichTable, "TIE");
+						bwprintf( COM2, "%s\r\n", "TIE");
 					}
 					else if ((pair->clientOneChoice == pair->clientTwoChoice + 1)
 							|| (pair->clientOneChoice == pair->clientTwoChoice - 2)){
 						matchResult1 = WIN;
 						matchResult2 = LOSE;
-						bwprintf( COM2, "Table #%d result: %s\r\n", req.whichTable, "Player 1 WIN");
+						bwprintf( COM2, "Player %d WIN\r\n", pair->clientOne);
 					}
 					else{
 						matchResult1 = LOSE;
 						matchResult2 = WIN;
-						bwprintf( COM2, "Table #%d result: %s\r\n", req.whichTable, "Player 2 WIN");
+						bwprintf( COM2, "Player %d WIN\r\n", pair->clientTwo);
 					}
 					pair->clientOneChoice = IDLE;
 					pair->clientTwoChoice = IDLE;
-					pair->status = WAITING;	
+					pair->roundCount++;	
 					Reply(pair->clientOne, &matchResult1, sizeof(int));
 					Reply(pair->clientTwo, &matchResult2, sizeof(int));
 				}
 
+				wait();
 				// error checking to be added
 				break;	
 			}				
 			case RPSCALL_QUIT:
 			{
-				int whichTable;
+				int retval = -1;
 				pair = &(rps.clientPairs[req.whichTable]);
 				if (pair->status == QUITTED){
 					pair->clientOne = -1;
@@ -164,19 +182,26 @@ RPS_Server(){
 					pair->clientOneChoice = IDLE;
 					pair->clientTwoChoice = IDLE;
 					pair->status = WAITING;
-					bwprintf( COM2, "Both player on table #%d quit\r\n", req.whichTable);
+					pair->roundCount = 0;	
 				}
 				else{
 					pair->status = QUITTED;
-					bwprintf( COM2, "One player on table #%d quit\r\n", req.whichTable);
+					if (pair->clientOneChoice != IDLE){
+						Reply(pair->clientOne, &retval, sizeof(int));
+					}
+					else if (pair->clientTwoChoice != IDLE){
+						Reply(pair->clientTwo, &retval, sizeof(int));
+					}
 				}
 
-				whichTable = -1;
-				Reply(req.tid, &whichTable, sizeof(int));
+				Reply(req.tid, &retval, sizeof(int));
+
+				bwprintf( COM2, "Player %d on table #%d requested to quit\r\n", req.tid, req.whichTable);
+				
+				wait();
 				break;				
 			}
 		}
-		
-		
+		bwprintf(COM2, "\033[0m");
 	}
 }
