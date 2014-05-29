@@ -10,7 +10,7 @@ typedef struct Queue{
 }Queue;
 
 void*
-memcpy(const char* src, char* dest, int size);
+memcpy(const char* src1, char* dest1, int size);
 
 int
 strLen(const char* str);	//doesn't include null terminator

@@ -1,10 +1,30 @@
 
 
 void*
-memcpy(const char* src, char* dest, int size){
+memcpy(const char* src1, char* dest1, int size){
+	int* src = (int*) src1;
+	int* dest = (int*) dest1;
+	
+	int int_size = size / sizeof(int);
+	int char_size = size % sizeof(int);
+	
+	while(int_size--)
+		*dest++ = *src++;
+	
+	char* char_src = (char*) src;
+	char* char_dest = (char*) dest;
+	
+	while(char_size--)
+		*char_dest++ = *char_src++;
+	
+	return dest;
+	
+	
+	/*
 	while(size--)
 		*dest++ = *src++;
 	return dest;
+	*/
 }
 
 int
