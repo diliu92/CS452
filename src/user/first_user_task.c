@@ -1,38 +1,6 @@
-
 #include <user.h>
 
 
-/*
-static void
-kernelPartOne_code(){
-	bwprintf( COM2, "My TID: %u, My Parent TID:%u\r\n", MyTid(), MyParentTid());
-	Pass();
-	bwprintf( COM2, "My TID: %u, My Parent TID:%u\r\n", MyTid(), MyParentTid());
-	Exit();	
-}
-
-
-
-static void
-kernelPartOne(){	//priority of FUT is 3
-	bwprintf( COM2, "\r\n");
-	int Tid_low1 = Create(4,kernelPartOne_code);
-	bwprintf( COM2, "Created: %u\r\n", Tid_low1);
-		
-	int Tid_low2 = Create(4,kernelPartOne_code);
-	bwprintf( COM2, "Created: %u\r\n", Tid_low2);
-	
-	int Tid_high1 = Create(2,kernelPartOne_code);
-	bwprintf( COM2, "Created: %u\r\n", Tid_high1);
-		
-	int Tid_high2 = Create(2,kernelPartOne_code);
-	bwprintf( COM2, "Created: %u\r\n", Tid_high2);	
-	
-	bwprintf( COM2, "First:exiting\r\n" );
-	
-	Exit();	
-}
-*/
 
 static void
 kernelPartTwo_Sender(){
@@ -66,12 +34,10 @@ testNameServer(){
 	RegisterAs("Yange3");
 	RegisterAs("Yang4");
 	RegisterAs("Yange5");
-	//RegisterAs("Yang3");
 	
 	bwprintf( COM2, "%d\r\n", WhoIs("Yange1"));
 	bwprintf( COM2, "%d\r\n", WhoIs("Yange5"));
 	bwprintf( COM2, "%d\r\n", WhoIs("Yang2"));
-	//bwprintf( COM2, "%d\r\n", WhoIs("Yang2"));
 	
 	Exit();
 }
@@ -192,11 +158,7 @@ kernelPartTwo(){
 	int client3 = Create(5, RPS_client3);
 	int client4 = Create(5, RPS_client4);
 	
-	//int Tid_low1 = Create(4,kernelPartTwo_Sender);		//1
-		
-	//int Tid_low2 = Create(4,kernelPartTwo_Receiver); 	//2
-	
-	//int Tid_low1 = Create(4,testNameServer);
+	Exit();
 }
 
 void
@@ -206,8 +168,7 @@ firstUserTask()
 	
 	bwprintf( COM2, "nameServer initialized.\nTID of nameServer: %u(should be 1)\r\n", Create(2,nameServer));		//tid:1
 	//clockserver	//tid:2
-	//serialserver	//tid:3
-	
+	//serialserver	//tid:3	
 	/* 	                         END							*/
 	
 	kernelPartTwo();
