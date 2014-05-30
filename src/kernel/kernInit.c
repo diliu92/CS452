@@ -4,6 +4,11 @@
 
 static void
 hardwareInit(){
+	// asm("mrc p15, 0, r0, c1, c0, 0");
+	// asm("orr r0, r0, #0x00000002"); //D Cache
+	// asm("orr r0, r0, #0x00001000"); //I Cache
+	// asm("mcr p15, 0, r0, c1, c0, 0");
+
 	bwsetfifo(COM2, OFF);
 	//add kerent to swi jump table
 	int* addr = (int*)0x28;

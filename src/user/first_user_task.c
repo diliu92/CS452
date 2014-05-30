@@ -1,7 +1,8 @@
 #include <user.h>
 
-static void
-speedTest_Sender(){
+static int start, end;
+
+static void createTimer(){
 	int *timerLoad = (int *) (TIMER3_BASE + LDR_OFFSET);
 	int *timerControl = (int *) (TIMER3_BASE + CRTL_OFFSET);
 	*timerControl = *timerControl & ~ENABLE_MASK; //disable timer
@@ -9,9 +10,14 @@ speedTest_Sender(){
 	*timerControl = *timerControl & ~MODE_MASK;	 //free runnning
 	*timerControl = *timerControl | CLKSEL_MASK; //uncomment to use 508Hz
 	*timerControl = *timerControl | ENABLE_MASK; //enable timer
+}
+
+static void
+speedTest_Sender1(){
+	createTimer();
 	int *timerValue = (int *) (TIMER3_BASE + VAL_OFFSET);
 
-	int startTime = *timerValue;
+	start = *timerValue;
 
 	char sendMSG[64] = "123456789.123456789.123456789.123456789.123456789.123456789.123";
 	char replyMSG[64];
@@ -20,20 +26,59 @@ speedTest_Sender(){
 	// char replyMSG[4];
 	// Send(3, sendMSG, 4, replyMSG, 4);
 
-	int endTime = *timerValue;
-	bwprintf(COM2, "startTime: %u, endTime: %u, timeDifference: %u\r\n", startTime, endTime, startTime - endTime );
+	end = *timerValue;
+	bwprintf(COM2, "startTime: %u, endTime: %u, timeDifference: %u\r\n", start, end, start - end );
 	bwprintf(COM2, "%s\r\n", replyMSG);
-	//64 byte message: 466, new 282;
-	//4 byte message: 225, new 218
+
 	Exit();
 }
 static void
-speedTest_Receiver(){
+speedTest_Receiver1(){
 	int tid;
 	char recvMSG[64];
 	char replyMSG[64] = "123456789.123456789.123456789.123456789.123456789.123456789.123";
 	Receieve(&tid,recvMSG,64);
 	Reply(tid,replyMSG,64);
+
+	// char recvMSG[4];
+	// char replyMSG[4] = "123";
+	// Receieve(&tid,recvMSG,4);
+	// Reply(tid,replyMSG,4);
+	
+	Exit();
+}
+
+static void
+speedTest_Sender2(){
+	int *timerValue = (int *) (TIMER3_BASE + VAL_OFFSET);
+
+	char sendMSG[64] = "123456789.123456789.123456789.123456789.123456789.123456789.123";
+	char replyMSG[64];
+	Send(2, sendMSG, 64, replyMSG, 64);
+
+	// char sendMSG[4] = "123";
+	// char replyMSG[4];
+	// Send(2, sendMSG, 4, replyMSG, 4);
+	
+	end = *timerValue;
+	bwprintf(COM2, "startTime: %u, endTime: %u, timeDifference: %u\r\n", start, end, start - end );
+	bwprintf(COM2, "%s\r\n", replyMSG);
+
+	Exit();
+}
+static void
+speedTest_Receiver2(){
+	createTimer();
+	int *timerValue = (int *) (TIMER3_BASE + VAL_OFFSET);
+	bwprintf(COM2, "receive\r\n");
+	start = *timerValue;
+	int tid;
+
+	char recvMSG[64];
+	char replyMSG[64] = "123456789.123456789.123456789.123456789.123456789.123456789.123";
+	Receieve(&tid,recvMSG,64);
+	Reply(tid,replyMSG,64);
+
 	// char recvMSG[4];
 	// char replyMSG[4] = "123";
 	// Receieve(&tid,recvMSG,4);
@@ -278,9 +323,15 @@ RPSGame(){
 }
 
 static void
-speedTest(){
-	Create(5, speedTest_Sender);
-	Create(5, speedTest_Receiver);
+speedTest_sendFirst(){
+	Create(5, speedTest_Sender1);
+	Create(5, speedTest_Receiver1);
+}
+
+static void
+speedTest_receiveFirst(){
+	Create(5, speedTest_Receiver2);
+	Create(5, speedTest_Sender2);
 }
 
 void
@@ -294,7 +345,8 @@ firstUserTask()
 	/* 	                         END							*/
 	
 	RPSGame();
-	//speedTest();
-	
+	//speedTest_sendFirst();
+	//speedTest_receiveFirst();
+
 	Exit();
 }

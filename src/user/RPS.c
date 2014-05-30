@@ -167,7 +167,7 @@ RPS_Server(){
 					Reply(pair->clientOne, &matchResult1, sizeof(int));
 					Reply(pair->clientTwo, &matchResult2, sizeof(int));
 				}
-
+				
 				wait();
 				// error checking to be added
 				break;	
