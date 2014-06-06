@@ -77,7 +77,7 @@ Send(int Tid, void* msg, int msglen, void* reply, int replylen){
 }
 
 int 
-Receieve(int* Tid, void* msg, int msglen){
+Receive(int* Tid, void* msg, int msglen){
 	syscallRequest_Receive req;
 	req.syscall_uid = SYSCALL_RECEIVE;
 	req.Tid = Tid;
@@ -112,11 +112,9 @@ RegisterAs(char* name){
 	req.name = name;
 	req.size = strLen(name);
 	
-	int retval;
+	Send(NAMESERVER_TID, &req, sizeof(syscallRequest_NameServer), &(req.retval), sizeof(int));
 	
-	Send(NAMESERVER_TID, &req, sizeof(syscallRequest_NameServer), &retval, sizeof(int));
-	
-	return retval; 	
+	return req.retval; 	
 }
 
 int
@@ -126,8 +124,60 @@ WhoIs(char* name){
 	req.name = name;
 	req.size = strLen(name);
 		
-	Send(NAMESERVER_TID, &req, sizeof(syscallRequest_NameServer), &(req.tid), sizeof(int));
-	
-	return req.tid; 	
+	Send(NAMESERVER_TID, &req, sizeof(syscallRequest_NameServer), &(req.retval), sizeof(int));
+
+	return req.retval; 	
 }
 
+int 
+AwaitEvent(int eventid){
+	syscallRequest_Await req;
+	req.syscall_uid = SYSCALL_AWAIT;
+	req.eventid = eventid;
+	
+	putReqInR0(&req);
+	asm("swi");
+	
+	return req.retval;	
+}
+
+int 
+Delay(int ticks){
+	syscallRequest_ClockServer req;
+	req.syscall_uid = SYSCALL_DELAY;
+	req.tid = MyTid();
+	req.type = TYPE_CLIENT;
+	req.ticks = ticks;
+
+	int clockServerTid = WhoIs("Clock Server");
+	Send(clockServerTid, &req, sizeof(syscallRequest_ClockServer), &(req.retval), sizeof(int));
+
+	return req.retval;
+}
+
+int 
+DelayUntil(int ticks){
+	syscallRequest_ClockServer req;
+	req.syscall_uid = SYSCALL_DELAYUNTIL;
+	req.tid = MyTid();
+	req.type = TYPE_CLIENT;
+	req.ticks = ticks;
+
+	int clockServerTid = WhoIs("Clock Server");
+	Send(clockServerTid, &req, sizeof(syscallRequest_ClockServer), &(req.retval), sizeof(int));
+
+	return req.retval;
+}
+
+int
+Time(){
+	syscallRequest_ClockServer req;
+	req.syscall_uid = SYSCALL_TIME;
+	req.tid = MyTid();
+	req.type = TYPE_CLIENT;
+
+	int clockServerTid = WhoIs("Clock Server");
+	Send(clockServerTid, &req, sizeof(syscallRequest_ClockServer), &(req.retval), sizeof(int));
+
+	return req.retval;
+}

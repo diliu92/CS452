@@ -2,6 +2,22 @@
 #define __UTILS_H__
 
 
+#define cyan "\033[36m"
+#define magenta "\033[35m"
+#define blue "\033[34m"
+#define yellow "\033[33m"
+#define green "\033[32m"
+#define red "\033[31m"
+
+#define clearLine "\033[K"
+#define clearScreen "\033[2J"
+#define resetColor "\033[0m"
+
+#define tab "\033[4C"
+
+#define save "\033[s"
+#define restore "\033[u"
+
 #define NULL (void*)0
 
 typedef struct Queue{

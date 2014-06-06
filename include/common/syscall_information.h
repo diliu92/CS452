@@ -11,11 +11,20 @@
 #define SYSCALL_SEND			6
 #define SYSCALL_RECEIVE			7
 #define SYSCALL_REPLY			8
+#define SYSCALL_AWAIT 			9	
 
-#define SYSCALL_REGISTERAS		9
-#define SYSCALL_WHOIS			10
+#define SYSCALL_REGISTERAS		10
+#define SYSCALL_WHOIS			11
 
- 
+#define SYSCALL_DELAY			12
+#define	SYSCALL_DELAYUNTIL		13
+#define SYSCALL_TIME			14
+
+#define TIMER_EVENT			0
+
+
+#define CLOCK_NOTIFIER_TID	8
+
 /*
  * for syscall functions that have no arguments
  */ 
@@ -62,13 +71,29 @@ typedef struct syscallRequest_Reply{
 	int replylen;
 }syscallRequest_Reply;
 
+typedef struct syscallRequest_Await{
+	int syscall_uid;
+	int	retval;
+	
+	int eventid;
+}syscallRequest_Await;
+
 typedef struct syscallRequest_NameServer{
 	int syscall_uid;
-	
+	int retval;
+
 	int tid;
 	char* name;
 	int size;
 }syscallRequest_NameServer;
 
+typedef struct syscallRequest_ClockServer{
+	int syscall_uid;
+	int retval;
+
+	int tid;
+	int ticks;
+	int type;
+}syscallRequest_ClockServer;
 
 #endif

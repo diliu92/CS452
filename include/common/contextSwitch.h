@@ -6,6 +6,9 @@
 #include <common/syscall_information.h>
 
 void 
+hwi_kerent();
+
+void 
 kerent();
 
 syscallRequest* 

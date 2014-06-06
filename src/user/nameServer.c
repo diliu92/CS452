@@ -38,7 +38,7 @@ nameServer(){
 	InitNameServer(&nameServerData);
 		
 	for (;;){
-		Receieve(&tid, &req, sizeof(syscallRequest_NameServer));
+		Receive(&tid, &req, sizeof(syscallRequest_NameServer));
 				
 		switch (req.syscall_uid)
 		{

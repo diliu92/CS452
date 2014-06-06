@@ -4,15 +4,23 @@
 
 static void
 hardwareInit(){
-	// asm("mrc p15, 0, r0, c1, c0, 0");
-	// asm("orr r0, r0, #0x00000002"); //D Cache
-	// asm("orr r0, r0, #0x00001000"); //I Cache
-	// asm("mcr p15, 0, r0, c1, c0, 0");
+	asm("mrc p15, 0, r0, c1, c0, 0");
+	asm("orr r0, r0, #0x00000002"); //D Cache
+	asm("orr r0, r0, #0x00001000"); //I Cache
+	asm("mcr p15, 0, r0, c1, c0, 0");
 
 	bwsetfifo(COM2, OFF);
 	//add kerent to swi jump table
-	int* addr = (int*)0x28;
-	*addr = (int)&kerent;
+	int* swi_addr = (int*)0x28;
+	*swi_addr = (int)&kerent;
+
+	int* hwi_addr = (int*)0x38;
+	*hwi_addr = (int)&hwi_kerent;
+
+	//int* vic1_addr = (int*)0x800B0000;
+	int* vic2_enable_addr = (int*)(0x800C0000 + 0x10);
+
+	*vic2_enable_addr = *vic2_enable_addr | 1 << 19; //Timer 3 interrup enable
 }
 
 static void 
@@ -66,8 +74,10 @@ void
 Init(kernGlobal* kernelData){
 	hardwareInit();
 	
+	kernelData->tasks_stack = 0x400000;
+	
 	tasksInit(kernelData);
 	queuesInit(kernelData);
-	
+
 	Task_create(kernelData, 1, firstUserTask);	//first_user_task	tid:0
 }

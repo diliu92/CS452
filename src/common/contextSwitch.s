@@ -1,12 +1,39 @@
 	.file	"contextSwitch.c"
 	.text
 	.align	2
+	.global	hwi_kerent
+	.type	hwi_kerent, %function
+
+hwi_kerent:
+	@ args = 0, pretend = 0, frame = 0
+	@ frame_needed = 1, uses_anonymous_args = 0	
+	msr	cpsr_c, #0xdf
+	stmfd	sp!, {r0,r1,r2,r3,ip}
+	msr cpsr_c, #0x92
+	sub r1, lr, #4
+	mrs r2, spsr
+	msr	cpsr_c, #0xdf
+	stmfd	sp!, {r1,r2}
+	mov r0, #0
+	bl kerent
+	msr	cpsr_c, #0xdf
+	ldmfd 	sp!, {r1,r2}
+	msr cpsr_c, #0x92
+	mov lr, r1
+	msr spsr, r2
+	msr	cpsr_c, #0xdf
+	ldmfd	sp!, {r0,r1,r2,r3,ip}
+	msr cpsr_c, #0x92
+	movs pc, lr
+
+	.size	hwi_kerent, .-hwi_kerent
+	.align	2
 	.global	kerent
 	.type	kerent, %function
+
 kerent:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 1, uses_anonymous_args = 0	
-
 	/* 1 acquire arguments of the request */
 	mov	r2, r0
 	/* 2 acquire lr */

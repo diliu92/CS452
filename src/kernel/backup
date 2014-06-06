@@ -1,0 +1,21 @@
+/*before*/
+	/* 1 store reg*/
+	stmfd	sp!, {r0-lr} 
+	/* 2 switch to system state*/
+	msr	cpsr_c, #0xdf 
+	/* 3 get sp, spsr*/
+	ldr	r3, [r0, #4]
+	ldr sp, [r0, #8]
+	/* 4 pop the regs of active task */
+	/* 6 return to svc state */
+	msr	cpsr_c #0xd3
+	/* 7 install spsr of the active task*/
+	msr cpsr, r3
+	/* 8 install the pc of the active task*/
+
+/*end before*/
+	bl	kerent(PLT)
+/*after*/
+	/*1 load reg*/
+	ldmfd	sp, {r0-lr} 
+/*end after*/

@@ -81,7 +81,7 @@ RPS_Server(){
 	RegisterAs("RPS Server");
 
 	for(;;){
-		Receieve(&playerTid, &req, sizeof(RPS_clientRequest));
+		Receive(&playerTid, &req, sizeof(RPS_clientRequest));
 		bwprintf(COM2, "\033[32mRPS Server:\r\n");
 		switch (req.rpscall_uid){
 			case RPSCALL_SIGNUP:{

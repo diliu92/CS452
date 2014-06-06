@@ -29,16 +29,17 @@ KERN_OBJS = 	$(OUT_DIR)/kernel.o			\
 
 USER_OBJS=	$(OUT_DIR)/syscall_userHandler.o	\
 		$(OUT_DIR)/first_user_task.o		\
-		$(OUT_DIR)/server.o			\
+		$(OUT_DIR)/nameServer.o			\
+		$(OUT_DIR)/clockServer.o			\
 		$(OUT_DIR)/RPS.o	
 
 COMMON_OBJS=	$(OUT_DIR)/contextSwitch.o		\
 		$(OUT_DIR)/bwio.o			\
 		$(OUT_DIR)/utils.o
 
-all: kernel2.elf
+all: kernel3.elf
 
-kernel2.elf: $(KERN_OBJS) $(USER_OBJS) $(COMMON_OBJS) 
+kernel3.elf: $(KERN_OBJS) $(USER_OBJS) $(COMMON_OBJS) 
 	$(LD) $(LDFLAGS) -o $@ $(KERN_OBJS) $(USER_OBJS) $(COMMON_OBJS) -lgcc	
 	
 #-------------------------------------kernel related----------------------------------------#
@@ -74,10 +75,15 @@ $(OUT_DIR)/first_user_task.o: $(OUT_DIR)/first_user_task.s
 $(OUT_DIR)/first_user_task.s:
 	$(XCC) 	-o $(OUT_DIR)/first_user_task.s 	-S $(CFLAGS) $(SRC_USER_DIR)/first_user_task.c
 
-$(OUT_DIR)/server.o: $(OUT_DIR)/server.s
-	$(AS) 	-o $(OUT_DIR)/server.o 	$(ASFLAGS) $(OUT_DIR)/server.s
-$(OUT_DIR)/server.s:
-	$(XCC) 	-o $(OUT_DIR)/server.s 	-S $(CFLAGS) $(SRC_USER_DIR)/server.c
+$(OUT_DIR)/nameServer.o: $(OUT_DIR)/nameServer.s
+	$(AS) 	-o $(OUT_DIR)/nameServer.o 	$(ASFLAGS) $(OUT_DIR)/nameServer.s
+$(OUT_DIR)/nameServer.s:
+	$(XCC) 	-o $(OUT_DIR)/nameServer.s 	-S $(CFLAGS) $(SRC_USER_DIR)/nameServer.c
+
+$(OUT_DIR)/clockServer.o: $(OUT_DIR)/clockServer.s
+	$(AS) 	-o $(OUT_DIR)/clockServer.o 	$(ASFLAGS) $(OUT_DIR)/clockServer.s
+$(OUT_DIR)/clockServer.s:
+	$(XCC) 	-o $(OUT_DIR)/clockServer.s 	-S $(CFLAGS) $(SRC_USER_DIR)/clockServer.c
 
 $(OUT_DIR)/RPS.o: $(OUT_DIR)/RPS.s
 	$(AS) 	-o $(OUT_DIR)/RPS.o 	$(ASFLAGS) $(OUT_DIR)/RPS.s
@@ -101,4 +107,4 @@ $(OUT_DIR)/utils.s:
 
 
 clean:
-	-rm -f kernel2.elf $(OUT_DIR)/*.s $(OUT_DIR)/*.o $(OUT_DIR)/main.map
+	-rm -f kernel3.elf $(OUT_DIR)/*.s $(OUT_DIR)/*.o $(OUT_DIR)/main.map

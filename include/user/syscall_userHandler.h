@@ -22,7 +22,7 @@ int
 Send(int Tid, void* msg, int msglen, void* reply, int replylen);
 
 int 
-Receieve(int* Tid, void* msg, int msglen);
+Receive(int* Tid, void* msg, int msglen);
 
 int 
 Reply(int Tid, void* reply, int replylen);
@@ -33,5 +33,17 @@ RegisterAs(char* name);
 int
 WhoIs(char* name);
 
+
+int 
+AwaitEvent(int eventid);
+
+int 
+Delay(int ticks);
+
+int 
+DelayUntil(int ticks);
+
+int
+Time();
 
 #endif

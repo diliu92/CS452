@@ -3,6 +3,10 @@
 
 #include <kernel/kernGlobal.h>
 
+
+#define TYPE_NOTIFIER		0
+#define TYPE_CLIENT			1
+
 /*
  * NameServer Related 
  */ 
@@ -34,16 +38,15 @@ nameServer();
 /*
  * clockServer Related 
  */
-#define CLOCKSERVER_TID		2 
 void
 clockServer();
+
 
 /*
  * serialServer Related 
  */
-#define SERIALSERVER_TID	3 
-void
-serialServer();
-
+// #define SERIALSERVER_TID	3 
+// void
+// serialServer();
 
 #endif

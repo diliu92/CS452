@@ -5,10 +5,9 @@
 #include <common/utils.h>
 
 #define MAX_TASK 	64
-#define STACK_SIZE	128*1024	//4KB is the best!
+#define STACK_SIZE	128*1024	//128KB is the best!
 
 #define MAX_PRIORITY 16
-
 
 typedef enum taskState_t{
 	Idle,
@@ -48,7 +47,8 @@ typedef struct kernGlobal{
 	
 	Queue priorityQueues[MAX_PRIORITY];	
 	
-	char tasks_stack[MAX_TASK*STACK_SIZE];	//should be last member of kernGlobal(memory protection)
+	char* tasks_stack;
+	//char tasks_stack[MAX_TASK*STACK_SIZE];	//should be last member of kernGlobal(memory protection)
 }kernGlobal;
 
 #endif
