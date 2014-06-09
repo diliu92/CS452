@@ -54,7 +54,7 @@ void clockServer(){
 	}
 
 	Send(notifierTid, &evtType, sizeof(int) ,&replyMsg, sizeof(int));
-	initTimer();
+	//initTimer();
 	for(;;){
 		Receive( &requester, &req, sizeof(syscallRequest_ClockServer));
 		switch (req.type){
