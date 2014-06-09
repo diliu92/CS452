@@ -7,21 +7,31 @@
 hwi_kerent:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 1, uses_anonymous_args = 0	
+	/* switch to system state */
 	msr	cpsr_c, #0xdf
+	/* store scratch regs */
 	stmfd	sp!, {r0,r1,r2,r3,ip}
 	msr cpsr_c, #0x92
+	/* store lr and spsr */
 	sub r1, lr, #4
 	mrs r2, spsr
+	/* switch to system state */
 	msr	cpsr_c, #0xdf
 	stmfd	sp!, {r1,r2}
 	mov r0, #0
+	msr	cpsr_c, #0x92
+	/* jump to kerent */
 	bl kerent
+	/* switch to system state */
 	msr	cpsr_c, #0xdf
 	ldmfd 	sp!, {r1,r2}
 	msr cpsr_c, #0x92
+	/* load lr and spsr */
 	mov lr, r1
 	msr spsr, r2
+	/* switch to system state */
 	msr	cpsr_c, #0xdf
+	/* load scratch regs */
 	ldmfd	sp!, {r0,r1,r2,r3,ip}
 	msr cpsr_c, #0x92
 	movs pc, lr

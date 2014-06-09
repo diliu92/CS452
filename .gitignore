@@ -1,3 +1,2 @@
 bin/*.s
 bin/*.o
-kernel.elf
