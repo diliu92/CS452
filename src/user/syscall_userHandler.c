@@ -176,7 +176,7 @@ Time(){
 	req.tid = MyTid();
 	req.type = TYPE_CLIENT;
 
-	int clockServerTid = WhoIs("Clock Server");
+	int clockServerTid = 2; //WhoIs("Clock Server");
 	Send(clockServerTid, &req, sizeof(syscallRequest_ClockServer), &(req.retval), sizeof(int));
 
 	return req.retval;

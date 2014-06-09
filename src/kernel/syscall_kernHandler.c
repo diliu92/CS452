@@ -45,8 +45,6 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 				}
 				else if(kernelData->tasks[sendReq->Tid].state == Idle || kernelData->tasks[sendReq->Tid].state == Zombie ){
 					sendReq->retval = -2;		
-					// if(!( ((syscallRequest_Send*)req)->Tid >=0 && ((syscallRequest_Send*)req)->Tid <=63))
-					// return -3;
 				}
 				else{
 					sendTask = kernelData->currentActiveTask;
@@ -66,13 +64,11 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 																	
 						sendTask->state = Reply_blocked;					
 					}
-					else				
-						Message_pushSendQueue(kernelData, recvTask->tid, sendTask);
-					
-					return;			
+					else			
+						Message_pushSendQueue(kernelData, recvTask->tid, sendTask);					
 				}
 						
-				break;
+				return;	//sender always blocks
 			}	
 			case SYSCALL_RECEIVE:
 			{
