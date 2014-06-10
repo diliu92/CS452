@@ -63,7 +63,7 @@ static void client1(){
 		Delay(10);
 		//Time();
 		//Time();
-		bwprintf(COM2, "Client1 after -- %d: %d\r\n", i, Time());
+		bwprintf(COM2, "Client1 %d: %d\r\n", i, Time());
 	}
 	Exit();
 }
@@ -76,7 +76,7 @@ static void client2(){
 		//Time();
 		//Time();
 		Delay(23);
-		bwprintf(COM2, "Client2 after -- %d: %d\r\n", i, Time());
+		bwprintf(COM2, "Client2 %d: %d\r\n", i, Time());
 	}	
 	Exit();
 }
@@ -89,7 +89,7 @@ static void client3(){
 		//Time();
 		//Time();
 		Delay(33);
-		bwprintf(COM2, "Client3 after -- %d: %d\r\n", i, Time());
+		bwprintf(COM2, "Client3 %d: %d\r\n", i, Time());
 	}	
 	Exit();
 }
@@ -102,7 +102,7 @@ static void client4(){
 		//Time();
 		//Time();
 		Delay(71);
-		bwprintf(COM2, "Client4 after -- %d: %d\r\n", i, Time());
+		bwprintf(COM2, "Client4 %d: %d\r\n", i, Time());
 	}
 	Exit();
 }
