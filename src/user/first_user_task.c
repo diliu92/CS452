@@ -9,7 +9,7 @@ idleTask(){
 	while (1){
 		 if (x % 100 == 0){
 		 	x = 0;
-			bwprintf(COM2, "time: %u\r\n", Time());
+			//bwprintf(COM2, "time: %u\r\n", Time());
 			//Pass();
 			//char c = bwgetc(COM2);
 			//if (c == 'q')
