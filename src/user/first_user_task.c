@@ -4,16 +4,16 @@
 
 void
 idleTask(){
-	//int i;
+	int x;
 
 	while (1){
-		 //if (x % 100000 == 0){
-		 //	x = 0;
-		 bwprintf(COM2, "time: %u\r\n", Time());
-		 //}
-		// x++;
+		 if (x % 100 == 0){
+		 	x = 0;
+			bwprintf(COM2, "time: %u\r\n", Time());
+		 }
+		 x++;
 		//bwprintf(COM2, "tick: %d; timer: %d\r\n", Time(), *timerValue);
-		Pass();
+		//Pass();
 		//char c = bwgetc(COM2);
 		//if (c == 'q'){
 		//	Exit();
