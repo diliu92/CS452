@@ -10,6 +10,7 @@ idleTask(){
 		 if (x % 100 == 0){
 		 	x = 0;
 			bwprintf(COM2, "time: %u\r\n", Time());
+			Pass();
 		 }
 		 x++;
 		//bwprintf(COM2, "tick: %d; timer: %d\r\n", Time(), *timerValue);
