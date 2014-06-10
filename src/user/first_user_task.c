@@ -4,14 +4,14 @@
 
 void
 idleTask(){
-	 int x = 0;
+	//int i;
 
 	while (1){
-		 if (x % 100000 == 0){
-		 	x = 0;
-		 	bwprintf(COM2, "time: %u\r\n", Time());
-		 }
-		 x++;
+		 //if (x % 100000 == 0){
+		 //	x = 0;
+		 //	bwprintf(COM2, "time: %u\r\n", Time());
+		 //}
+		// x++;
 		//bwprintf(COM2, "tick: %d; timer: %d\r\n", Time(), *timerValue);
 		Pass();
 		//char c = bwgetc(COM2);
@@ -23,7 +23,7 @@ idleTask(){
 
 static void client1(){
 	int i;
-	for (i = 0; i < 20; i++){
+	for (i = 0; i < 200; i++){
 	//for(;;){
 		//bwprintf(COM2, "Client1 before -- %d: %d\r\n", i, Time());
 		Delay(10);
@@ -36,7 +36,7 @@ static void client1(){
 
 static void client2(){
 	int i;
-	for (i = 0; i < 9; i++){
+	for (i = 0; i < 90; i++){
 	//for(;;){
 		//bwprintf(COM2, "Client2 before -- %d: %d\r\n", i, Time());
 		//Time();
@@ -49,7 +49,7 @@ static void client2(){
 
 static void client3(){
 	int i;
-	for (i = 0; i < 6; i++){
+	for (i = 0; i < 60; i++){
 	//for(;;){
 		//bwprintf(COM2, "Client3 before -- %d: %d\r\n", i, Time());
 		//Time();
@@ -62,7 +62,7 @@ static void client3(){
 
 static void client4(){
 	int i;
-	for (i = 0; i < 3; i++){
+	for (i = 0; i < 30; i++){
 	//for(;;){
 		//bwprintf(COM2, "Client4 before -- %d: %d\r\n", i, Time());
 		//Time();
