@@ -23,7 +23,7 @@ idleTask(){
 
 static void client1(){
 	int i;
-	for (i = 0; i < 200; i++){
+	for (i = 0; i < 20000; i++){
 	//for(;;){
 		//bwprintf(COM2, "Client1 before -- %d: %d\r\n", i, Time());
 		Delay(10);
@@ -36,7 +36,7 @@ static void client1(){
 
 static void client2(){
 	int i;
-	for (i = 0; i < 90; i++){
+	for (i = 0; i < 9000; i++){
 	//for(;;){
 		//bwprintf(COM2, "Client2 before -- %d: %d\r\n", i, Time());
 		//Time();
@@ -49,7 +49,7 @@ static void client2(){
 
 static void client3(){
 	int i;
-	for (i = 0; i < 60; i++){
+	for (i = 0; i < 6000; i++){
 	//for(;;){
 		//bwprintf(COM2, "Client3 before -- %d: %d\r\n", i, Time());
 		//Time();
@@ -62,7 +62,7 @@ static void client3(){
 
 static void client4(){
 	int i;
-	for (i = 0; i < 30; i++){
+	for (i = 0; i < 3000; i++){
 	//for(;;){
 		//bwprintf(COM2, "Client4 before -- %d: %d\r\n", i, Time());
 		//Time();
