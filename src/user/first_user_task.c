@@ -11,9 +11,9 @@ idleTask(){
 		 	x = 0;
 			bwprintf(COM2, "time: %u\r\n", Time());
 			Pass();
-			char c = bwgetc(COM2);
-			if (c == 'q')
-				Exit();
+			//char c = bwgetc(COM2);
+			//if (c == 'q')
+			//	Exit();
 		 }
 		 x++;
 		//bwprintf(COM2, "tick: %d; timer: %d\r\n", Time(), *timerValue);
