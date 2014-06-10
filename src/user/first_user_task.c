@@ -14,10 +14,10 @@ idleTask(){
 			//char c = bwgetc(COM2);
 			//if (c == 'q')
 			//	Exit();
+			Pass();
 		 }
 		 x++;
 		//bwprintf(COM2, "tick: %d; timer: %d\r\n", Time(), *timerValue);
-		Pass();
 		//char c = bwgetc(COM2);
 		//if (c == 'q'){
 		//	Exit();
