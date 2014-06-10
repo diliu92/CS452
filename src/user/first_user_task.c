@@ -4,20 +4,20 @@
 
 void
 idleTask(){
-	// int x = 0;
-	int *timerValue = (int *) (TIMER3_BASE + VAL_OFFSET);
+	 int x = 0;
+
 	while (1){
-		// if (x % 100000 == 0){
-		// 	x = 0;
-		// 	bwprintf(COM2, "time: %u\r\n", Time());
-		// }
-		// x++;
-		 bwprintf(COM2, "tick: %d; timer: %d\r\n", Time(), *timerValue);
+		 if (x % 100000 == 0){
+		 	x = 0;
+		 	bwprintf(COM2, "time: %u\r\n", Time());
+		 }
+		 x++;
+		//bwprintf(COM2, "tick: %d; timer: %d\r\n", Time(), *timerValue);
 		Pass();
-		char c = bwgetc(COM2);
-		if (c == 'q'){
-			Exit();
-		}
+		//char c = bwgetc(COM2);
+		//if (c == 'q'){
+		//	Exit();
+		//}
 	}
 }
 
