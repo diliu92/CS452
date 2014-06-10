@@ -59,7 +59,7 @@ static void client1(){
 	int i;
 	for (i = 0; i < 20; i++){
 	//for(;;){
-		bwprintf(COM2, "Client1 before -- %d: %d\r\n", i, Time());
+		//bwprintf(COM2, "Client1 before -- %d: %d\r\n", i, Time());
 		Delay(10);
 		//Time();
 		//Time();
@@ -72,7 +72,7 @@ static void client2(){
 	int i;
 	for (i = 0; i < 9; i++){
 	//for(;;){
-		bwprintf(COM2, "Client2 before -- %d: %d\r\n", i, Time());
+		//bwprintf(COM2, "Client2 before -- %d: %d\r\n", i, Time());
 		//Time();
 		//Time();
 		Delay(23);
@@ -85,7 +85,7 @@ static void client3(){
 	int i;
 	for (i = 0; i < 6; i++){
 	//for(;;){
-		bwprintf(COM2, "Client3 before -- %d: %d\r\n", i, Time());
+		//bwprintf(COM2, "Client3 before -- %d: %d\r\n", i, Time());
 		//Time();
 		//Time();
 		Delay(33);
@@ -98,7 +98,7 @@ static void client4(){
 	int i;
 	for (i = 0; i < 3; i++){
 	//for(;;){
-		bwprintf(COM2, "Client4 before -- %d: %d\r\n", i, Time());
+		//bwprintf(COM2, "Client4 before -- %d: %d\r\n", i, Time());
 		//Time();
 		//Time();
 		Delay(71);
