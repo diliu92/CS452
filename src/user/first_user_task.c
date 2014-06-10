@@ -7,7 +7,7 @@ idleTask(){
 	int x;
 
 	while (1){
-		 if (x % 100 == 0){
+		 if (x % 10000 == 0){
 		 	x = 0;
 			//bwprintf(COM2, "time: %u\r\n", Time());
 			//Pass();
