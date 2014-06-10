@@ -7,37 +7,52 @@
 hwi_kerent:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 1, uses_anonymous_args = 0	
+	
 	/* switch to system state */
 	msr	cpsr_c, #0xdf
+	
 	/* store scratch regs */
 	stmfd	sp!, {r0,r1,r2,r3,ip}
+	
 	/* switch to IRQ mode */
 	msr cpsr_c, #0x92
+	
 	/* store lr and spsr */
 	sub r1, lr, #4
 	mrs r2, spsr
+	
 	/* switch to system state */
 	msr	cpsr_c, #0xdf
+	
 	/* save pc and spsr in stack */
 	stmfd	sp!, {r1,r2}
+	
 	/* switch to IRQ mode */
 	msr	cpsr_c, #0x92
+	
 	/* jump to kerent */
 	mov r0, #0
 	bl kerent
+	
 	/* switch to system state */
 	msr	cpsr_c, #0xdf
+	
 	/* load pc and spsr from stack */
 	ldmfd 	sp!, {r1,r2}
+	
 	/* switch to IRQ mode */
 	msr cpsr_c, #0x92
+	
 	/* load lr and spsr */
 	mov lr, r1
 	msr spsr, r2
+	
 	/* switch to system state */
 	msr	cpsr_c, #0xdf
+	
 	/* load scratch regs */
 	ldmfd	sp!, {r0,r1,r2,r3,ip}
+	
 	/* switch to IRQ mode */
 	msr cpsr_c, #0x92
 

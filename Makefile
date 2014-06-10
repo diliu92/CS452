@@ -30,7 +30,7 @@ KERN_OBJS = 	$(OUT_DIR)/kernel.o			\
 USER_OBJS=	$(OUT_DIR)/syscall_userHandler.o	\
 		$(OUT_DIR)/first_user_task.o		\
 		$(OUT_DIR)/nameServer.o			\
-		$(OUT_DIR)/clockServer.o			\
+		$(OUT_DIR)/clockServer.o		\
 		$(OUT_DIR)/RPS.o	
 
 COMMON_OBJS=	$(OUT_DIR)/contextSwitch.o		\
