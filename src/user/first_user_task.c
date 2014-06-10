@@ -12,7 +12,7 @@ idleTask(){
 		 //	bwprintf(COM2, "time: %u\r\n", Time());
 		 //}
 		// x++;
-		//bwprintf(COM2, "tick: %d; timer: %d\r\n", Time(), *timerValue);
+		bwprintf(COM2, "tick: %d; timer: %d\r\n", Time(), *timerValue);
 		Pass();
 		//char c = bwgetc(COM2);
 		//if (c == 'q'){
@@ -82,10 +82,10 @@ firstUserTask()
 	bwprintf( COM2, "\r\n\r\nNameServer initialized.\r\nTID of nameServer: %u(should be 1)\r\n", nameServerTID);		//tid:1
 	int clockServerTID = Create(2, clockServer);
 	
-	Create(3, client1);
-	Create(4, client2);
-	Create(5, client3);	
-	Create(6, client4);
+	//Create(3, client1);
+	//Create(4, client2);
+	//Create(5, client3);	
+	//Create(6, client4);
 
 	Create(16, idleTask);
 
