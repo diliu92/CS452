@@ -116,10 +116,10 @@ firstUserTask()
 	bwprintf( COM2, "\r\n\r\nNameServer initialized.\r\nTID of nameServer: %u(should be 1)\r\n", nameServerTID);		//tid:1
 	int clockServerTID = Create(2, clockServer);
 	
-	Create(3, client1);
-	Create(4, client2);
-	Create(5, client3);	
-	Create(6, client4);
+	//Create(3, client1);
+	//Create(4, client2);
+	//Create(5, client3);	
+	//Create(6, client4);
 
 	Create(7, idleTask);
 

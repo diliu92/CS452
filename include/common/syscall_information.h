@@ -23,7 +23,7 @@
 #define TIMER_EVENT			0
 
 
-#define CLOCK_NOTIFIER_TID	8
+#define CLOCK_NOTIFIER_TID	4
 
 /*
  * for syscall functions that have no arguments
