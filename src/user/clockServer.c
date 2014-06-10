@@ -35,7 +35,7 @@ static void clockNotifier(){
 }
 
 void clockServer(){
-	RegisterAs("Clock Server");
+	//RegisterAs("Clock Server");
 	int notifierTid = Create(1, clockNotifier);
 	bwprintf(COM2, "notifierTid: %d\r\n", notifierTid);
 	int tick = 0;
@@ -54,7 +54,8 @@ void clockServer(){
 	}
 
 	Send(notifierTid, &evtType, sizeof(int) ,&replyMsg, sizeof(int));
-	initTimer();
+	//initTimer();
+	RegisterAs("Clock Server");
 	for(;;){
 		Receive( &requester, &req, sizeof(syscallRequest_ClockServer));
 		switch (req.type){

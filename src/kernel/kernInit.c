@@ -21,6 +21,15 @@ hardwareInit(){
 	int* vic2_enable_addr = (int*)(0x800C0000 + 0x10);
 
 	*vic2_enable_addr = *vic2_enable_addr | 1 << 19; //Timer 3 interrup enable
+	
+	int *timerLoad = (int *) (TIMER3_BASE + LDR_OFFSET);
+	int *timerControl = (int *) (TIMER3_BASE + CRTL_OFFSET);
+	*timerControl = *timerControl & ~ENABLE_MASK; //disable timer
+	*timerLoad = 5080;				 //set timer init value
+	//*timerControl = *timerControl & ~MODE_MASK;	 //free runnning
+	*timerControl = *timerControl | MODE_MASK;	 //periodic mode
+	*timerControl = *timerControl | CLKSEL_MASK; //uncomment to use 508Hz
+	*timerControl = *timerControl | ENABLE_MASK; //enable timer
 }
 
 static void 
