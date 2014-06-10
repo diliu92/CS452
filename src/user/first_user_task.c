@@ -13,7 +13,11 @@ idleTask(){
 		// }
 		// x++;
 		// bwprintf(COM2, "tick: %d; timer: %d\r\n", Time(), *timerValue);
-		Pass();
+		//Pass();
+		char c = bwgetc(COM2);
+		if (c == 'q'){
+			Exit();
+		}
 	}
 }
 
@@ -63,7 +67,7 @@ static void client1(){
 		Delay(10);
 		//Time();
 		//Time();
-		bwprintf(COM2, "Client1 %d: %d\r\n", i, Time());
+		bwprintf(COM2, "Client1 %d: %d\r\n", i+1, Time());
 	}
 	Exit();
 }
@@ -76,7 +80,7 @@ static void client2(){
 		//Time();
 		//Time();
 		Delay(23);
-		bwprintf(COM2, "Client2 %d: %d\r\n", i, Time());
+		bwprintf(COM2, "Client2 %d: %d\r\n", i+1, Time());
 	}	
 	Exit();
 }
@@ -89,7 +93,7 @@ static void client3(){
 		//Time();
 		//Time();
 		Delay(33);
-		bwprintf(COM2, "Client3 %d: %d\r\n", i, Time());
+		bwprintf(COM2, "Client3 %d: %d\r\n", i+1, Time());
 	}	
 	Exit();
 }
@@ -102,7 +106,7 @@ static void client4(){
 		//Time();
 		//Time();
 		Delay(71);
-		bwprintf(COM2, "Client4 %d: %d\r\n", i, Time());
+		bwprintf(COM2, "Client4 %d: %d\r\n", i+1, Time());
 	}
 	Exit();
 }
@@ -116,10 +120,10 @@ firstUserTask()
 	bwprintf( COM2, "\r\n\r\nNameServer initialized.\r\nTID of nameServer: %u(should be 1)\r\n", nameServerTID);		//tid:1
 	int clockServerTID = Create(2, clockServer);
 	
-	//Create(3, client1);
-	//Create(4, client2);
-	//Create(5, client3);	
-	//Create(6, client4);
+	Create(3, client1);
+	Create(4, client2);
+	Create(5, client3);	
+	Create(6, client4);
 
 	Create(7, idleTask);
 
