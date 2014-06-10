@@ -12,12 +12,12 @@ idleTask(){
 		// 	bwprintf(COM2, "time: %u\r\n", Time());
 		// }
 		// x++;
-		// bwprintf(COM2, "tick: %d; timer: %d\r\n", Time(), *timerValue);
-		//Pass();
-		char c = bwgetc(COM2);
-		if (c == 'q'){
-			Exit();
-		}
+		 bwprintf(COM2, "tick: %d; timer: %d\r\n", Time(), *timerValue);
+		Pass();
+		//char c = bwgetc(COM2);
+		//if (c == 'q'){
+		//	Exit();
+		//}
 	}
 }
 
@@ -26,10 +26,10 @@ static void client1(){
 	for (i = 0; i < 20; i++){
 	//for(;;){
 		//bwprintf(COM2, "Client1 before -- %d: %d\r\n", i, Time());
-		Delay(10);
+		//Delay(10);
 		//Time();
 		//Time();
-		bwprintf(COM2, "Client1 %d: %d\r\n", i+1, Time());
+		//bwprintf(COM2, "Client1 %d: %d\r\n", i+1, Time());
 	}
 	Exit();
 }
@@ -41,8 +41,8 @@ static void client2(){
 		//bwprintf(COM2, "Client2 before -- %d: %d\r\n", i, Time());
 		//Time();
 		//Time();
-		Delay(23);
-		bwprintf(COM2, "Client2 %d: %d\r\n", i+1, Time());
+		//Delay(23);
+		//bwprintf(COM2, "Client2 %d: %d\r\n", i+1, Time());
 	}	
 	Exit();
 }
@@ -54,8 +54,8 @@ static void client3(){
 		//bwprintf(COM2, "Client3 before -- %d: %d\r\n", i, Time());
 		//Time();
 		//Time();
-		Delay(33);
-		bwprintf(COM2, "Client3 %d: %d\r\n", i+1, Time());
+		//Delay(33);
+		//bwprintf(COM2, "Client3 %d: %d\r\n", i+1, Time());
 	}	
 	Exit();
 }
@@ -67,8 +67,8 @@ static void client4(){
 		//bwprintf(COM2, "Client4 before -- %d: %d\r\n", i, Time());
 		//Time();
 		//Time();
-		Delay(71);
-		bwprintf(COM2, "Client4 %d: %d\r\n", i+1, Time());
+		//Delay(71);
+		//bwprintf(COM2, "Client4 %d: %d\r\n", i+1, Time());
 	}
 	Exit();
 }
