@@ -12,7 +12,7 @@ idleTask(){
 			bwprintf(COM2, "time: %u\r\n", Time());
 			Pass();
 			char c = bwgetc(COM2);
-			if (c == 'q'){
+			if (c == 'q')
 				Exit();
 		 }
 		 x++;
