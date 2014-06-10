@@ -4,7 +4,7 @@
 
 void 
 syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
-	//bwprintf(COM2, "kernHandler\r\n");
+
 	if (req == 0){
 		//bwprintf(COM2, "hwi\r\n");
 		int *timerClear = (int *) (TIMER3_BASE + CLR_OFFSET);
@@ -14,11 +14,6 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 		Scheduler_pushQueue(kernelData, clockNotifierTask->priority-1, clockNotifierTask);
 	}
 	else{
-		int x = req->syscall_uid;
-		if (x != 4){
-
-		//bwprintf(COM2, "syscall: %d\r\n", x);
-		}
 		switch (req->syscall_uid)
 		{
 			case SYSCALL_CREATE:
@@ -158,11 +153,9 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 		}
 	}
 	
-	//bwprintf(COM2, "push back\r\n");
 	Scheduler_pushQueue(kernelData, 
 							(kernelData->currentActiveTask->priority)-1, 
-								kernelData->currentActiveTask);	
-	//bwprintf(COM2, "exit kernHandler\r\n");	
+								kernelData->currentActiveTask);		
 }
 
 
