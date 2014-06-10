@@ -54,7 +54,7 @@ void clockServer(){
 	}
 
 	Send(notifierTid, &evtType, sizeof(int) ,&replyMsg, sizeof(int));
-	initTimer();
+	//initTimer();
 	RegisterAs("Clock Server");
 	for(;;){
 		Receive( &requester, &req, sizeof(syscallRequest_ClockServer));
