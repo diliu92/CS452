@@ -21,44 +21,6 @@ idleTask(){
 	}
 }
 
-
-// static void client1(){
-// 	while(1){
-// 		Send(6,0,0,0,0);
-// 	}
-// 	Exit();
-// }
-
-// static void client2(){
-// 	while(1){
-// 		Send(6,0,0,0,0);
-// 	}
-// 	Exit();
-// }
-
-// static void client3(){
-// 	while(1){
-// 		Send(6,0,0,0,0);
-// 	}
-// 	Exit();
-// }
-
-// static void client4(){
-// 	int Tid;
-	
-// 	while(1){
-// 		Receive(&Tid, 0,0 );
-// 		Reply(Tid, 0 , 0);
-// 		Receive(&Tid, 0,0 );
-// 		Reply(Tid, 0 , 0);
-// 		Receive(&Tid, 0,0 );
-// 		Reply(Tid, 0 , 0);
-// 	}
-	
-// 	Exit();
-// }
-
-
 static void client1(){
 	int i;
 	for (i = 0; i < 20; i++){

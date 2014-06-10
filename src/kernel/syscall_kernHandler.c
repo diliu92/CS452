@@ -6,7 +6,6 @@ void
 syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 
 	if (req == 0){
-		//bwprintf(COM2, "hwi\r\n");
 		int *timerClear = (int *) (TIMER3_BASE + CLR_OFFSET);
 		*timerClear = *timerClear | 1;
 		task *clockNotifierTask = &(kernelData->tasks[CLOCK_NOTIFIER_TID]);
