@@ -5,22 +5,64 @@
 void
 idleTask(){
 	// int x = 0;
+	int *timerValue = (int *) (TIMER3_BASE + VAL_OFFSET);
 	while (1){
 		// if (x % 100000 == 0){
 		// 	x = 0;
 		// 	bwprintf(COM2, "time: %u\r\n", Time());
 		// }
 		// x++;
+		// bwprintf(COM2, "tick: %d; timer: %d\r\n", Time(), *timerValue);
 		Pass();
 	}
 }
 
+
+// static void client1(){
+// 	while(1){
+// 		Send(6,0,0,0,0);
+// 	}
+// 	Exit();
+// }
+
+// static void client2(){
+// 	while(1){
+// 		Send(6,0,0,0,0);
+// 	}
+// 	Exit();
+// }
+
+// static void client3(){
+// 	while(1){
+// 		Send(6,0,0,0,0);
+// 	}
+// 	Exit();
+// }
+
+// static void client4(){
+// 	int Tid;
+	
+// 	while(1){
+// 		Receive(&Tid, 0,0 );
+// 		Reply(Tid, 0 , 0);
+// 		Receive(&Tid, 0,0 );
+// 		Reply(Tid, 0 , 0);
+// 		Receive(&Tid, 0,0 );
+// 		Reply(Tid, 0 , 0);
+// 	}
+	
+// 	Exit();
+// }
+
+
 static void client1(){
 	int i;
-	//for (i = 0; i < 200; i++){
-	for(;;){
+	for (i = 0; i < 20; i++){
+	//for(;;){
 		bwprintf(COM2, "Client1 before -- %d: %d\r\n", i, Time());
-		//Delay(10);
+		Delay(10);
+		//Time();
+		//Time();
 		bwprintf(COM2, "Client1 after -- %d: %d\r\n", i, Time());
 	}
 	Exit();
@@ -28,10 +70,12 @@ static void client1(){
 
 static void client2(){
 	int i;
-	//for (i = 0; i < 87; i++){
-	for(;;){
+	for (i = 0; i < 9; i++){
+	//for(;;){
 		bwprintf(COM2, "Client2 before -- %d: %d\r\n", i, Time());
-		//Delay(23);
+		//Time();
+		//Time();
+		Delay(23);
 		bwprintf(COM2, "Client2 after -- %d: %d\r\n", i, Time());
 	}	
 	Exit();
@@ -39,10 +83,12 @@ static void client2(){
 
 static void client3(){
 	int i;
-	//for (i = 0; i < 61; i++){
-	for(;;){
+	for (i = 0; i < 6; i++){
+	//for(;;){
 		bwprintf(COM2, "Client3 before -- %d: %d\r\n", i, Time());
-		//Delay(33);
+		//Time();
+		//Time();
+		Delay(33);
 		bwprintf(COM2, "Client3 after -- %d: %d\r\n", i, Time());
 	}	
 	Exit();
@@ -50,10 +96,12 @@ static void client3(){
 
 static void client4(){
 	int i;
-	//for (i = 0; i < 28; i++){
-	for(;;){
+	for (i = 0; i < 3; i++){
+	//for(;;){
 		bwprintf(COM2, "Client4 before -- %d: %d\r\n", i, Time());
-		//Delay(71);
+		//Time();
+		//Time();
+		Delay(71);
 		bwprintf(COM2, "Client4 after -- %d: %d\r\n", i, Time());
 	}
 	Exit();
@@ -69,11 +117,11 @@ firstUserTask()
 	int clockServerTID = Create(2, clockServer);
 	
 	Create(3, client1);
-	Create(3, client2);
-	Create(3, client3);	
-	Create(3, client4);
+	Create(4, client2);
+	Create(5, client3);	
+	Create(6, client4);
 
-	Create(16, idleTask);
+	Create(7, idleTask);
 
 	Exit();
 }

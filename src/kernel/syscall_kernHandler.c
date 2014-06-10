@@ -4,14 +4,21 @@
 
 void 
 syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
+	//bwprintf(COM2, "kernHandler\r\n");
 	if (req == 0){
+		//bwprintf(COM2, "hwi\r\n");
 		int *timerClear = (int *) (TIMER3_BASE + CLR_OFFSET);
 		*timerClear = *timerClear | 1;
 		task *clockNotifierTask = &(kernelData->tasks[CLOCK_NOTIFIER_TID]);
-		clockNotifierTask->state = Ready;
+
 		Scheduler_pushQueue(kernelData, clockNotifierTask->priority-1, clockNotifierTask);
 	}
 	else{
+		int x = req->syscall_uid;
+		if (x != 4){
+
+		//bwprintf(COM2, "syscall: %d\r\n", x);
+		}
 		switch (req->syscall_uid)
 		{
 			case SYSCALL_CREATE:
@@ -64,8 +71,10 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 																	
 						sendTask->state = Reply_blocked;					
 					}
-					else			
+					else{
+						//bwprintf(COM2, "---------------------------------------------------\r\n");			
 						Message_pushSendQueue(kernelData, recvTask->tid, sendTask);					
+					}
 				}
 						
 				return;	//sender always blocks
@@ -128,13 +137,18 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 			}
 			case SYSCALL_AWAIT:
 			{
+				task* eventTask = kernelData->currentActiveTask;
+
 				syscallRequest_Await* awaitReq = (syscallRequest_Await*)req;
+
+
 				switch(awaitReq->eventid){
 					case TIMER_EVENT:
-						kernelData->tasks[CLOCK_NOTIFIER_TID].state = Event_blocked;
+						eventTask->state = Event_blocked;
 						break;
 					default:
 						req->retval = -1;
+						break;
 				}
 				return;
 			}
@@ -144,9 +158,11 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 		}
 	}
 	
+	//bwprintf(COM2, "push back\r\n");
 	Scheduler_pushQueue(kernelData, 
 							(kernelData->currentActiveTask->priority)-1, 
-								kernelData->currentActiveTask);		
+								kernelData->currentActiveTask);	
+	//bwprintf(COM2, "exit kernHandler\r\n");	
 }
 
 

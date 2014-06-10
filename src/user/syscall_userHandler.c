@@ -1,7 +1,8 @@
 #include <user.h>
 
 static syscallRequest* 
-putReqInR0(syscallRequest* req){
+call_swi(syscallRequest* req){
+	asm("swi");
 	return req;
 }
 
@@ -12,9 +13,7 @@ Create(int priority, void (*code)()){
 	req.priority = priority;
 	req.code = code;
 	
-	putReqInR0(&req);
-	//to be fixed, hardware-interrupt
-	asm("swi");
+	call_swi(&req);
 
 	return req.retval;
 }
@@ -24,8 +23,7 @@ MyTid(){
 	syscallRequest req;
 	req.syscall_uid = SYSCALL_MY_TID;
 	
-	putReqInR0(&req);
-	asm("swi");
+	call_swi(&req);
 
 	return req.retval;
 }
@@ -35,8 +33,7 @@ MyParentTid(){
 	syscallRequest req;
 	req.syscall_uid = SYSCALL_MY_PARENT_TID;
 	
-	putReqInR0(&req);
-	asm("swi");
+	call_swi(&req);
 
 	return req.retval;	
 }
@@ -46,8 +43,8 @@ Pass(){
 	syscallRequest req;
 	req.syscall_uid = SYSCALL_PASS;
 	
-	putReqInR0(&req);
-	asm("swi");
+	call_swi(&req);
+
 }
 
 void 
@@ -55,8 +52,8 @@ Exit(){
 	syscallRequest req;
 	req.syscall_uid = SYSCALL_EXIT;
 	
-	putReqInR0(&req);
-	asm("swi");
+	call_swi(&req);
+
 }
 
 
@@ -70,8 +67,7 @@ Send(int Tid, void* msg, int msglen, void* reply, int replylen){
 	req.reply = reply;
 	req.replylen = replylen;
 	
-	putReqInR0(&req);
-	asm("swi");
+	call_swi(&req);
 	
 	return req.retval;	
 }
@@ -84,8 +80,7 @@ Receive(int* Tid, void* msg, int msglen){
 	req.msg = msg;
 	req.msglen = msglen;
 	
-	putReqInR0(&req);
-	asm("swi");
+	call_swi(&req);
 	
 	return req.retval;	
 }
@@ -98,8 +93,7 @@ Reply(int Tid, void* reply, int replylen){
 	req.reply = reply;
 	req.replylen = replylen;
 	
-	putReqInR0(&req);
-	asm("swi");
+	call_swi(&req);
 	
 	return req.retval;	
 }
@@ -135,9 +129,8 @@ AwaitEvent(int eventid){
 	req.syscall_uid = SYSCALL_AWAIT;
 	req.eventid = eventid;
 	
-	putReqInR0(&req);
-	asm("swi");
-	
+	call_swi(&req);
+
 	return req.retval;	
 }
 

@@ -18,10 +18,11 @@ hwi_kerent:
 	mrs r2, spsr
 	/* switch to system state */
 	msr	cpsr_c, #0xdf
+
 	/* save pc and spsr in stack */
 	stmfd	sp!, {r1,r2}
-	/* switch to IRQ mode */
-	msr	cpsr_c, #0x92
+	/* switch to svc mode */
+	msr	cpsr_c, #0xd3
 	/* jump to kerent */
 	mov r0, #0
 	bl kerent
@@ -51,58 +52,69 @@ hwi_kerent:
 kerent:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 1, uses_anonymous_args = 0	
-	/* 1 acquire arguments of the request */
-	mov	r2, r0
-	/* 2 acquire lr */
-	mov	r3, lr
-	/* 3 change to system state */
-	msr	cpsr_c, #0xdf
-	/* 4 overwrite lr with value from 2 */
-	mov	lr, r3
-	mov r1, r3
-	/* 5 push the registers of the active task onto its stack */
-	stmfd	sp!, {r0,r4,r5,r6,r7,r8,r9,r10,fp}
-	/* 6 acquire the sp of the active */
+	# Do NOT touch r0! It holds the pointer to the request.
+
+	# Grab pc & SPSR
+	mov r1, lr
+	mrs r2, spsr
+
+	# Switch to system mode.
+	msr cpsr_c, #159
+
+	mov lr, r1
+
+	# Save user's registers.
+	stmfd sp!, {r4, r5, r6, r7, r8, sb, sl, fp, ip, lr}
+
+	# Grab user sp into r3
 	mov r3, sp
-	/* 7 return to svc state */
-	msr	cpsr_c, #0xd3
-	/* 8 acquire the spsr of the active */
-	mrs ip, spsr
-	/* 9 pop the registers of the kernel from its stack*/
-	ldmfd	sp!, {r0,r4,r5,r6,r7,r8,r9,r10,fp,lr}
-	/* 11 put the sp and spsr into the TD of the active task*/
-	str	ip, [r0, #4]
-	str r3, [r0, #8]
-	str	r1, [r0, #12]
-	/* 10 fill in the request with its arguments*/
-	mov r0, r2
-	mov pc, lr
+
+	# Back to supervisor mode.
+	msr cpsr_c, #147
+
+	# Restore kernel registers.
+	# The kernel's pointer to the user's stack ptr is put into r1
+	ldmfd sp!, {r1, r4, r5, r6, r7, r8, sb, sl, fp, ip}
+
+	# save active task fields
+	str r2, [r1, #4]
+	str r3, [r1, #8]
+	str lr, [r1, #12]
+
+	# Jump back to whoever called k_exit
+	ldmfd sp!, {pc}
+
 	.size	kerent, .-kerent
 	.align	2
 	.global	kerxit
 	.type	kerxit, %function
-
-
 kerxit:
 	@ args = 0, pretend = 0, frame = 4
 	@ frame_needed = 1, uses_anonymous_args = 0
-	/* 1 store kernel reg */
-	stmfd	sp!, {r0,r4,r5,r6,r7,r8,r9,r10,fp,lr}
-	/* 2 switch to system state*/
-	msr	cpsr_c, #0xdf
-	/* 3 get sp, spsr, pc of active */
-	ldr	r3, [r0, #4]
-	ldr	sp, [r0, #8]
-	ldr	r2, [r0, #12]
-	/* 4 pop the regs of active task */
-	ldmfd	sp!, {r0,r4,r5,r6,r7,r8,r9,r10,fp}
-	/* 6 return to svc state */
-	msr	cpsr_c, #0xd3
-	/* 7 install spsr of the active task*/
-	msr	spsr, r3
-	/* 8 install the pc of the active task*/
+	# Don't touch r0! It holds the user's return value.
+
+	# Save kernel's registers.
+	# r1 holds kernel's pointer to user's stack ptr, so we can update it later.
+	stmfd sp!, {r0, r4, r5, r6, r7, r8, sb, sl, fp, ip, lr}
+
+	# Switch to system mode.
+	msr cpsr_c, #159
+
+	# Restore user's stack ptr
+	ldr r3, [r0, #4]
+	ldr sp, [r0, #8]
+	ldr r2, [r0, #12]
+
+	# Restore task's registers.
+	ldmfd sp!, {r4, r5, r6, r7, r8, sb, sl, fp, ip, lr}
+
+	# Back to supervisor mode.
+	msr cpsr_c, #147
+
+	# Restore user SPSR
+	msr spsr, r3
+
+	# Jump to user task (this will also move the svc SPSR into users CPSR).
 	movs pc, r2
-
-
 	.size	kerxit, .-kerxit
 	.ident	"GCC: (GNU) 4.0.2"

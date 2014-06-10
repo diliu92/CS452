@@ -54,7 +54,7 @@ void clockServer(){
 	}
 
 	Send(notifierTid, &evtType, sizeof(int) ,&replyMsg, sizeof(int));
-	//initTimer();
+	initTimer();
 	for(;;){
 		Receive( &requester, &req, sizeof(syscallRequest_ClockServer));
 		switch (req.type){
@@ -63,7 +63,7 @@ void clockServer(){
 				tick++;
 				//int c = numWaitingTask;
 				if (numWaitingTask > 0){
-					for (i = 3; i < 8; i++){
+					for (i = 3; i < 64; i++){
 						if (waitTime[i] != -1){
 							if (waitTime[i] <= tick){
 								Reply(i, &success, sizeof(int));
@@ -82,7 +82,7 @@ void clockServer(){
 				switch (req.syscall_uid){
 					case SYSCALL_DELAY:
 						waitTime[req.tid] = req.ticks + tick;
-						numWaitingTask++;
+						numWaitingTask++;	
 						break;
 					case SYSCALL_DELAYUNTIL:
 						if (req.ticks > tick){

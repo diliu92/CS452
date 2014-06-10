@@ -16,7 +16,7 @@ Task_create(kernGlobal* kernelData, int priority, void (*code)()){
 	
 	task* tsk = &(kernelData->tasks[kernelData->nextTaskUID]);
 	
-	tsk->cpsr = 0x10;
+	tsk->cpsr = 0x50;
 	tsk->pc = code;
 	
 	tsk->state = Ready;
@@ -24,6 +24,11 @@ Task_create(kernGlobal* kernelData, int priority, void (*code)()){
 	tsk->parent_tid = (kernelData->currentActiveTask == NULL) ?	0 : kernelData->currentActiveTask->tid;
 	
 	tsk->nextPriorityQueueTask = NULL;
+
+	tsk->sendQueue.head = NULL;
+	tsk->sendQueue.tail = NULL;
+
+	tsk->nextSendQueueTask = NULL;
 	
 	Scheduler_pushQueue(kernelData, priority-1, tsk);
 	
@@ -141,10 +146,12 @@ Message_pushSendQueue(kernGlobal* kernelData, int tid, task* tsk){
 	tsk->state = Receive_blocked;
 
 	if (Message_isSendQueueEmpty(kernelData, tid)){
+		//bwprintf(COM2, "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\r\n");	
 			sendQ->head=tsk;
 			sendQ->tail=tsk;
 	}
 	else{
+		//bwprintf(COM2, "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\r\n");
 			((task*)sendQ->tail)->nextSendQueueTask = tsk;
 			sendQ->tail = ((task*)sendQ->tail)->nextSendQueueTask;
 	}
