@@ -5,7 +5,7 @@
 void 
 syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 
-	if (req == 0){
+	if (req->syscall_uid == 0){
 		int *timerClear = (int *) (TIMER3_BASE + CLR_OFFSET);
 		*timerClear = *timerClear | 1;
 		task *clockNotifierTask = &(kernelData->tasks[CLOCK_NOTIFIER_TID]);
