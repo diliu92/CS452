@@ -20,10 +20,21 @@
 #define	SYSCALL_DELAYUNTIL		13
 #define SYSCALL_TIME			14
 
+#define SYSCALL_GETC			15
+#define SYSCALL_PUTC			16
+
 #define TIMER_EVENT			0
+#define UART1_SEND_EVENT	1
+#define UART1_RECV_EVENT	2
+#define UART2_SEND_EVENT	3
+#define UART2_RECV_EVENT	4
 
 
-#define CLOCK_NOTIFIER_TID	3
+#define CLOCK_NOTIFIER_TID			3
+#define UART2_SEND_NOTIFIER_TID		5
+#define UART2_RECV_NOTIFIER_TID		6
+#define UART1_SEND_NOTIFIER_TID		8
+#define UART1_RECV_NOTIFIER_TID		9
 
 /*
  * for syscall functions that have no arguments
@@ -95,5 +106,14 @@ typedef struct syscallRequest_ClockServer{
 	int ticks;
 	int type;
 }syscallRequest_ClockServer;
+
+typedef struct syscallRequest_UARTServer{
+	int syscall_uid;
+	int retval;
+
+	int tid;
+	char data;
+	int type;
+}syscallRequest_UARTServer;
 
 #endif

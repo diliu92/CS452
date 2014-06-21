@@ -27,8 +27,11 @@ hwi_kerent:
 	/* save pc and spsr in stack */
 	stmfd	sp!, {r1,r2}
 	
-	/* switch to IRQ mode(changed) */
+	/* switch to SVC mode(changed) */
 	msr	cpsr_c, #0xd3
+
+	/* turn off interrupt */
+	msr spsr_c, #0x92
 	
 	/* jump to kerent */
 	mov r0, #0

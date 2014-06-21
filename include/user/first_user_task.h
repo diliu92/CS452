@@ -10,3 +10,5 @@ firstUserTask();
 
 
 #endif
+
+//make clean ; make ; cp kernel4.elf /u/cs452/tftp/ARM/d35liu/

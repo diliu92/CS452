@@ -1,16 +1,73 @@
 
 #include <kernel.h>
 
+static void 
+timerInterruptHandler(kernGlobal* kernelData){
+	int *timerClear = (int *) (TIMER3_BASE + CLR_OFFSET);
+	*timerClear = *timerClear | 1;
+	task *clockNotifierTask = &(kernelData->tasks[CLOCK_NOTIFIER_TID]);
+	Scheduler_pushQueue(kernelData, clockNotifierTask->priority-1, clockNotifierTask);
+}
+
+static void 
+uartInterruptHandler(kernGlobal* kernelData, int base){
+	int *data = (int *)(base + UART_DATA_OFFSET);
+	int *flag = (int *)(base + UART_FLAG_OFFSET);
+	int *intr = (int *)(base + UART_INTR_OFFSET);
+	int *rsr = (int *)(base + UART_RSR_OFFSET);
+	int notifierTid;
+	unsigned char c;
+
+	if((base == UART1_BASE) && ((*intr) & MIS_MASK)){	//modem interrupt
+
+	}
+	else if((*intr) & RIS_MASK){	//receive buffer full
+		switch(base){
+			case UART1_BASE:
+				notifierTid = 9;
+			case UART2_BASE:
+				notifierTid = 6;
+		} 
+		c = *data;
+		task *notifierTask = &(kernelData->tasks[notifierTid]);
+		notifierTask->whyBlocked->retval = c;
+		Scheduler_pushQueue(kernelData, notifierTask->priority-1, notifierTask);
+	}
+	else if((*intr) & TIS_MASK){	// transmit interrupt
+		switch(base){
+			case UART1_BASE:
+				notifierTid = 8;
+			case UART2_BASE:
+				notifierTid = 5;
+		} 
+		//turn off transmit intr
+		int* uart_control_addr = (int *)(base + UART_CTLR_OFFSET);
+		*uart_control_addr = (*uart_control_addr) & ~TIEN_MASK;
+
+		task *notifierTask = &(kernelData->tasks[notifierTid]);
+		Scheduler_pushQueue(kernelData, notifierTask->priority-1, notifierTask);
+	}
+	else if((base == UART1_BASE) && kernelData->uart1_send_ready){
+
+	}
+
+}
 
 void 
 syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 
 	if (req == 0){
-		int *timerClear = (int *) (TIMER3_BASE + CLR_OFFSET);
-		*timerClear = *timerClear | 1;
-		task *clockNotifierTask = &(kernelData->tasks[CLOCK_NOTIFIER_TID]);
+		int* vic2_status_addr = (int*)(0x800C0000 + 0x00);
+		if ((*vic2_status_addr & (1 << (TIMER_INTERRUPT % 32))) != 0){
+			timerInterruptHandler(kernelData);
+		}
+		if ((*vic2_status_addr & (1 << (UART1_INTERRUPT % 32))) != 0){
+			uartInterruptHandler(kernelData, UART1_BASE);
 
-		Scheduler_pushQueue(kernelData, clockNotifierTask->priority-1, clockNotifierTask);
+		}
+		if ((*vic2_status_addr & (1 << (UART2_INTERRUPT % 32))) != 0){
+			uartInterruptHandler(kernelData, UART2_BASE);
+		}		
 	}
 	else{
 		switch (req->syscall_uid)
@@ -135,9 +192,22 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 
 				syscallRequest_Await* awaitReq = (syscallRequest_Await*)req;
 
+				eventTask->whyBlocked = awaitReq;
 
 				switch(awaitReq->eventid){
 					case TIMER_EVENT:
+						eventTask->state = Event_blocked;
+						break;
+					case UART1_SEND_EVENT:
+						eventTask->state = Event_blocked;
+						break;
+					case UART1_RECV_EVENT:
+						eventTask->state = Event_blocked;
+						break;
+					case UART2_SEND_EVENT:
+						eventTask->state = Event_blocked;
+						break;
+					case UART2_RECV_EVENT:
 						eventTask->state = Event_blocked;
 						break;
 					default:

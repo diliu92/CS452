@@ -5,7 +5,9 @@
 
 
 #define TYPE_NOTIFIER		0
-#define TYPE_CLIENT			1
+#define TYPE_NOTIFIER_RECV	1
+#define TYPE_NOTIFIER_SEND	2
+#define TYPE_CLIENT			3
 
 /*
  * NameServer Related 
@@ -48,5 +50,12 @@ clockServer();
 // #define SERIALSERVER_TID	3 
 // void
 // serialServer();
+
+
+void
+UART2_Server();
+
+void
+UART1_Server();
 
 #endif

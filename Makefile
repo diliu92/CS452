@@ -31,15 +31,17 @@ USER_OBJS=	$(OUT_DIR)/syscall_userHandler.o	\
 		$(OUT_DIR)/first_user_task.o		\
 		$(OUT_DIR)/nameServer.o			\
 		$(OUT_DIR)/clockServer.o		\
+		$(OUT_DIR)/uartServer1.o		\
+		$(OUT_DIR)/uartServer2.o		\
 		$(OUT_DIR)/RPS.o	
 
 COMMON_OBJS=	$(OUT_DIR)/contextSwitch.o		\
 		$(OUT_DIR)/bwio.o			\
 		$(OUT_DIR)/utils.o
 
-all: kernel3.elf
+all: kernel4.elf
 
-kernel3.elf: $(KERN_OBJS) $(USER_OBJS) $(COMMON_OBJS) 
+kernel4.elf: $(KERN_OBJS) $(USER_OBJS) $(COMMON_OBJS) 
 	$(LD) $(LDFLAGS) -o $@ $(KERN_OBJS) $(USER_OBJS) $(COMMON_OBJS) -lgcc	
 	
 #-------------------------------------kernel related----------------------------------------#
@@ -85,6 +87,16 @@ $(OUT_DIR)/clockServer.o: $(OUT_DIR)/clockServer.s
 $(OUT_DIR)/clockServer.s:
 	$(XCC) 	-o $(OUT_DIR)/clockServer.s 	-S $(CFLAGS) $(SRC_USER_DIR)/clockServer.c
 
+$(OUT_DIR)/uartServer1.o: $(OUT_DIR)/uartServer1.s
+	$(AS) 	-o $(OUT_DIR)/uartServer1.o 	$(ASFLAGS) $(OUT_DIR)/uartServer1.s
+$(OUT_DIR)/uartServer1.s:
+	$(XCC) 	-o $(OUT_DIR)/uartServer1.s 	-S $(CFLAGS) $(SRC_USER_DIR)/uartServer1.c
+
+$(OUT_DIR)/uartServer2.o: $(OUT_DIR)/uartServer2.s
+	$(AS) 	-o $(OUT_DIR)/uartServer2.o 	$(ASFLAGS) $(OUT_DIR)/uartServer2.s
+$(OUT_DIR)/uartServer2.s:
+	$(XCC) 	-o $(OUT_DIR)/uartServer2.s 	-S $(CFLAGS) $(SRC_USER_DIR)/uartServer2.c
+
 $(OUT_DIR)/RPS.o: $(OUT_DIR)/RPS.s
 	$(AS) 	-o $(OUT_DIR)/RPS.o 	$(ASFLAGS) $(OUT_DIR)/RPS.s
 $(OUT_DIR)/RPS.s:
@@ -107,4 +119,4 @@ $(OUT_DIR)/utils.s:
 
 
 clean:
-	-rm -f kernel3.elf $(OUT_DIR)/*.s $(OUT_DIR)/*.o $(OUT_DIR)/main.map
+	-rm -f kernel4.elf $(OUT_DIR)/*.s $(OUT_DIR)/*.o $(OUT_DIR)/main.map

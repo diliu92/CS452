@@ -174,3 +174,43 @@ Time(){
 
 	return req.retval;
 }
+
+char getc(int channel){
+	syscallRequest_UARTServer req;
+	req.syscall_uid = SYSCALL_GETC;
+	req.tid = MyTid();
+	req.type = TYPE_CLIENT;
+
+	int uartServerTid;
+	switch(channel){
+		case COM1:
+			uartServerTid = WhoIs("UART1 Server");
+			break;
+		case COM2:
+			uartServerTid = WhoIs("UART2 Server");
+			break;	
+	}
+	Send(uartServerTid, &req, sizeof(syscallRequest_UARTServer), &(req.retval), sizeof(int));
+
+	return req.retval;
+}
+
+void putc(int channel, char c){
+	syscallRequest_UARTServer req;
+	req.syscall_uid = SYSCALL_PUTC;
+	req.tid = MyTid();
+	req.type = TYPE_CLIENT;
+	req.data = c;
+
+	int uartServerTid;
+	switch(channel){
+		case COM1:
+			uartServerTid = WhoIs("UART1 Server");
+			break;
+		case COM2:
+			uartServerTid = WhoIs("UART2 Server");
+			break;	
+	}
+	Send(uartServerTid, &req, sizeof(syscallRequest_UARTServer), &(req.retval), sizeof(int));
+	return req.retval;
+}

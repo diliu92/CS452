@@ -60,7 +60,7 @@ void clockServer(){
 						}
 					}
 				}
-				printTime(tick);
+				//printTime(tick);
 				break;
 			case TYPE_CLIENT:
 				switch (req.syscall_uid){
