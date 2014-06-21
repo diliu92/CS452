@@ -7,20 +7,19 @@ idleTask(){
 	int x;
 
 	while (1){
-		char c = bwgetc(COM2);
-		if (c == 'q'){
-			Exit();
-		}
+		//need to figure out how to exit idleTask
 	}
 }
 
 void testGetcCom2(){
 	int i;
-	for(i = 0; i < 10; i++){
+	for(i = 0; 1; i++){
 		char c = getc(COM2);
 		putc(COM2, c);
-		//bwprintf(COM2, "%c\r\n", c);
+		//bwputc(COM2, c);
+		//bwprintf(COM2, "%d\r\n", i);
 	}
+	//bwprintf(COM2, "testGetcCom2 exiting...\r\n");
 	Exit();
 }
 

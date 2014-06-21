@@ -4,15 +4,19 @@ static void UART2_SendNotifier(){
 	int server;
 	int evtType;
 	int replyMsg = 0;
-	int data;
+	char c;
+	int *data = (int *)(UART2_BASE + UART_DATA_OFFSET);
+	int retval;
 	syscallRequest_UARTServer req;
 	Receive(&server, &evtType, sizeof(int));
 	Reply(server, &replyMsg, sizeof(int));
+	int *flag = (int *)(UART2_BASE + UART_FLAG_OFFSET);
+
 	for(;;){
-		data = AwaitEvent(evtType);
+		retval = AwaitEvent(evtType);
 		req.type = TYPE_NOTIFIER_SEND;
-		req.data = (char)data;
-		Send(server, &req, sizeof(syscallRequest_UARTServer), &replyMsg, sizeof(int));
+		Send(server, &req, sizeof(syscallRequest_UARTServer), &c, sizeof(char));
+		*data = c;
 	}
 }
 
@@ -63,13 +67,12 @@ void UART2_Server(){
 	int waitingListNextFree = 0;
 	int waitingListLength = 0;
 
-	int *data = (int *)(UART2_BASE + UART_DATA_OFFSET);
-	int *uart_control_addr = (int *)(UART2_BASE + UART_CTLR_OFFSET);
+	int sendReady = 0;
 
 	Send(sendNotifierTid, &sendEvtType, sizeof(int), &replyMsg, sizeof(int));
 	bwprintf( COM2, "UART2_SendNotifier initialized.\r\nTID of UART2_SendNotifier: %u(should be 5)\r\n", sendNotifierTid);
 
-	Send(recvNotifierTid, &sendEvtType, sizeof(int), &replyMsg, sizeof(int));
+	Send(recvNotifierTid, &recvEvtType, sizeof(int), &replyMsg, sizeof(int));
 	bwprintf( COM2, "UART2_RecvNotifier initialized.\r\nTID of UART2_RecvNotifier: %u(should be 6)\r\n", recvNotifierTid);
 
 	RegisterAs("UART2 Server");
@@ -77,33 +80,33 @@ void UART2_Server(){
 		Receive( &requester, &req, sizeof(syscallRequest_UARTServer));
 		switch(req.type){
 			case TYPE_NOTIFIER_SEND:
-				Reply(requester, &replyMsg, sizeof(int));
-
-				// if (sendBufferLength > 0){
-				// 	*data = sendBuffer[sendBufferNextReady];
-				// 	sendBufferNextReady = (sendBufferNextReady + 1) % 4096;
-				// 	sendBufferLength--;	
-
-				// 	if(sendBufferLength > 0){
-				// 		*uart_control_addr = (*uart_control_addr) | TIEN_MASK;
-				// 	}			
-				// }
+				if (sendBufferLength > 0){
+					Reply(requester, &sendBuffer[sendBufferNextReady], sizeof(char));
+					sendBufferNextReady = (sendBufferNextReady + 1) % 4096;
+					sendBufferLength--;	
+					sendReady = 0;
+				}
+				else{
+					sendReady = 1;
+				}
 
 				break;
 			case TYPE_NOTIFIER_RECV:
-				Reply(requester, &replyMsg, sizeof(int));
 				recvBuffer[recvBufferNextFree] = req.data;
 				recvBufferNextFree = (recvBufferNextFree + 1) % 4096;
 				recvBufferLength++;
 				while(recvBufferLength > 0 && waitingListLength > 0){
+
 					Reply(waitingList[waitingListNextReady], &recvBuffer[recvBufferNextReady], sizeof(char));
 					
-					recvBufferNextReady++;
-					waitingListNextReady++;
+					recvBufferNextReady = (recvBufferNextReady + 1) % 4096;
+					waitingListNextReady = (waitingListNextReady + 1) % 64;
 
 					recvBufferLength--;
 					waitingListLength--;
 				}
+
+				Reply(requester, &replyMsg, sizeof(int));
 				break;
 			case TYPE_CLIENT:
 				switch(req.syscall_uid){
@@ -120,14 +123,16 @@ void UART2_Server(){
 						}
 						break;
 					case SYSCALL_PUTC:
-						sendBuffer[sendBufferNextFree] = req.data;
-						sendBufferNextFree = (sendBufferNextFree + 1) % 4096;
-						sendBufferLength++;
+						if (sendReady == 1 ){
+							Reply(sendNotifierTid, &req.data, sizeof(char));
+						}
+						else{
+							sendBuffer[sendBufferNextFree] = req.data;
+							sendBufferNextFree = (sendBufferNextFree + 1) % 4096;
+							sendBufferLength++;
+						}
 
 						Reply(requester, &success, sizeof(int));
-
-						//turn on transmit intr
-						*uart_control_addr = (*uart_control_addr) | TIEN_MASK;
 						break;
 				}
 				break;

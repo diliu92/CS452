@@ -18,10 +18,12 @@ uartInterruptHandler(kernGlobal* kernelData, int base){
 	int notifierTid;
 	unsigned char c;
 
+	//bwprintf(COM2, "ctrl = %d\r\n", *((int *)(base + UART_CTLR_OFFSET)));
 	if((base == UART1_BASE) && ((*intr) & MIS_MASK)){	//modem interrupt
 
 	}
 	else if((*intr) & RIS_MASK){	//receive buffer full
+		//bwputc(COM2, '~');
 		switch(base){
 			case UART1_BASE:
 				notifierTid = 9;
@@ -34,6 +36,7 @@ uartInterruptHandler(kernGlobal* kernelData, int base){
 		Scheduler_pushQueue(kernelData, notifierTask->priority-1, notifierTask);
 	}
 	else if((*intr) & TIS_MASK){	// transmit interrupt
+		//bwputc(COM2,'*');
 		switch(base){
 			case UART1_BASE:
 				notifierTid = 8;
@@ -41,6 +44,7 @@ uartInterruptHandler(kernGlobal* kernelData, int base){
 				notifierTid = 5;
 		} 
 		//turn off transmit intr
+
 		int* uart_control_addr = (int *)(base + UART_CTLR_OFFSET);
 		*uart_control_addr = (*uart_control_addr) & ~TIEN_MASK;
 
@@ -194,6 +198,8 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 
 				eventTask->whyBlocked = awaitReq;
 
+				int *uart_control_addr;
+
 				switch(awaitReq->eventid){
 					case TIMER_EVENT:
 						eventTask->state = Event_blocked;
@@ -205,7 +211,10 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 						eventTask->state = Event_blocked;
 						break;
 					case UART2_SEND_EVENT:
+						//bwputc(COM2, '|');
 						eventTask->state = Event_blocked;
+						uart_control_addr = (int *)(UART2_BASE + UART_CTLR_OFFSET);
+						*uart_control_addr = (*uart_control_addr) | TIEN_MASK;
 						break;
 					case UART2_RECV_EVENT:
 						eventTask->state = Event_blocked;
