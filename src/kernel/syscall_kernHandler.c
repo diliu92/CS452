@@ -68,7 +68,8 @@ uartInterruptHandler(kernGlobal* kernelData, int base){
 	// bwputr(COM2, kernelData->txReady);
 	// bwputr(COM2, kernelData->ctsReady);
 
-	if (kernelData->txReady == 1 && kernelData->ctsReady == 1){
+	if ((kernelData->txReady == 1 && kernelData->ctsReady == 1) &&
+		(kernelData->tasks[8].state == Event_blocked)){
 		kernelData->txReady = 0;
 		kernelData->ctsReady = 0;
 		Scheduler_pushQueue(kernelData, (kernelData->tasks[8].priority)-1, &(kernelData->tasks[8]));

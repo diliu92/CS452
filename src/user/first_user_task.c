@@ -25,10 +25,10 @@ firstUserTask()	//priority 3
 	int uart1ServerTID = Create(2, UART1_Server);
 	//bwprintf( COM2, "UART1_Server initialized.\r\nTID of UART1_Server: %u(should be 7)\r\n", uart1ServerTID);
 	
-	bwprintf( COM2, "%s\033[H", clearScreen);
+	sprintf( COM2, "%s\033[H", clearScreen);
 
-	//Create(4, cmdProcessor);
 	Create(4, sensorFeedProcessor);
+	Create(4, cmdProcessor);
 
 	Create(16, idleTask);
 

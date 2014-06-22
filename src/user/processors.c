@@ -315,45 +315,45 @@ void sensorFeedProcessor (){
 
 	//init track
 	putc(COM1, 96);
-	// int i = 0, j = 44;
-	// while (j >= 44 && j <= 54){
-	// 	putc(COM1, 0); 
-	// 	putc(COM1, j + 1);
-	// 	j++;
-	// }
-	// while (i < 22){
-	// 	if ((i == 19) || (i == 21)){ //154, 156
-	// 		putc(COM1, 33);
-	// 		putc(COM1, i + 135);
-	// 	}
-	// 	else if (i > 17){
-	// 		putc(COM1, 34);
-	// 		putc(COM1, i + 135);
-	// 	}
-	// 	else{
-	// 		putc(COM1, 34);
-	// 		putc(COM1, i + 1);
-	// 	}
-	// 	putc(COM1, 32);
-	// 	i++;
-	// }
+	int i = 0, j = 44;
+	while (j >= 44 && j <= 54){
+		putc(COM1, 0); 
+		putc(COM1, j + 1);
+		j++;
+	}
+	while (i < 22){
+		if ((i == 19) || (i == 21)){ //154, 156
+			putc(COM1, 33);
+			putc(COM1, i + 135);
+		}
+		else if (i > 17){
+			putc(COM1, 34);
+			putc(COM1, i + 135);
+		}
+		else{
+			putc(COM1, 34);
+			putc(COM1, i + 1);
+		}
+		putc(COM1, 32);
+		i++;
+	}
 
 	//send first query
-	putc(COM1, 192);
-	putc(COM1, 133);
+	// putc(COM1, 192);
+	// putc(COM1, 133);
 
-	while(1){
-		int feed = getc(COM1);
-		sensorFeed[sensorCount] = feed;
-		sensorCount++;
-		if (sensorCount == 10){
-			sensorCount = 0;
-			processFeed(sensorFeed, feedHistory);
+	// while(1){
+	// 	int feed = getc(COM1);
+	// 	sensorFeed[sensorCount] = feed;
+	// 	sensorCount++;
+	// 	if (sensorCount == 10){
+	// 		sensorCount = 0;
+	// 		processFeed(sensorFeed, feedHistory);
 
-			putc(COM1, 192);
-			putc(COM1, 133);
-		}
-	}
+	// 		putc(COM1, 192);
+	// 		putc(COM1, 133);
+	// 	}
+	// }
 	Exit();
 }
 
