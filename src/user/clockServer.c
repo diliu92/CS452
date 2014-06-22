@@ -5,7 +5,7 @@ static void printTime (int ticks){
 	int s = ticks / 100 % 60;
 	int m = ticks / 6000 % 60;
 	int h = ticks / 360000;
-	bwprintf( COM2, "%s\033[0;45H%s%sTime: %d:%d:%d:%d%s%s", save, clearLine, green, h, m, s, ds, restore, resetColor);
+	sprintf( COM2, "%s\033[0;0H%s%sTime: %d:%d:%d:%d%s%s", save, clearLine, green, h, m, s, ds, restore, resetColor);
 }
 
 static void clockNotifier(){
@@ -40,7 +40,7 @@ void clockServer(){
 		waitTime[i] = -1;
 	}
 	Send(notifierTid, &evtType, sizeof(int) ,&replyMsg, sizeof(int));
-	bwprintf( COM2, "ClockNotifier initialized.\r\nTID of ClockNotifier: %u(should be 3)\r\n", notifierTid);
+	//bwprintf( COM2, "ClockNotifier initialized.\r\nTID of ClockNotifier: %u(should be 3)\r\n", notifierTid);
 
 	RegisterAs("Clock Server");
 	for(;;){
@@ -60,7 +60,9 @@ void clockServer(){
 						}
 					}
 				}
-				//printTime(tick);
+				if (tick % 10 == 0){
+					printTime(tick);
+				}
 				break;
 			case TYPE_CLIENT:
 				switch (req.syscall_uid){

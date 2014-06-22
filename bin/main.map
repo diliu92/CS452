@@ -27,95 +27,118 @@ bss             0x0000000000218000        0x0
  *(.bss)
                 0x0000000000218000                _BssEnd = .
 
-text            0x0000000000218000     0x4c24
+text            0x0000000000218000     0x7560
  *(.text)
- .text          0x0000000000218000       0xb4 bin/kernel.o
+ .text          0x0000000000218000       0xc0 bin/kernel.o
                 0x0000000000218000                main
- .text          0x00000000002180b4      0x538 bin/kernInit.o
-                0x0000000000218580                Init
- .text          0x00000000002185ec      0x5ec bin/syscall_kern.o
-                0x000000000021899c                Scheduler_getNextReadyTask
-                0x00000000002188f4                Scheduler_pushQueue
-                0x00000000002189fc                Message_isSendQueueEmpty
-                0x00000000002185ec                Task_create
-                0x0000000000218b28                Message_pushSendQueue
-                0x0000000000218a78                Message_popSendQueue
- .text          0x0000000000218bd8      0x92c bin/syscall_kernHandler.o
-                0x0000000000218e30                syscall_kernHandler
- .text          0x0000000000219504      0x6e0 bin/syscall_userHandler.o
-                0x0000000000219634                Send
-                0x00000000002195a8                MyParentTid
-                0x00000000002195dc                Pass
-                0x0000000000219a30                getc
-                0x00000000002197c8                WhoIs
-                0x0000000000219528                Create
-                0x0000000000219834                AwaitEvent
-                0x00000000002196a0                Receive
-                0x00000000002196f8                Reply
-                0x0000000000219574                MyTid
-                0x0000000000219608                Exit
-                0x000000000021990c                DelayUntil
-                0x0000000000219b08                putc
-                0x0000000000219750                RegisterAs
-                0x0000000000219874                Delay
-                0x00000000002199a4                Time
- .text          0x0000000000219be4      0x178 bin/first_user_task.o
-                0x0000000000219be4                idleTask
-                0x0000000000219c40                firstUserTask
-                0x0000000000219bf8                testGetcCom2
- .text          0x0000000000219d5c      0x594 bin/nameServer.o
-                0x0000000000219ef4                nameServer
- .text          0x000000000021a2f0      0x538 bin/clockServer.o
-                0x000000000021a52c                clockServer
- .text          0x000000000021a828      0x668 bin/uartServer2.o
-                0x000000000021a974                UART2_Server
- .text          0x000000000021ae90      0x864 bin/RPS.o
-                0x000000000021afd8                wait
-                0x000000000021b02c                RPS_Server
- .text          0x000000000021b6f4       0xb0 bin/contextSwitch.o
-                0x000000000021b780                kerxit
-                0x000000000021b6f4                hwi_kerent
-                0x000000000021b744                kerent
- .text          0x000000000021b7a4      0xc54 bin/bwio.o
-                0x000000000021bb1c                bwputr
-                0x000000000021c088                bwi2a
-                0x000000000021b7a4                bwsetfifo
-                0x000000000021b978                bwputc
-                0x000000000021bdd8                bwa2d
-                0x000000000021b86c                bwsetspeed
-                0x000000000021ba3c                c2x
-                0x000000000021be80                bwa2i
-                0x000000000021bd20                bwgetc
-                0x000000000021bf44                bwui2a
-                0x000000000021c0ec                bwformat
-                0x000000000021bc18                bwputw
-                0x000000000021c3c0                bwprintf
-                0x000000000021ba9c                bwputx
-                0x000000000021bb9c                bwputstr
- .text          0x000000000021c3f8      0x1c0 bin/utils.o
-                0x000000000021c3f8                memcpy
-                0x000000000021c538                strEnq
-                0x000000000021c4e4                strLen
- .text          0x000000000021c5b8      0x110 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_udivsi3.o)
-                0x000000000021c5b8                __udivsi3
-                0x000000000021c6b0                __aeabi_uidivmod
- .text          0x000000000021c6c8       0xcc /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_umodsi3.o)
-                0x000000000021c6c8                __umodsi3
- .text          0x000000000021c794        0x4 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_dvmd_tls.o)
-                0x000000000021c794                __aeabi_ldiv0
-                0x000000000021c794                __div0
-                0x000000000021c794                __aeabi_idiv0
+ .text          0x00000000002180c0      0x4f8 bin/kernInit.o
+                0x0000000000218540                Init
+ .text          0x00000000002185b8      0x5ec bin/syscall_kern.o
+                0x0000000000218968                Scheduler_getNextReadyTask
+                0x00000000002188c0                Scheduler_pushQueue
+                0x00000000002189c8                Message_isSendQueueEmpty
+                0x00000000002185b8                Task_create
+                0x0000000000218af4                Message_pushSendQueue
+                0x0000000000218a44                Message_popSendQueue
+ .text          0x0000000000218ba4      0x9cc bin/syscall_kernHandler.o
+                0x0000000000218e7c                syscall_kernHandler
+ .text          0x0000000000219570      0x6e8 bin/syscall_userHandler.o
+                0x00000000002196a0                Send
+                0x0000000000219614                MyParentTid
+                0x0000000000219648                Pass
+                0x0000000000219a9c                getc
+                0x0000000000219834                WhoIs
+                0x0000000000219594                Create
+                0x00000000002198a0                AwaitEvent
+                0x000000000021970c                Receive
+                0x0000000000219764                Reply
+                0x00000000002195e0                MyTid
+                0x0000000000219674                Exit
+                0x0000000000219978                DelayUntil
+                0x0000000000219b74                putc
+                0x00000000002197bc                RegisterAs
+                0x00000000002198e0                Delay
+                0x0000000000219a10                Time
+ .text          0x0000000000219c58      0x114 bin/first_user_task.o
+                0x0000000000219c58                idleTask
+                0x0000000000219c6c                firstUserTask
+ .text          0x0000000000219d6c      0x594 bin/nameServer.o
+                0x0000000000219f04                nameServer
+ .text          0x000000000021a300      0x570 bin/clockServer.o
+                0x000000000021a53c                clockServer
+ .text          0x000000000021a870      0x640 bin/uartServer1.o
+                0x000000000021a9b0                UART1_Server
+ .text          0x000000000021aeb0      0x640 bin/uartServer2.o
+                0x000000000021aff0                UART2_Server
+ .text          0x000000000021b4f0     0x17f0 bin/processors.o
+                0x000000000021ca6c                cmdProcessor
+                0x000000000021b840                updateSwitchState
+                0x000000000021c568                processFeed
+                0x000000000021bdb4                processCmd
+                0x000000000021b4f0                initUI
+                0x000000000021c968                sensorFeedProcessor
+                0x000000000021c4b0                array2int
+ .text          0x000000000021cce0      0x864 bin/RPS.o
+                0x000000000021ce28                wait
+                0x000000000021ce7c                RPS_Server
+ .text          0x000000000021d544       0xb0 bin/contextSwitch.o
+                0x000000000021d5d0                kerxit
+                0x000000000021d544                hwi_kerent
+                0x000000000021d594                kerent
+ .text          0x000000000021d5f4      0xc54 bin/bwio.o
+                0x000000000021d96c                bwputr
+                0x000000000021ded8                bwi2a
+                0x000000000021d5f4                bwsetfifo
+                0x000000000021d7c8                bwputc
+                0x000000000021dc28                bwa2d
+                0x000000000021d6bc                bwsetspeed
+                0x000000000021d88c                c2x
+                0x000000000021dcd0                bwa2i
+                0x000000000021db70                bwgetc
+                0x000000000021dd94                bwui2a
+                0x000000000021df3c                bwformat
+                0x000000000021da68                bwputw
+                0x000000000021e210                bwprintf
+                0x000000000021d8ec                bwputx
+                0x000000000021d9ec                bwputstr
+ .text          0x000000000021e248      0x904 bin/serialio.o
+                0x000000000021e424                putw
+                0x000000000021e3a8                putstr
+                0x000000000021e7dc                i2a
+                0x000000000021e840                format
+                0x000000000021e2a8                putx
+                0x000000000021e248                sc2x
+                0x000000000021e698                ui2a
+                0x000000000021e5d4                a2i
+                0x000000000021e52c                a2d
+                0x000000000021eb14                sprintf
+                0x000000000021e328                putr
+ .text          0x000000000021eb4c      0x1c0 bin/utils.o
+                0x000000000021eb4c                memcpy
+                0x000000000021ec8c                strEnq
+                0x000000000021ec38                strLen
+ .text          0x000000000021ed0c      0x110 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_udivsi3.o)
+                0x000000000021ed0c                __udivsi3
+                0x000000000021ee04                __aeabi_uidivmod
+ .text          0x000000000021ee1c       0xcc /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_umodsi3.o)
+                0x000000000021ee1c                __umodsi3
+ .text          0x000000000021eee8        0x4 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_dvmd_tls.o)
+                0x000000000021eee8                __aeabi_ldiv0
+                0x000000000021eee8                __div0
+                0x000000000021eee8                __aeabi_idiv0
  *(.got)
- .got           0x000000000021c798       0x2c bin/kernInit.o
+ .got           0x000000000021eeec       0x38 bin/kernInit.o
  *(.got.plt)
- .got.plt       0x000000000021c7c4        0xc bin/kernInit.o
-                0x000000000021c7c4                _GLOBAL_OFFSET_TABLE_
+ .got.plt       0x000000000021ef24        0xc bin/kernInit.o
+                0x000000000021ef24                _GLOBAL_OFFSET_TABLE_
  *(.rodata)
- .rodata        0x000000000021c7d0       0x30 bin/syscall_userHandler.o
- .rodata        0x000000000021c800       0xd0 bin/first_user_task.o
- .rodata        0x000000000021c8d0       0x94 bin/clockServer.o
- .rodata        0x000000000021c964       0xb0 bin/uartServer2.o
- .rodata        0x000000000021ca14      0x210 bin/RPS.o
+ .rodata        0x000000000021ef30       0x30 bin/syscall_userHandler.o
+ .rodata        0x000000000021ef60       0x10 bin/first_user_task.o
+ .rodata        0x000000000021ef70       0x50 bin/clockServer.o
+ .rodata        0x000000000021efc0       0x10 bin/uartServer1.o
+ .rodata        0x000000000021efd0       0x10 bin/uartServer2.o
+ .rodata        0x000000000021efe0      0x370 bin/processors.o
+ .rodata        0x000000000021f350      0x210 bin/RPS.o
  *(.glue_7)
  *(.glue_7t)
 
@@ -130,14 +153,16 @@ LOAD bin/nameServer.o
 LOAD bin/clockServer.o
 LOAD bin/uartServer1.o
 LOAD bin/uartServer2.o
+LOAD bin/processors.o
 LOAD bin/RPS.o
 LOAD bin/contextSwitch.o
 LOAD bin/bwio.o
+LOAD bin/serialio.o
 LOAD bin/utils.o
 LOAD /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a
 OUTPUT(kernel4.elf elf32-littlearm)
 
-.comment        0x0000000000000000       0xfc
+.comment        0x0000000000000000      0x120
  .comment       0x0000000000000000       0x12 bin/kernel.o
  .comment       0x0000000000000012       0x12 bin/kernInit.o
  .comment       0x0000000000000024       0x12 bin/syscall_kern.o
@@ -148,10 +173,12 @@ OUTPUT(kernel4.elf elf32-littlearm)
  .comment       0x000000000000007e       0x12 bin/clockServer.o
  .comment       0x0000000000000090       0x12 bin/uartServer1.o
  .comment       0x00000000000000a2       0x12 bin/uartServer2.o
- .comment       0x00000000000000b4       0x12 bin/RPS.o
- .comment       0x00000000000000c6       0x12 bin/contextSwitch.o
- .comment       0x00000000000000d8       0x12 bin/bwio.o
- .comment       0x00000000000000ea       0x12 bin/utils.o
+ .comment       0x00000000000000b4       0x12 bin/processors.o
+ .comment       0x00000000000000c6       0x12 bin/RPS.o
+ .comment       0x00000000000000d8       0x12 bin/contextSwitch.o
+ .comment       0x00000000000000ea       0x12 bin/bwio.o
+ .comment       0x00000000000000fc       0x12 bin/serialio.o
+ .comment       0x000000000000010e       0x12 bin/utils.o
 
 .debug_line     0x0000000000000000      0x14f
  .debug_line    0x0000000000000000       0x86 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_udivsi3.o)

@@ -1,13 +1,15 @@
 #ifndef __FIRSTUSERTASK_H__
 #define __FIRSTUSERTASK_H__
 
+void sensorFeedProcessor();
+
+void cmdProcessor();
+
 void
 firstUserTask();
 /*
  * To be added
  */
-
-
 
 #endif
 

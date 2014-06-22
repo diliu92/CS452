@@ -18,48 +18,36 @@ UartInit(int base){
 	unsigned int on = 0xffffffff;
 	unsigned int off = 0x00000000;
 	unsigned int ms_irq;
-	unsigned int stp2;
 
 	//set UART specific values (speed, ms, stp2)
-	int *speed_addr_high = (int *)(base + UART_LCRM_OFFSET);
-	int *speed_addr_low = (int *)(base + UART_LCRL_OFFSET);
+	int *speed_high = (int *)(base + UART_LCRM_OFFSET);
+	int *speed_low = (int *)(base + UART_LCRL_OFFSET);
 	switch(base){
 		case UART1_BASE:
-			*speed_addr_high = 0x0;	//uart1 speed: 2400
-			*speed_addr_low = 0xbf;
+			*speed_high = 0x0;	//uart1 speed: 2400
+			*speed_low = 0xbf;
 			ms_irq = on;
-			stp2 = on;
 			break;
 		case UART2_BASE:
-			*speed_addr_high = 0x0;	//uart2 speed: 115200
-			*speed_addr_low = 0x3;
+			*speed_high = 0x0;	//uart2 speed: 115200
+			*speed_low = 0x3;
 			ms_irq = off;
-			stp2 = off;
 			break;
 	}
 
-	//set UART line
-	int* uart_line_addr_high = (int*) (base + UART_LCRH_OFFSET);
-	int wordLen = 3;
-	int lineHighVal = (BRK_MASK & off)|	//brk off
-						(PEN_MASK & off)|	//parity enable = false
-						(EPS_MASK & off)|	//even_parity off
-						(STP2_MASK & stp2)|	//stop bits: UART1 on, UART2 off
-						(FEN_MASK & off)|	//fifo off
-						(WLEN_MASK & (wordLen << 5));	//word length
-	//bwprintf(COM2,"line: %u\r\n", lineHighVal);
-	*uart_line_addr_high = lineHighVal;
+	//set line fifo
+	int* line = (int*) (base + UART_LCRH_OFFSET);
+	int buf = *line;
+	buf = buf & ~FEN_MASK;
+	*line = buf;
 
 	//set UART control
-	int* uart_control_addr = (int *)(base + UART_CTLR_OFFSET);
-	int ctrlVal = (UARTEN_MASK & on)|	//enable = true
-					(MSIEN_MASK & ms_irq)|	//ms irq: UART1 on, UART2 off
-					(RIEN_MASK & on)|	//receive irq on
-					(TIEN_MASK & off)|	//transmit irq off
-					(RTIEN_MASK & off)|	//recv timeout off
-					(LBEN_MASK & off);	//loopback off
-	//bwprintf(COM2,"ctrl: %u\r\n", ctrlVal);
-	*uart_control_addr = ctrlVal;
+	int* ctrl = (int *)(base + UART_CTLR_OFFSET);
+	int ctrlVal = 	(UARTEN_MASK & on)|		//enable = true
+					(MSIEN_MASK & ms_irq)|	//modem status irq: UART1 on, UART2 off
+					(RIEN_MASK & on)|		//receive irq on
+					(TIEN_MASK & off);		//transmit irq off
+	*ctrl = (*ctrl) | ctrlVal;
 }
 
 static void
@@ -87,7 +75,7 @@ static void
 hardwareInit(){
 	cacheInit();
 
-	bwsetfifo(COM2, OFF);
+	//bwsetfifo(COM2, OFF);
 
 	//add kerent to swi jump table
 	int* swi_addr = (int*)0x28;
@@ -96,11 +84,12 @@ hardwareInit(){
 	int* hwi_addr = (int*)0x38;
 	*hwi_addr = (int)&hwi_kerent;
 
-	irqInterruptInit();
-	
 	TimerInit();
 	UartInit(UART1_BASE);
 	UartInit(UART2_BASE);
+
+	irqInterruptInit();
+	
 }
 
 static void 
@@ -155,7 +144,8 @@ Init(kernGlobal* kernelData){
 	hardwareInit();
 	
 	kernelData->tasks_stack = 0x400000;
-	kernelData->uart1_send_ready = 0x00000000;
+	kernelData->ctsReady = 1;
+	kernelData->txReady = 0;
 
 	tasksInit(kernelData);
 	queuesInit(kernelData);

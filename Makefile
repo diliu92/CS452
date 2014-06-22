@@ -33,10 +33,12 @@ USER_OBJS=	$(OUT_DIR)/syscall_userHandler.o	\
 		$(OUT_DIR)/clockServer.o		\
 		$(OUT_DIR)/uartServer1.o		\
 		$(OUT_DIR)/uartServer2.o		\
+		$(OUT_DIR)/processors.o			\
 		$(OUT_DIR)/RPS.o	
 
 COMMON_OBJS=	$(OUT_DIR)/contextSwitch.o		\
 		$(OUT_DIR)/bwio.o			\
+		$(OUT_DIR)/serialio.o			\
 		$(OUT_DIR)/utils.o
 
 all: kernel4.elf
@@ -102,6 +104,11 @@ $(OUT_DIR)/RPS.o: $(OUT_DIR)/RPS.s
 $(OUT_DIR)/RPS.s:
 	$(XCC) 	-o $(OUT_DIR)/RPS.s 	-S $(CFLAGS) $(SRC_USER_DIR)/RPS.c
 
+$(OUT_DIR)/processors.o: $(OUT_DIR)/processors.s
+	$(AS) 	-o $(OUT_DIR)/processors.o 	$(ASFLAGS) $(OUT_DIR)/processors.s
+$(OUT_DIR)/processors.s:
+	$(XCC) 	-o $(OUT_DIR)/processors.s 	-S $(CFLAGS) $(SRC_USER_DIR)/processors.c
+
 
 #-------------------------------------common related----------------------------------------#
 $(OUT_DIR)/contextSwitch.o: 
@@ -111,6 +118,11 @@ $(OUT_DIR)/bwio.o: $(OUT_DIR)/bwio.s
 	$(AS)	-o $(OUT_DIR)/bwio.o 	$(ASFLAGS) $(OUT_DIR)/bwio.s
 $(OUT_DIR)/bwio.s: 
 	$(XCC) 	-o $(OUT_DIR)/bwio.s 	-S $(CFLAGS) $(SRC_COMMON_DIR)/bwio.c
+
+$(OUT_DIR)/serialio.o: $(OUT_DIR)/serialio.s
+	$(AS)	-o $(OUT_DIR)/serialio.o 	$(ASFLAGS) $(OUT_DIR)/serialio.s
+$(OUT_DIR)/serialio.s: 
+	$(XCC) 	-o $(OUT_DIR)/serialio.s 	-S $(CFLAGS) $(SRC_COMMON_DIR)/serialio.c
 
 $(OUT_DIR)/utils.o: $(OUT_DIR)/utils.s
 	$(AS)	-o $(OUT_DIR)/utils.o 	$(ASFLAGS) $(OUT_DIR)/utils.s

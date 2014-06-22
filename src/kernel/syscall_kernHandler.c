@@ -14,45 +14,64 @@ uartInterruptHandler(kernGlobal* kernelData, int base){
 	int *data = (int *)(base + UART_DATA_OFFSET);
 	int *flag = (int *)(base + UART_FLAG_OFFSET);
 	int *intr = (int *)(base + UART_INTR_OFFSET);
-	int *rsr = (int *)(base + UART_RSR_OFFSET);
+	int *ctrl = (int *)(base + UART_CTLR_OFFSET);
 	int notifierTid;
 	unsigned char c;
-
-	//bwprintf(COM2, "ctrl = %d\r\n", *((int *)(base + UART_CTLR_OFFSET)));
+	
 	if((base == UART1_BASE) && ((*intr) & MIS_MASK)){	//modem interrupt
+		//bwputc(COM2, '-');
+		if ((*flag) & CTS_MASK){
+			//bwputc(COM2, '&');
+			kernelData->ctsReady = 1;
+			//*ctrl = (*ctrl) | TIEN_MASK;
+		}
 
+		*intr = (int)(*intr) & (~MIS_MASK);
 	}
-	else if((*intr) & RIS_MASK){	//receive buffer full
-		//bwputc(COM2, '~');
+	
+	if((*intr) & RIS_MASK){	
 		switch(base){
 			case UART1_BASE:
 				notifierTid = 9;
+				break;
 			case UART2_BASE:
 				notifierTid = 6;
+				break;
 		} 
 		c = *data;
 		task *notifierTask = &(kernelData->tasks[notifierTid]);
 		notifierTask->whyBlocked->retval = c;
 		Scheduler_pushQueue(kernelData, notifierTask->priority-1, notifierTask);
 	}
-	else if((*intr) & TIS_MASK){	// transmit interrupt
-		//bwputc(COM2,'*');
+	// else if((base == UART1_BASE) && (kernelData->wait_for_cts == 1)){
+	// 	//bwputc(COM2, '*');
+	// 	*ctrl = (*ctrl) & ~TIEN_MASK;
+	// }
+	if((*intr) & TIS_MASK){	// transmit interrupt
+		//turn off transmit intr
+		int* uart_control_addr = (int *)(base + UART_CTLR_OFFSET);
 		switch(base){
 			case UART1_BASE:
-				notifierTid = 8;
+				//bwputc(COM2, '~');
+				kernelData->txReady = 1;
+				*ctrl = (*ctrl) & ~TIEN_MASK;
+				//Scheduler_pushQueue(kernelData, (kernelData->tasks[8].priority)-1, &(kernelData->tasks[8]));
+				break;
 			case UART2_BASE:
-				notifierTid = 5;
+				*ctrl = (*ctrl) & ~TIEN_MASK;
+				Scheduler_pushQueue(kernelData, kernelData->tasks[5].priority-1, &(kernelData->tasks[5]));
+				break;
 		} 
-		//turn off transmit intr
 
-		int* uart_control_addr = (int *)(base + UART_CTLR_OFFSET);
-		*uart_control_addr = (*uart_control_addr) & ~TIEN_MASK;
-
-		task *notifierTask = &(kernelData->tasks[notifierTid]);
-		Scheduler_pushQueue(kernelData, notifierTask->priority-1, notifierTask);
 	}
-	else if((base == UART1_BASE) && kernelData->uart1_send_ready){
 
+	// bwputr(COM2, kernelData->txReady);
+	// bwputr(COM2, kernelData->ctsReady);
+
+	if (kernelData->txReady == 1 && kernelData->ctsReady == 1){
+		kernelData->txReady = 0;
+		kernelData->ctsReady = 0;
+		Scheduler_pushQueue(kernelData, (kernelData->tasks[8].priority)-1, &(kernelData->tasks[8]));
 	}
 
 }
@@ -126,8 +145,7 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 																	
 						sendTask->state = Reply_blocked;					
 					}
-					else{
-						//bwprintf(COM2, "---------------------------------------------------\r\n");			
+					else{			
 						Message_pushSendQueue(kernelData, recvTask->tid, sendTask);					
 					}
 				}
@@ -198,7 +216,7 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 
 				eventTask->whyBlocked = awaitReq;
 
-				int *uart_control_addr;
+				int *ctrl;
 
 				switch(awaitReq->eventid){
 					case TIMER_EVENT:
@@ -206,15 +224,17 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 						break;
 					case UART1_SEND_EVENT:
 						eventTask->state = Event_blocked;
+						ctrl = (int *)(UART1_BASE + UART_CTLR_OFFSET);
+						*ctrl = (*ctrl) | TIEN_MASK;
+						//*ctrl = (*ctrl) | MSIEN_MASK;
 						break;
 					case UART1_RECV_EVENT:
 						eventTask->state = Event_blocked;
 						break;
 					case UART2_SEND_EVENT:
-						//bwputc(COM2, '|');
 						eventTask->state = Event_blocked;
-						uart_control_addr = (int *)(UART2_BASE + UART_CTLR_OFFSET);
-						*uart_control_addr = (*uart_control_addr) | TIEN_MASK;
+						ctrl = (int *)(UART2_BASE + UART_CTLR_OFFSET);
+						*ctrl = (*ctrl) | TIEN_MASK;
 						break;
 					case UART2_RECV_EVENT:
 						eventTask->state = Event_blocked;

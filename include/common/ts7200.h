@@ -68,7 +68,7 @@
 	#define TXFF_MASK	0x20	// Transmit buffer full
 	#define RXFF_MASK	0x40	// Receive buffer full
 	#define TXFE_MASK	0x80	// Transmit buffer empty
-#define UART_INTR_OFFSET	0x21c	//low 4 bits
+#define UART_INTR_OFFSET	0x1c	//low 4 bits
  	#define MIS_MASK 	0x1 	// Modem interrupt
 	#define RIS_MASK 	0x2 	// Receive buffer full
 	#define TIS_MASK 	0x4 	// Transmit interrupt

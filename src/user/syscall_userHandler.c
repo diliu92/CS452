@@ -195,7 +195,7 @@ char getc(int channel){
 	return req.retval;
 }
 
-void putc(int channel, char c){
+int putc(int channel, char c){
 	syscallRequest_UARTServer req;
 	req.syscall_uid = SYSCALL_PUTC;
 	req.tid = MyTid();
@@ -212,5 +212,6 @@ void putc(int channel, char c){
 			break;	
 	}
 	Send(uartServerTid, &req, sizeof(syscallRequest_UARTServer), &(req.retval), sizeof(int));
+	
 	return req.retval;
 }

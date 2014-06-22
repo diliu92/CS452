@@ -10,7 +10,6 @@ static void UART2_SendNotifier(){
 	syscallRequest_UARTServer req;
 	Receive(&server, &evtType, sizeof(int));
 	Reply(server, &replyMsg, sizeof(int));
-	int *flag = (int *)(UART2_BASE + UART_FLAG_OFFSET);
 
 	for(;;){
 		retval = AwaitEvent(evtType);
@@ -70,10 +69,10 @@ void UART2_Server(){
 	int sendReady = 0;
 
 	Send(sendNotifierTid, &sendEvtType, sizeof(int), &replyMsg, sizeof(int));
-	bwprintf( COM2, "UART2_SendNotifier initialized.\r\nTID of UART2_SendNotifier: %u(should be 5)\r\n", sendNotifierTid);
+	//bwprintf( COM2, "UART2_SendNotifier initialized.\r\nTID of UART2_SendNotifier: %u(should be 5)\r\n", sendNotifierTid);
 
 	Send(recvNotifierTid, &recvEvtType, sizeof(int), &replyMsg, sizeof(int));
-	bwprintf( COM2, "UART2_RecvNotifier initialized.\r\nTID of UART2_RecvNotifier: %u(should be 6)\r\n", recvNotifierTid);
+	//bwprintf( COM2, "UART2_RecvNotifier initialized.\r\nTID of UART2_RecvNotifier: %u(should be 6)\r\n", recvNotifierTid);
 
 	RegisterAs("UART2 Server");
 	for(;;){
@@ -118,12 +117,13 @@ void UART2_Server(){
 						}
 						else{
 							waitingList[waitingListNextFree] = req.tid;
-							waitingListNextFree++;
+							waitingListNextFree = (waitingListNextFree + 1) % 64;
 							waitingListLength++;
 						}
 						break;
 					case SYSCALL_PUTC:
 						if (sendReady == 1 ){
+							sendReady = 0;
 							Reply(sendNotifierTid, &req.data, sizeof(char));
 						}
 						else{
