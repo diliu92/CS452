@@ -4,8 +4,10 @@ static void UART1_SendNotifier(){
 	int server;
 	int evtType;
 	int replyMsg = 0;
+
 	char c;
 	int *data = (int *)(UART1_BASE + UART_DATA_OFFSET);
+
 	int retval;
 	syscallRequest_UARTServer req;
 	Receive(&server, &evtType, sizeof(int));
@@ -13,8 +15,10 @@ static void UART1_SendNotifier(){
 
 	for(;;){
 		retval = AwaitEvent(evtType);
+
 		req.type = TYPE_NOTIFIER_SEND;
 		Send(server, &req, sizeof(syscallRequest_UARTServer), &c, sizeof(char));
+		
 		*data = c;
 	}
 }
@@ -80,12 +84,14 @@ void UART1_Server(){
 		switch(req.type){
 			case TYPE_NOTIFIER_SEND:
 				if (sendBufferLength > 0){
+					//bwputc(COM2, '3');
 					Reply(requester, &sendBuffer[sendBufferNextReady], sizeof(char));
 					sendBufferNextReady = (sendBufferNextReady + 1) % 4096;
 					sendBufferLength--;	
 					sendReady = 0;
 				}
 				else{
+					//bwputc(COM2, '4');
 					sendReady = 1;
 				}
 
@@ -124,10 +130,12 @@ void UART1_Server(){
 						break;
 					case SYSCALL_PUTC:
 						if (sendReady == 1 ){
+							//bwputc(COM2, '1');
 							sendReady = 0;
 							Reply(sendNotifierTid, &req.data, sizeof(char));
 						}
 						else{
+							//bwputc(COM2, '2');
 							sendBuffer[sendBufferNextFree] = req.data;
 							sendBufferNextFree = (sendBufferNextFree + 1) % 4096;
 							sendBufferLength++;

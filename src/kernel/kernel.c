@@ -12,6 +12,10 @@ main( int argc, char* argv[] ) {
 	for(i = 0; ;i++){
 		active = Scheduler_getNextReadyTask(&kernelData);
 		//bwprintf(COM2, "active: %d\r\n", active->tid);
+		
+		if (kernelData.tasks[0].state == Zombie)
+			break;
+
 		if (active == NULL)
 			break;
 		//bwprintf(COM2, "before kerxit\r\n");

@@ -339,21 +339,25 @@ void sensorFeedProcessor (){
 	}
 
 	//send first query
-	// putc(COM1, 192);
-	// putc(COM1, 133);
+	putc(COM1, 192);
+	putc(COM1, 133);
 
-	// while(1){
-	// 	int feed = getc(COM1);
-	// 	sensorFeed[sensorCount] = feed;
-	// 	sensorCount++;
-	// 	if (sensorCount == 10){
-	// 		sensorCount = 0;
-	// 		processFeed(sensorFeed, feedHistory);
+	while(1){
+		int feed = getc(COM1);
+		sensorFeed[sensorCount] = feed;
+		sensorCount++;
+		if (sensorCount == 10){
+			sensorCount = 0;
+			processFeed(sensorFeed, feedHistory);
 
-	// 		putc(COM1, 192);
-	// 		putc(COM1, 133);
-	// 	}
-	// }
+			putc(COM1, 192);
+			putc(COM1, 133);
+			Delay(50);
+		}
+	}
+
+	// int msg, reply;
+	// Send(0, msg, sizeof(int), reply, sizeof(int));
 	Exit();
 }
 
@@ -379,8 +383,9 @@ void cmdProcessor (){
 			int ret = processCmd(cmd, trainSpeed);
 			switch (ret){
 				case 1: //q
-					sprintf(COM2, "\033[20;0H");
-					//putc(COM1, 97);
+					putc(COM1, 97);	
+					sprintf(COM2, "\033[20;0HShutting down\r\n");
+					Send(0, NULL, 0, NULL, 0);
 					Exit();
 					break;
 				case -1:
@@ -391,16 +396,20 @@ void cmdProcessor (){
 			i = 0;
 		}
 		else if (cmd[i] == '\b'){
-			cmd[i] = '\0';
-			cmd[i-1] = '\0';
-			i--;
-			sprintf(COM2, "\033[1D\033[K");
+			if (i > 0){
+				cmd[i] = '\0';
+				cmd[i-1] = '\0';
+				i--;
+				sprintf(COM2, "\033[1D\033[K");
+			}
 		}
 		else{
 			putc(COM2, cmd[i]);
 			i++;
 		}
 	}
+
+	Send(0, NULL, 0, NULL, 0);
 	//clearPutBuffers();
 	Exit();
 }

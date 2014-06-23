@@ -46,4 +46,11 @@ DelayUntil(int ticks);
 int
 Time();
 
+int 
+putc(int channel, char c);
+
+char 
+getc(int channel);
+
+
 #endif

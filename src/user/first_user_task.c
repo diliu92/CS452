@@ -32,5 +32,11 @@ firstUserTask()	//priority 3
 
 	Create(16, idleTask);
 
+	int tid;
+	Receive(&tid, NULL, 0);
+	Reply(tid, NULL, 0);
+	sprintf(COM2, "firstUserTask exits, idleTask is still running");
+
+
 	Exit();
 }
