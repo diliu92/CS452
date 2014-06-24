@@ -47,8 +47,13 @@ typedef struct kernGlobal{
 	
 	Queue priorityQueues[MAX_PRIORITY];	
 
-	int ctsReady;
-	int txReady;
+	int   uart1_ctsReady;
+	int   uart1_txReady;
+	char  uart1_txChar;
+	char* uart1_recvChar;
+
+	char  uart2_txChar;
+	char* uart2_recvChar;
 	
 	char* tasks_stack;
 	//char tasks_stack[MAX_TASK*STACK_SIZE];	//should be last member of kernGlobal(memory protection)

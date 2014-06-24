@@ -8,6 +8,7 @@ main( int argc, char* argv[] ) {
 	task* active;
 
 	Init(&kernelData);
+
 	int i;
 	for(i = 0; ;i++){
 		active = Scheduler_getNextReadyTask(&kernelData);

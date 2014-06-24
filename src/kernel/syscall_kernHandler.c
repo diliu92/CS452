@@ -20,33 +20,43 @@ uartInterruptHandler(kernGlobal* kernelData, int base){
 	unsigned char c;
 	
 	if((base == UART1_BASE) && ((*intr) & MIS_MASK)){	//modem interrupt;
-		if ((*flag) & CTS_MASK){
-			kernelData->ctsReady = 1;
+		if (((*flag) & CTS_MASK) && (kernelData->uart1_ctsReady == -1)){
+			kernelData->uart1_ctsReady = 1;
+			//*ctrl = (*ctrl) | TIEN_MASK;
+		}
+		else if (((*flag) & CTS_MASK) != CTS_MASK){
+			kernelData->uart1_ctsReady = -1;
 		}
 
-		*intr = (int)(*intr) & (~MIS_MASK);
-	}
-	
+		*intr = (int)(*intr) & ~MIS_MASK;		//clear ms irq
+	}	
 	if((*intr) & RIS_MASK){	
 		switch(base){
 			case UART1_BASE:
 				notifierTask = &(kernelData->tasks[UART1_RECV_NOTIFIER_TID]);
+
+				c = *data;
+				*(kernelData->uart1_recvChar) = c;
+
+				Scheduler_pushQueue(kernelData, notifierTask->priority-1, notifierTask);
 				break;
 			case UART2_BASE:
 				notifierTask = &(kernelData->tasks[UART2_RECV_NOTIFIER_TID]);
+
+				c = *data;
+				*(kernelData->uart2_recvChar) = c;
+				Scheduler_pushQueue(kernelData, notifierTask->priority-1, notifierTask);
 				break;
 		} 
-		c = *data;
-		notifierTask->whyBlocked->retval = c;
-
-		Scheduler_pushQueue(kernelData, notifierTask->priority-1, notifierTask);
 	}
 	if((*intr) & TIS_MASK){
 		switch(base){
 			case UART1_BASE:
-				kernelData->txReady = 1;
+				kernelData->uart1_txReady = 1;
 				break;
 			case UART2_BASE:
+				*data = kernelData->uart2_txChar;
+
 				notifierTask = &(kernelData->tasks[UART2_SEND_NOTIFIER_TID]);
 				Scheduler_pushQueue(kernelData, notifierTask->priority-1, notifierTask);
 				break;
@@ -54,12 +64,20 @@ uartInterruptHandler(kernGlobal* kernelData, int base){
 
 		*ctrl = (*ctrl) & ~TIEN_MASK; 
 	}
-	if ((kernelData->txReady == 1 && kernelData->ctsReady == 1) &&
-		(kernelData->tasks[UART1_SEND_NOTIFIER_TID].state == Event_blocked)){
-			kernelData->txReady = 0;
-			kernelData->ctsReady = 0;
-			Scheduler_pushQueue(kernelData, (kernelData->tasks[UART1_SEND_NOTIFIER_TID].priority)-1, 
-									&(kernelData->tasks[UART1_SEND_NOTIFIER_TID]));
+	if ((kernelData->uart1_txReady == 1 && kernelData->uart1_ctsReady == 1) 
+		&& (kernelData->tasks[UART1_SEND_NOTIFIER_TID].state == Event_blocked)){
+			ctrl = (int*)(UART1_BASE + UART_CTLR_OFFSET);
+			data = (int*)(UART1_BASE + UART_DATA_OFFSET);
+
+			*data = kernelData->uart1_txChar;
+			*(ctrl) = *(ctrl) | TIEN_MASK;
+			
+			kernelData->uart1_txReady = 0;
+			kernelData->uart1_ctsReady = 0;
+
+			notifierTask = &(kernelData->tasks[UART1_SEND_NOTIFIER_TID]);
+
+			Scheduler_pushQueue(kernelData, notifierTask->priority-1, notifierTask);
 	}
 
 }
@@ -207,27 +225,47 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 				eventTask->whyBlocked = awaitReq;
 
 				int *ctrl;
+				int *data;
 
 				switch(awaitReq->eventid){
 					case TIMER_EVENT:
 						eventTask->state = Event_blocked;
+
 						break;
 					case UART1_SEND_EVENT:
 						eventTask->state = Event_blocked;
-						ctrl = (int *)(UART1_BASE + UART_CTLR_OFFSET);
-						*ctrl = (*ctrl) | TIEN_MASK;
-						//*ctrl = (*ctrl) | MSIEN_MASK;
+						kernelData->uart1_txChar = *(awaitReq->event);
+
+						if (kernelData->uart1_txReady == 1 && kernelData->uart1_ctsReady == 1){
+								ctrl = (int*)(UART1_BASE + UART_CTLR_OFFSET);
+								data = (int*)(UART1_BASE + UART_DATA_OFFSET);
+
+								*data = kernelData->uart1_txChar;
+								*(ctrl) = *(ctrl) | TIEN_MASK;
+								
+								kernelData->uart1_txReady = 0;
+								kernelData->uart1_ctsReady = 0;
+
+								Scheduler_pushQueue(kernelData, eventTask->priority-1, eventTask);
+						}
 						break;
 					case UART1_RECV_EVENT:
 						eventTask->state = Event_blocked;
+						kernelData->uart1_recvChar = awaitReq->event;
+
 						break;
 					case UART2_SEND_EVENT:
 						eventTask->state = Event_blocked;
+						kernelData->uart2_txChar = *(awaitReq->event);
+
 						ctrl = (int *)(UART2_BASE + UART_CTLR_OFFSET);
 						*ctrl = (*ctrl) | TIEN_MASK;
+
 						break;
 					case UART2_RECV_EVENT:
 						eventTask->state = Event_blocked;
+						kernelData->uart2_recvChar = awaitReq->event;
+
 						break;
 					default:
 						req->retval = -1;

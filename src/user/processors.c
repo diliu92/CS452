@@ -352,12 +352,9 @@ void sensorFeedProcessor (){
 
 			putc(COM1, 192);
 			putc(COM1, 133);
-			Delay(50);
 		}
-	}
+	 }
 
-	// int msg, reply;
-	// Send(0, msg, sizeof(int), reply, sizeof(int));
 	Exit();
 }
 

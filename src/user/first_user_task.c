@@ -10,6 +10,19 @@ idleTask(){
 		//need to figure out how to exit idleTask
 	}
 }
+// void 
+// com2_testone(){
+// 	while(1){
+// 		putc(COM2,'X');
+// 	}
+// }
+// void 
+// com2_testtwo(){
+// 	while(1){
+// 		putc(COM2,getc(COM2));
+// 	}
+// }
+
 
 
 void
@@ -29,13 +42,15 @@ firstUserTask()	//priority 3
 
 	Create(4, sensorFeedProcessor);
 	Create(4, cmdProcessor);
+	//Create(4, com2_testone);
+	//Create(4, com2_testtwo);
+
 
 	Create(16, idleTask);
 
 	int tid;
 	Receive(&tid, NULL, 0);
 	Reply(tid, NULL, 0);
-	sprintf(COM2, "firstUserTask exits, idleTask is still running");
 
 
 	Exit();

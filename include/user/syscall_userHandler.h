@@ -35,7 +35,7 @@ WhoIs(char* name);
 
 
 int 
-AwaitEvent(int eventid);
+AwaitEvent(int eventid, char* event, int eventlen);
 
 int 
 Delay(int ticks);

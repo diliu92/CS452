@@ -18,6 +18,7 @@ UartInit(int base){
 	unsigned int on = 0xffffffff;
 	unsigned int off = 0x00000000;
 	unsigned int ms_irq;
+	unsigned int tx_irq;
 
 	//set UART specific values (speed, ms, stp2)
 	int *speed_high = (int *)(base + UART_LCRM_OFFSET);
@@ -26,12 +27,14 @@ UartInit(int base){
 		case UART1_BASE:
 			*speed_high = 0x0;	//uart1 speed: 2400
 			*speed_low = 0xbf;
-			ms_irq = on;
+			ms_irq = on;	//TBC
+			tx_irq = on;	//TBC
 			break;
 		case UART2_BASE:
 			*speed_high = 0x0;	//uart2 speed: 115200
 			*speed_low = 0x3;
 			ms_irq = off;
+			tx_irq = off;
 			break;
 	}
 
@@ -46,7 +49,7 @@ UartInit(int base){
 	int ctrlVal = 	(UARTEN_MASK & on)|		//enable = true
 					(MSIEN_MASK & ms_irq)|	//modem status irq: UART1 on, UART2 off
 					(RIEN_MASK & on)|		//receive irq on
-					(TIEN_MASK & off);		//transmit irq off
+					(TIEN_MASK & tx_irq);		//transmit irq off
 	*ctrl = (*ctrl) | ctrlVal;
 }
 
@@ -144,8 +147,8 @@ Init(kernGlobal* kernelData){
 	hardwareInit();
 	
 	kernelData->tasks_stack = 0x400000;
-	kernelData->ctsReady = 1;
-	kernelData->txReady = 0;
+	kernelData->uart1_ctsReady = 1;
+	kernelData->uart1_txReady = 0;
 
 	tasksInit(kernelData);
 	queuesInit(kernelData);

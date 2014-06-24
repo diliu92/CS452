@@ -17,7 +17,7 @@ static void clockNotifier(){
 	Receive(&server, &evtType, sizeof(int));
 	Reply(server, &replyMsg, sizeof(int));
 	for(;;){
-		data = AwaitEvent(evtType);
+		data = AwaitEvent(evtType, 0, 0);
 		req.type = TYPE_NOTIFIER;
 		Send(server, &req, sizeof(syscallRequest_ClockServer), &replyMsg, sizeof(int));
 	}

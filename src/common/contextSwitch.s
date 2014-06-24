@@ -76,10 +76,10 @@ kerent:
 	/* 3 change to system state */
 	msr	cpsr_c, #0xdf
 	/* 4 overwrite lr with value from 2 */
-	mov	lr, r3
+	# mov	lr, r3
 	mov r1, r3
 	/* 5 push the registers of the active task onto its stack */
-	stmfd	sp!, {r0,r4,r5,r6,r7,r8,r9,r10,fp}
+	stmfd	sp!, {r0,r4,r5,r6,r7,r8,r9,r10,fp,lr}
 	/* 6 acquire the sp of the active */
 	mov r3, sp
 	/* 7 return to svc state */
@@ -113,7 +113,7 @@ kerxit:
 	ldr	sp, [r0, #8]
 	ldr	r2, [r0, #12]
 	/* 4 pop the regs of active task */
-	ldmfd	sp!, {r0,r4,r5,r6,r7,r8,r9,r10,fp}
+	ldmfd	sp!, {r0,r4,r5,r6,r7,r8,r9,r10,fp,lr}
 	/* 6 return to svc state */
 	msr	cpsr_c, #0xd3
 	/* 7 install spsr of the active task*/

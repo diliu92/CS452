@@ -91,6 +91,8 @@ typedef struct syscallRequest_Await{
 	int	retval;
 	
 	int eventid;
+	char* event;
+	int eventlen;
 }syscallRequest_Await;
 
 typedef struct syscallRequest_NameServer{

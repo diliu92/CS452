@@ -6,20 +6,16 @@ static void UART1_SendNotifier(){
 	int replyMsg = 0;
 
 	char c;
-	int *data = (int *)(UART1_BASE + UART_DATA_OFFSET);
 
-	int retval;
 	syscallRequest_UARTServer req;
+	req.type = TYPE_NOTIFIER_SEND;
+
 	Receive(&server, &evtType, sizeof(int));
 	Reply(server, &replyMsg, sizeof(int));
 
 	for(;;){
-		retval = AwaitEvent(evtType);
-
-		req.type = TYPE_NOTIFIER_SEND;
 		Send(server, &req, sizeof(syscallRequest_UARTServer), &c, sizeof(char));
-		
-		*data = c;
+		AwaitEvent(evtType, &c, sizeof(char));
 	}
 }
 
@@ -27,14 +23,17 @@ static void UART1_RecvNotifier(){
 	int server;
 	int evtType;
 	int replyMsg = 0;
-	int data;
+	char c;
+
 	syscallRequest_UARTServer req;
+	req.type = TYPE_NOTIFIER_RECV;
+
 	Receive(&server, &evtType, sizeof(int));
 	Reply(server, &replyMsg, sizeof(int));
 	for(;;){
-		data = AwaitEvent(evtType);
-		req.type = TYPE_NOTIFIER_RECV;
-		req.data = (char) data;
+		AwaitEvent(evtType, &c, sizeof(char));
+		req.data = c;
+
 		Send(server, &req, sizeof(syscallRequest_UARTServer), &replyMsg, sizeof(int));
 	}
 }

@@ -124,10 +124,13 @@ WhoIs(char* name){
 }
 
 int 
-AwaitEvent(int eventid){
+AwaitEvent(int eventid, char* event, int eventlen){
 	syscallRequest_Await req;
 	req.syscall_uid = SYSCALL_AWAIT;
+
 	req.eventid = eventid;
+	req.event = event;
+	req.eventlen = eventlen;
 	
 	call_swi(&req);
 
@@ -142,7 +145,7 @@ Delay(int ticks){
 	req.type = TYPE_CLIENT;
 	req.ticks = ticks;
 
-	int clockServerTid = WhoIs("Clock Server");
+	int clockServerTid = CLOCK_SERVER_TID;//WhoIs("Clock Server");
 	Send(clockServerTid, &req, sizeof(syscallRequest_ClockServer), &(req.retval), sizeof(int));
 
 	return req.retval;
@@ -156,7 +159,7 @@ DelayUntil(int ticks){
 	req.type = TYPE_CLIENT;
 	req.ticks = ticks;
 
-	int clockServerTid = WhoIs("Clock Server");
+	int clockServerTid = CLOCK_SERVER_TID;//WhoIs("Clock Server");
 	Send(clockServerTid, &req, sizeof(syscallRequest_ClockServer), &(req.retval), sizeof(int));
 
 	return req.retval;
@@ -169,7 +172,7 @@ Time(){
 	req.tid = MyTid();
 	req.type = TYPE_CLIENT;
 
-	int clockServerTid = WhoIs("Clock Server");
+	int clockServerTid = CLOCK_SERVER_TID;//WhoIs("Clock Server");
 	Send(clockServerTid, &req, sizeof(syscallRequest_ClockServer), &(req.retval), sizeof(int));
 
 	return req.retval;
@@ -184,10 +187,10 @@ char getc(int channel){
 	int uartServerTid;
 	switch(channel){
 		case COM1:
-			uartServerTid = WhoIs("UART1 Server");
+			uartServerTid = UART1_SERIAL_SERVER_TID;//WhoIs("UART1 Server");
 			break;
 		case COM2:
-			uartServerTid = WhoIs("UART2 Server");
+			uartServerTid = UART2_SERIAL_SERVER_TID;//WhoIs("UART2 Server");
 			break;	
 	}
 	Send(uartServerTid, &req, sizeof(syscallRequest_UARTServer), &(req.retval), sizeof(int));
@@ -205,10 +208,10 @@ int putc(int channel, char c){
 	int uartServerTid;
 	switch(channel){
 		case COM1:
-			uartServerTid = WhoIs("UART1 Server");
+			uartServerTid = UART1_SERIAL_SERVER_TID;//WhoIs("UART1 Server");
 			break;
 		case COM2:
-			uartServerTid = WhoIs("UART2 Server");
+			uartServerTid = UART2_SERIAL_SERVER_TID;//WhoIs("UART2 Server");
 			break;	
 	}
 	Send(uartServerTid, &req, sizeof(syscallRequest_UARTServer), &(req.retval), sizeof(int));
