@@ -1,7 +1,7 @@
 #ifndef __FIRSTUSERTASK_H__
 #define __FIRSTUSERTASK_H__
 
-void sensorFeedProcessor();
+int sensorFeedProcessor();
 
 void cmdProcessor();
 

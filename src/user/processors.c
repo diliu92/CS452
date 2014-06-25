@@ -242,7 +242,7 @@ int array2int (char *ca){
 	return num;
 }
 
-void processFeed(int *sensorFeed, int *feedHistory){
+int processFeed(int *sensorFeed, int *feedHistory){
 	int cur, i, j, k;
 	for(i = 0; i < 10; i++){
 		cur = sensorFeed[i];
@@ -277,7 +277,7 @@ void processFeed(int *sensorFeed, int *feedHistory){
 					id = base + 8;
 					break;
 				default:
-					return;
+					return -1;
 					break;
 			}
 
@@ -299,11 +299,12 @@ void processFeed(int *sensorFeed, int *feedHistory){
 				}
 				sprintf(COM2, "%s%s", resetColor, restore);
 			}
+			return newfeed;
 		}
 	}
 }
 
-void sensorFeedProcessor (){
+int sensorFeedProcessor (){
 	int sensorFeed[10];
 	int feedHistory[5];
 	int sensorCount = 0;
@@ -342,16 +343,33 @@ void sensorFeedProcessor (){
 	putc(COM1, 192);
 	putc(COM1, 133);
 
+	int startSensor = 'C' * 17 + 13;
+	int endSensor = 'E' * 17 + 7;
+	int curSensor;
+	long startTime, endTime, temp;
+	int *high = (int *) 0x80810064;
+	int *low = (int *) 0x80810060;
+
 	while(1){
 		int feed = getc(COM1);
 		sensorFeed[sensorCount] = feed;
 		sensorCount++;
 		if (sensorCount == 10){
 			sensorCount = 0;
-			processFeed(sensorFeed, feedHistory);
-
+			curSensor = processFeed(sensorFeed, feedHistory);
 			putc(COM1, 192);
 			putc(COM1, 133);
+			if (curSensor == startSensor){
+				startTime = *low;
+				temp = *high;
+				startTime = startTime + (temp << 32);
+			}
+			else if (curSensor == endSensor){
+				endTime = *low;
+				temp = *high;
+				endTime = endTime + (temp << 32);
+				sprintf(COM2, "%s\033[45;0H%d%s", save, endTime - startTime, restore);
+			}
 		}
 	 }
 
@@ -380,7 +398,7 @@ void cmdProcessor (){
 			int ret = processCmd(cmd, trainSpeed);
 			switch (ret){
 				case 1: //q
-					putc(COM1, 97);	
+					bwputc(COM1, 97);	
 					sprintf(COM2, "\033[20;0HShutting down\r\n");
 					Send(0, NULL, 0, NULL, 0);
 					Exit();

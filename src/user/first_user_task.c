@@ -23,7 +23,13 @@ idleTask(){
 // 	}
 // }
 
+void 
+debugTimerInit(){
+	int *high = (int *) 0x80810064;
+	int *low = (int *) 0x80810060;
 
+	*high = (*high) | 1 << 8;
+}
 
 void
 firstUserTask()	//priority 3
@@ -39,6 +45,8 @@ firstUserTask()	//priority 3
 	//bwprintf( COM2, "UART1_Server initialized.\r\nTID of UART1_Server: %u(should be 7)\r\n", uart1ServerTID);
 	
 	sprintf( COM2, "%s\033[H", clearScreen);
+
+	debugTimerInit();
 
 	Create(4, sensorFeedProcessor);
 	Create(4, cmdProcessor);

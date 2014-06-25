@@ -41,9 +41,9 @@ COMMON_OBJS=	$(OUT_DIR)/contextSwitch.o		\
 		$(OUT_DIR)/serialio.o			\
 		$(OUT_DIR)/utils.o
 
-all: kernel4.elf
+all: kernelF.elf
 
-kernel4.elf: $(KERN_OBJS) $(USER_OBJS) $(COMMON_OBJS) 
+kernelF.elf: $(KERN_OBJS) $(USER_OBJS) $(COMMON_OBJS) 
 	$(LD) $(LDFLAGS) -o $@ $(KERN_OBJS) $(USER_OBJS) $(COMMON_OBJS) -lgcc	
 	
 #-------------------------------------kernel related----------------------------------------#
@@ -131,4 +131,4 @@ $(OUT_DIR)/utils.s:
 
 
 clean:
-	-rm -f kernel4.elf $(OUT_DIR)/*.s $(OUT_DIR)/*.o $(OUT_DIR)/main.map
+	-rm -f kernelF.elf $(OUT_DIR)/*.s $(OUT_DIR)/*.o $(OUT_DIR)/main.map
