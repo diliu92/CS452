@@ -3,7 +3,6 @@
 static void UART1_SendNotifier(){
 	int server;
 	int evtType;
-	int replyMsg = 0;
 
 	char c;
 
@@ -11,8 +10,7 @@ static void UART1_SendNotifier(){
 	req.type = TYPE_NOTIFIER_SEND;
 
 	Receive(&server, &evtType, sizeof(int));
-	Reply(server, &replyMsg, sizeof(int));
-
+	Reply(server, NULL, 0);
 	for(;;){
 		Send(server, &req, sizeof(syscallRequest_UARTServer), &c, sizeof(char));
 		AwaitEvent(evtType, &c, sizeof(char));
@@ -22,19 +20,19 @@ static void UART1_SendNotifier(){
 static void UART1_RecvNotifier(){
 	int server;
 	int evtType;
-	int replyMsg = 0;
+
 	char c;
 
 	syscallRequest_UARTServer req;
 	req.type = TYPE_NOTIFIER_RECV;
 
 	Receive(&server, &evtType, sizeof(int));
-	Reply(server, &replyMsg, sizeof(int));
+	Reply(server, NULL, 0);
 	for(;;){
 		AwaitEvent(evtType, &c, sizeof(char));
 		req.data = c;
 
-		Send(server, &req, sizeof(syscallRequest_UARTServer), &replyMsg, sizeof(int));
+		Send(server, &req, sizeof(syscallRequest_UARTServer), NULL, 0);
 	}
 }
 
@@ -45,37 +43,36 @@ void UART1_Server(){
 	int sendEvtType = UART1_SEND_EVENT;
 	int recvEvtType = UART1_RECV_EVENT;
 
-	int replyMsg;
 	int success = 0;
 	int requester;
+
 	syscallRequest_UARTServer req;
 
 	char sendBuffer[4096];
-	char recvBuffer[4096];
-
-	int recvBufferNextFree = 0;
-	int recvBufferNextReady = 0;
-	int recvBufferLength = 0;
 	int sendBufferNextFree = 0;
 	int sendBufferNextReady = 0;
 	int sendBufferLength = 0;
 
+	char recvBuffer[4096];
+	int recvBufferNextFree = 0;
+	int recvBufferNextReady = 0;
+	int recvBufferLength = 0;
+
+	int sendReady = 0;
+
 	int waitingList[64];
-	int i;
-	for (i = 0; i < 64; i++){
-		waitingList[i] = 0;
-	}
 	int waitingListNextReady = 0;
 	int waitingListNextFree = 0;
 	int waitingListLength = 0;
 
-	int sendReady = 0;
+	int i;
+	for (i = 0; i < 64; i++){
+		waitingList[i] = 0;
+	}
 
-	Send(sendNotifierTid, &sendEvtType, sizeof(int), &replyMsg, sizeof(int));
-	//bwprintf( COM2, "UART1_SendNotifier initialized.\r\nTID of UART1_SendNotifier: %u(should be 8)\r\n", sendNotifierTid);
+	Send(sendNotifierTid, &sendEvtType, sizeof(int), NULL, 0);
 
-	Send(recvNotifierTid, &recvEvtType, sizeof(int), &replyMsg, sizeof(int));
-	//bwprintf( COM2, "UART1_RecvNotifier initialized.\r\nTID of UART1_RecvNotifier: %u(should be 9)\r\n", recvNotifierTid);
+	Send(recvNotifierTid, &recvEvtType, sizeof(int), NULL, 0);
 
 	RegisterAs("UART1 Server");
 	for(;;){
@@ -83,20 +80,17 @@ void UART1_Server(){
 		switch(req.type){
 			case TYPE_NOTIFIER_SEND:
 				if (sendBufferLength > 0){
-					//bwputc(COM2, '3');
 					Reply(requester, &sendBuffer[sendBufferNextReady], sizeof(char));
 					sendBufferNextReady = (sendBufferNextReady + 1) % 4096;
 					sendBufferLength--;	
 					sendReady = 0;
 				}
 				else{
-					//bwputc(COM2, '4');
 					sendReady = 1;
 				}
 
 				break;
 			case TYPE_NOTIFIER_RECV:
-				//putr(COM2,req.data);
 				recvBuffer[recvBufferNextFree] = req.data;
 				recvBufferNextFree = (recvBufferNextFree + 1) % 4096;
 				recvBufferLength++;
@@ -111,7 +105,7 @@ void UART1_Server(){
 					waitingListLength--;
 				}
 
-				Reply(requester, &replyMsg, sizeof(int));
+				Reply(requester, NULL, 0);
 				break;
 			case TYPE_CLIENT:
 				switch(req.syscall_uid){
@@ -129,12 +123,10 @@ void UART1_Server(){
 						break;
 					case SYSCALL_PUTC:
 						if (sendReady == 1 ){
-							//bwputc(COM2, '1');
 							sendReady = 0;
 							Reply(sendNotifierTid, &req.data, sizeof(char));
 						}
 						else{
-							//bwputc(COM2, '2');
 							sendBuffer[sendBufferNextFree] = req.data;
 							sendBufferNextFree = (sendBufferNextFree + 1) % 4096;
 							sendBufferLength++;

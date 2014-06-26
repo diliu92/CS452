@@ -52,5 +52,11 @@ putc(int channel, char c);
 char 
 getc(int channel);
 
+void
+ShutDown();
+
+int
+NeedToShutDown();
+
 
 #endif

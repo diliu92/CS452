@@ -20,6 +20,10 @@
 
 #define NULL (void*)0
 
+#define TRUE	0xFFFFFFFF
+#define FALSE	0x00000000
+
+
 typedef struct Queue{
 	void* head;	
 	void* tail;		

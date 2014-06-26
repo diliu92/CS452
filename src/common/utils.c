@@ -17,14 +17,8 @@ memcpy(const char* src1, char* dest1, int size){
 	while(char_size--)
 		*char_dest++ = *char_src++;
 	
-	return dest;
 	
-	
-	/*
-	while(size--)
-		*dest++ = *src++;
 	return dest;
-	*/
 }
 
 int

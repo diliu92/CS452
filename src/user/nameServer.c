@@ -43,9 +43,7 @@ nameServer(){
 		switch (req.syscall_uid)
 		{
 			case SYSCALL_REGISTERAS:
-			{
-				// error checking to be added
-				
+			{			
 				nameServerEntry* entry = &(nameServerData.entries[req.tid]);
 				nameEntry* name = &(entry->names[entry->nextSpot]);
 				
@@ -63,7 +61,6 @@ nameServer(){
 			case SYSCALL_WHOIS:
 			{
 				int i, howMany;
-				//nameServerEntry* entry;
 				
 				reply = -3;	//not found
 				for (i = 0; i < MAX_TASK; i++)

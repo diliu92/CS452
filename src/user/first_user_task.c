@@ -6,9 +6,9 @@ void
 idleTask(){
 	int x;
 
-	while (1){
-		//need to figure out how to exit idleTask
-	}
+	while (!NeedToShutDown());
+
+	Exit();
 }
 // void 
 // com2_testone(){
@@ -55,11 +55,6 @@ firstUserTask()	//priority 3
 
 
 	Create(16, idleTask);
-
-	int tid;
-	Receive(&tid, NULL, 0);
-	Reply(tid, NULL, 0);
-
 
 	Exit();
 }

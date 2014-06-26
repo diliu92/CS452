@@ -1,9 +1,9 @@
 #
 # Makefile for busy-wait IO tests
 #
-XCC     = gcc
+XCC = gcc
 AS	= as
-LD      = ld
+LD  = ld
 
 OUT_DIR		= bin
 SRC_KERN_DIR	= src/kernel
@@ -22,24 +22,23 @@ ASFLAGS	= -mcpu=arm920t -mapcs-32
 
 LDFLAGS = -init main -Map $(OUT_DIR)/main.map -N  -T orex.ld -L/u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2
 
-KERN_OBJS = 	$(OUT_DIR)/kernel.o			\
-		$(OUT_DIR)/kernInit.o			\
-		$(OUT_DIR)/syscall_kern.o		\
-		$(OUT_DIR)/syscall_kernHandler.o				
+KERN_OBJS = 	$(OUT_DIR)/kernel.o					\
+				$(OUT_DIR)/kernInit.o				\
+				$(OUT_DIR)/syscall_kern.o			\
+				$(OUT_DIR)/syscall_kernHandler.o				
 
 USER_OBJS=	$(OUT_DIR)/syscall_userHandler.o	\
-		$(OUT_DIR)/first_user_task.o		\
-		$(OUT_DIR)/nameServer.o			\
-		$(OUT_DIR)/clockServer.o		\
-		$(OUT_DIR)/uartServer1.o		\
-		$(OUT_DIR)/uartServer2.o		\
-		$(OUT_DIR)/processors.o			\
-		$(OUT_DIR)/RPS.o	
+			$(OUT_DIR)/first_user_task.o		\
+			$(OUT_DIR)/nameServer.o				\
+			$(OUT_DIR)/clockServer.o			\
+			$(OUT_DIR)/uartServer1.o			\
+			$(OUT_DIR)/uartServer2.o			\
+			$(OUT_DIR)/processors.o			
 
 COMMON_OBJS=	$(OUT_DIR)/contextSwitch.o		\
-		$(OUT_DIR)/bwio.o			\
-		$(OUT_DIR)/serialio.o			\
-		$(OUT_DIR)/utils.o
+				$(OUT_DIR)/bwio.o				\
+				$(OUT_DIR)/serialio.o			\
+				$(OUT_DIR)/utils.o
 
 all: kernelF.elf
 
@@ -98,11 +97,6 @@ $(OUT_DIR)/uartServer2.o: $(OUT_DIR)/uartServer2.s
 	$(AS) 	-o $(OUT_DIR)/uartServer2.o 	$(ASFLAGS) $(OUT_DIR)/uartServer2.s
 $(OUT_DIR)/uartServer2.s:
 	$(XCC) 	-o $(OUT_DIR)/uartServer2.s 	-S $(CFLAGS) $(SRC_USER_DIR)/uartServer2.c
-
-$(OUT_DIR)/RPS.o: $(OUT_DIR)/RPS.s
-	$(AS) 	-o $(OUT_DIR)/RPS.o 	$(ASFLAGS) $(OUT_DIR)/RPS.s
-$(OUT_DIR)/RPS.s:
-	$(XCC) 	-o $(OUT_DIR)/RPS.s 	-S $(CFLAGS) $(SRC_USER_DIR)/RPS.c
 
 $(OUT_DIR)/processors.o: $(OUT_DIR)/processors.s
 	$(AS) 	-o $(OUT_DIR)/processors.o 	$(ASFLAGS) $(OUT_DIR)/processors.s

@@ -2,7 +2,7 @@
 #include <kernel.h>
 
 static void 
-TimerInit(){
+Timer3Init(){
 	int *timerLoad = (int *) (TIMER3_BASE + LDR_OFFSET);
 	int *timerControl = (int *) (TIMER3_BASE + CRTL_OFFSET);
 	*timerControl = *timerControl & ~ENABLE_MASK; //disable timer
@@ -46,10 +46,10 @@ UartInit(int base){
 
 	//set UART control
 	int* ctrl = (int *)(base + UART_CTLR_OFFSET);
-	int ctrlVal = 	(UARTEN_MASK & on)|		//enable = true
-					(MSIEN_MASK & ms_irq)|	//modem status irq: UART1 on, UART2 off
-					(RIEN_MASK & on)|		//receive irq on
-					(TIEN_MASK & tx_irq);		//transmit irq off
+	int ctrlVal = 	(UARTEN_MASK & on)|			//enable = on
+					(MSIEN_MASK & ms_irq)|		//modem status irq: UART1 on, UART2 off
+					(RIEN_MASK & on)|			//receive irq on
+					(TIEN_MASK & tx_irq);		//transmit irq: UART1 on, UART2 off
 	*ctrl = (*ctrl) | ctrlVal;
 }
 
@@ -78,21 +78,17 @@ static void
 hardwareInit(){
 	cacheInit();
 
-	//bwsetfifo(COM2, OFF);
-
-	//add kerent to swi jump table
 	int* swi_addr = (int*)0x28;
 	*swi_addr = (int)&kerent;
 
 	int* hwi_addr = (int*)0x38;
 	*hwi_addr = (int)&hwi_kerent;
 
-	TimerInit();
+	Timer3Init();
 	UartInit(UART1_BASE);
 	UartInit(UART2_BASE);
 
-	irqInterruptInit();
-	
+	irqInterruptInit();	
 }
 
 static void 
@@ -146,12 +142,14 @@ void
 Init(kernGlobal* kernelData){
 	hardwareInit();
 	
-	kernelData->tasks_stack = 0x400000;
+	kernelData->tasks_stack = STACK_LOCATION;
 	kernelData->uart1_ctsReady = 1;
 	kernelData->uart1_txReady = 0;
+
+	kernelData->isShutDownIssued = FALSE;
 
 	tasksInit(kernelData);
 	queuesInit(kernelData);
 
-	Task_create(kernelData, 3, firstUserTask);	//first_user_task	tid:0
+	Task_create(kernelData, 3, firstUserTask);		//first_user_task	tid:0
 }

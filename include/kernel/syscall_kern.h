@@ -5,8 +5,6 @@
 #include <kernel/kernGlobal.h>
 
 
-
-
 /*
  * Task Related Functions
  * 

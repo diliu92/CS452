@@ -5,21 +5,23 @@ static void printTime (int ticks){
 	int s = ticks / 100 % 60;
 	int m = ticks / 6000 % 60;
 	int h = ticks / 360000;
+
 	sprintf( COM2, "%s\033[0;0H%s%sTime: %d:%d:%d:%d%s%s", save, clearLine, green, h, m, s, ds, restore, resetColor);
 }
 
 static void clockNotifier(){
 	int server;
 	int evtType;
-	int replyMsg = 0;
-	int data;
+
 	syscallRequest_ClockServer req;
+	req.type = TYPE_NOTIFIER;
+
 	Receive(&server, &evtType, sizeof(int));
-	Reply(server, &replyMsg, sizeof(int));
+	Reply(server, NULL, 0);
+
 	for(;;){
-		data = AwaitEvent(evtType, 0, 0);
-		req.type = TYPE_NOTIFIER;
-		Send(server, &req, sizeof(syscallRequest_ClockServer), &replyMsg, sizeof(int));
+		AwaitEvent(evtType, NULL, 0);
+		Send(server, &req, sizeof(syscallRequest_ClockServer), NULL, 0);
 	}
 }
 
@@ -27,7 +29,7 @@ void clockServer(){
 	int notifierTid = Create(1, clockNotifier);
 	int tick = 0;
 	int evtType = TIMER_EVENT;
-	int replyMsg;
+
 	int success = 0;
 	int requester;
 	syscallRequest_ClockServer req;
@@ -39,15 +41,15 @@ void clockServer(){
 	for (i = 0; i < 64; i++){
 		waitTime[i] = -1;
 	}
-	Send(notifierTid, &evtType, sizeof(int) ,&replyMsg, sizeof(int));
-	//bwprintf( COM2, "ClockNotifier initialized.\r\nTID of ClockNotifier: %u(should be 3)\r\n", notifierTid);
+	
+	Send(notifierTid, &evtType, sizeof(int) , NULL, 0);
 
 	RegisterAs("Clock Server");
 	for(;;){
 		Receive( &requester, &req, sizeof(syscallRequest_ClockServer));
 		switch (req.type){
 			case TYPE_NOTIFIER: 
-				Reply(requester, &replyMsg, sizeof(int));
+				Reply(requester, NULL, 0);
 				tick++;
 				if (numWaitingTask > 0){
 					for (i = 4; i < 64; i++){

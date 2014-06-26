@@ -1,11 +1,13 @@
 #include <user.h>
 
-char sc2x( char ch ) {
+char 
+sc2x( char ch ) {
 	if ( (ch <= 9) ) return '0' + ch;
 	return 'a' + ch - 10;
 }
 
-int putx( int channel, char c ) {
+int 
+putx( int channel, char c ) {
 	char chh, chl;
 
 	chh = sc2x( c / 16 );
@@ -14,7 +16,8 @@ int putx( int channel, char c ) {
 	return putc( channel, chl );
 }
 
-int putr( int channel, unsigned int reg ) {
+int 
+putr( int channel, unsigned int reg ) {
 	int byte;
 	char *ch = (char *) &reg;
 
@@ -22,7 +25,8 @@ int putr( int channel, unsigned int reg ) {
 	return putc( channel, ' ' );
 }
 
-int putstr( int channel, char *str ) {
+int 
+putstr( int channel, char *str ) {
 	while( *str ) {
 		if( putc( channel, *str ) < 0 ) return -1;
 		str++;
@@ -30,7 +34,8 @@ int putstr( int channel, char *str ) {
 	return 0;
 }
 
-void putw( int channel, int n, char fc, char *bf ) {
+void 
+putw( int channel, int n, char fc, char *bf ) {
 	char ch;
 	char *p = bf;
 
@@ -39,14 +44,16 @@ void putw( int channel, int n, char fc, char *bf ) {
 	while( ( ch = *bf++ ) ) putc( channel, ch );
 }
 
-int a2d( char ch ) {
+int 
+a2d( char ch ) {
 	if( ch >= '0' && ch <= '9' ) return ch - '0';
 	if( ch >= 'a' && ch <= 'f' ) return ch - 'a' + 10;
 	if( ch >= 'A' && ch <= 'F' ) return ch - 'A' + 10;
 	return -1;
 }
 
-char a2i( char ch, char **src, int base, int *nump ) {
+char 
+a2i( char ch, char **src, int base, int *nump ) {
 	int num, digit;
 	char *p;
 
@@ -60,7 +67,8 @@ char a2i( char ch, char **src, int base, int *nump ) {
 	return ch;
 }
 
-void ui2a( unsigned int num, unsigned int base, char *bf ) {
+void 
+ui2a( unsigned int num, unsigned int base, char *bf ) {
 	int n = 0;
 	int dgt;
 	unsigned int d = 1;
@@ -78,7 +86,8 @@ void ui2a( unsigned int num, unsigned int base, char *bf ) {
 	*bf = 0;
 }
 
-void i2a( int num, char *bf ) {
+void 
+i2a( int num, char *bf ) {
 	if( num < 0 ) {
 		num = -num;
 		*bf++ = '-';
@@ -86,7 +95,8 @@ void i2a( int num, char *bf ) {
 	ui2a( num, 10, bf );
 }
 
-void format ( int channel, char *fmt, va_list va ) {
+void 
+format ( int channel, char *fmt, va_list va ) {
 	char bf[12];
 	char ch, lz;
 	int w;
@@ -142,7 +152,8 @@ void format ( int channel, char *fmt, va_list va ) {
 	}
 }
 
-void sprintf( int channel, char *fmt, ... ) {
+void 
+sprintf( int channel, char *fmt, ... ) {
         va_list va;
 
         va_start(va,fmt);

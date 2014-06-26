@@ -44,7 +44,6 @@ Pass(){
 	req.syscall_uid = SYSCALL_PASS;
 	
 	call_swi(&req);
-
 }
 
 void 
@@ -53,7 +52,6 @@ Exit(){
 	req.syscall_uid = SYSCALL_EXIT;
 	
 	call_swi(&req);
-
 }
 
 
@@ -178,7 +176,8 @@ Time(){
 	return req.retval;
 }
 
-char getc(int channel){
+char 
+getc(int channel){
 	syscallRequest_UARTServer req;
 	req.syscall_uid = SYSCALL_GETC;
 	req.tid = MyTid();
@@ -198,7 +197,8 @@ char getc(int channel){
 	return req.retval;
 }
 
-int putc(int channel, char c){
+int 
+putc(int channel, char c){
 	syscallRequest_UARTServer req;
 	req.syscall_uid = SYSCALL_PUTC;
 	req.tid = MyTid();
@@ -216,5 +216,24 @@ int putc(int channel, char c){
 	}
 	Send(uartServerTid, &req, sizeof(syscallRequest_UARTServer), &(req.retval), sizeof(int));
 	
+	return req.retval;
+}
+
+
+void 
+ShutDown(){
+	syscallRequest req;
+	req.syscall_uid = SYSCALL_SHUTDOWN;
+	
+	call_swi(&req);
+}
+
+int 
+NeedToShutDown(){
+	syscallRequest req;
+	req.syscall_uid = SYSCALL_NEEDTOSHUTDOWN;
+	
+	call_swi(&req);
+
 	return req.retval;
 }

@@ -343,12 +343,12 @@ int sensorFeedProcessor (){
 	putc(COM1, 192);
 	putc(COM1, 133);
 
-	int startSensor = 'C' * 17 + 13;
-	int endSensor = 'E' * 17 + 7;
+	int startSensor = 'C' * 17 + 9;
+	int endSensor = 'B' * 17 + 15;
 	int curSensor;
-	long startTime, endTime, temp;
-	int *high = (int *) 0x80810064;
-	int *low = (int *) 0x80810060;
+	unsigned long startTime, endTime, temp;
+	unsigned int *high = (unsigned int *) 0x80810064;
+	unsigned int *low = (unsigned int *) 0x80810060;
 
 	while(1){
 		int feed = getc(COM1);
@@ -368,7 +368,7 @@ int sensorFeedProcessor (){
 				endTime = *low;
 				temp = *high;
 				endTime = endTime + (temp << 32);
-				sprintf(COM2, "%s\033[45;0H%d%s", save, endTime - startTime, restore);
+				sprintf(COM2, "%s\033[45;0H%d%s\033[K", save, endTime - startTime, restore);
 			}
 		}
 	 }
@@ -397,11 +397,11 @@ void cmdProcessor (){
 			cmd[i] = '\0';
 			int ret = processCmd(cmd, trainSpeed);
 			switch (ret){
-				case 1: //q
-					bwputc(COM1, 97);	
+				case 1: 
+					putc(COM1, 97);	
 					sprintf(COM2, "\033[20;0HShutting down\r\n");
-					Send(0, NULL, 0, NULL, 0);
-					Exit();
+					Delay(300);	//Magic number
+					ShutDown();
 					break;
 				case -1:
 					sprintf(COM2, "\033[18;0H%s%sInvalid command!%s", clearLine, red, resetColor);

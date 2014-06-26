@@ -4,10 +4,13 @@
 #include <common/syscall_information.h>
 #include <common/utils.h>
 
-#define MAX_TASK 	64
-#define STACK_SIZE	128*1024	//128KB is the best!
+#define MAX_TASK 		64
+#define MAX_PRIORITY 	16
 
-#define MAX_PRIORITY 16
+#define STACK_LOCATION 	0x00400000	
+#define STACK_SIZE		128*1024	//128KB is the best!
+
+#define MAX_PRIORITY 	16
 
 typedef enum taskState_t{
 	Idle,
@@ -21,29 +24,30 @@ typedef enum taskState_t{
 }taskState_t;
 
 typedef struct task{
-	int tid;
-	unsigned int cpsr;
-	void* sp;	
-	void* pc;
+	int 			tid;
+	unsigned int 	cpsr;
+	void* 			sp;	
+	void* 			pc;
 
-	taskState_t state;	
-	int priority;
-	int parent_tid;
+	taskState_t 	state;	
+	int 			priority;
+	int 			parent_tid;
 	
 	struct task* nextPriorityQueueTask;	
 
 	Queue sendQueue;	
 	struct task* nextSendQueueTask;	
 	
-	syscallRequest* whyBlocked;		//Send,Recv,to be changed to comReq
+	syscallRequest* whyBlocked;				
 }task; 
 
 
 typedef struct kernGlobal{
-	task tasks[MAX_TASK];
-	int nextTaskUID;
-	
-	task* currentActiveTask;
+	task 	tasks[MAX_TASK];
+	char* 	tasks_stack;
+
+	int 	nextTaskUID;
+	task* 	currentActiveTask;
 	
 	Queue priorityQueues[MAX_PRIORITY];	
 
@@ -54,9 +58,8 @@ typedef struct kernGlobal{
 
 	char  uart2_txChar;
 	char* uart2_recvChar;
-	
-	char* tasks_stack;
-	//char tasks_stack[MAX_TASK*STACK_SIZE];	//should be last member of kernGlobal(memory protection)
+
+	int isShutDownIssued;
 }kernGlobal;
 
 #endif

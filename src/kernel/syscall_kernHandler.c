@@ -5,6 +5,7 @@ static void
 timerInterruptHandler(kernGlobal* kernelData){
 	int *timerClear = (int *) (TIMER3_BASE + CLR_OFFSET);
 	*timerClear = *timerClear | 1;
+
 	task *clockNotifierTask = &(kernelData->tasks[CLOCK_NOTIFIER_TID]);
 	Scheduler_pushQueue(kernelData, clockNotifierTask->priority-1, clockNotifierTask);
 }
@@ -20,12 +21,8 @@ uartInterruptHandler(kernGlobal* kernelData, int base){
 	unsigned char c;
 	
 	if((base == UART1_BASE) && ((*intr) & MIS_MASK)){	//modem interrupt;
-		if (((*flag) & CTS_MASK) && (kernelData->uart1_ctsReady == -1)){
+		if (((*flag) & CTS_MASK)){
 			kernelData->uart1_ctsReady = 1;
-			//*ctrl = (*ctrl) | TIEN_MASK;
-		}
-		else if (((*flag) & CTS_MASK) != CTS_MASK){
-			kernelData->uart1_ctsReady = -1;
 		}
 
 		*intr = (int)(*intr) & ~MIS_MASK;		//clear ms irq
@@ -33,18 +30,17 @@ uartInterruptHandler(kernGlobal* kernelData, int base){
 	if((*intr) & RIS_MASK){	
 		switch(base){
 			case UART1_BASE:
-				notifierTask = &(kernelData->tasks[UART1_RECV_NOTIFIER_TID]);
-
 				c = *data;
 				*(kernelData->uart1_recvChar) = c;
 
+				notifierTask = &(kernelData->tasks[UART1_RECV_NOTIFIER_TID]);
 				Scheduler_pushQueue(kernelData, notifierTask->priority-1, notifierTask);
 				break;
 			case UART2_BASE:
-				notifierTask = &(kernelData->tasks[UART2_RECV_NOTIFIER_TID]);
-
 				c = *data;
 				*(kernelData->uart2_recvChar) = c;
+
+				notifierTask = &(kernelData->tasks[UART2_RECV_NOTIFIER_TID]);
 				Scheduler_pushQueue(kernelData, notifierTask->priority-1, notifierTask);
 				break;
 		} 
@@ -119,6 +115,13 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 			case SYSCALL_EXIT:
 				kernelData->currentActiveTask->state = Zombie;
 				return;
+			case SYSCALL_SHUTDOWN:
+				kernelData->currentActiveTask->state = Zombie;
+				kernelData->isShutDownIssued = TRUE;
+				return;
+			case SYSCALL_NEEDTOSHUTDOWN:
+				req->retval = kernelData->isShutDownIssued == TRUE ? TRUE : FALSE;
+				break;
 			case SYSCALL_SEND:
 			{
 				task* sendTask;
@@ -236,18 +239,6 @@ syscall_kernHandler(kernGlobal* kernelData, syscallRequest* req){
 						eventTask->state = Event_blocked;
 						kernelData->uart1_txChar = *(awaitReq->event);
 
-						if (kernelData->uart1_txReady == 1 && kernelData->uart1_ctsReady == 1){
-								ctrl = (int*)(UART1_BASE + UART_CTLR_OFFSET);
-								data = (int*)(UART1_BASE + UART_DATA_OFFSET);
-
-								*data = kernelData->uart1_txChar;
-								*(ctrl) = *(ctrl) | TIEN_MASK;
-								
-								kernelData->uart1_txReady = 0;
-								kernelData->uart1_ctsReady = 0;
-
-								Scheduler_pushQueue(kernelData, eventTask->priority-1, eventTask);
-						}
 						break;
 					case UART1_RECV_EVENT:
 						eventTask->state = Event_blocked;
