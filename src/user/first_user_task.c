@@ -6,7 +6,7 @@ static unsigned int
 readTimer4(){
 	unsigned int *low = (unsigned int *) TIMER4_LOW;
 		
-	return *TIMER4_LOW;
+	return *low;
 }
 
 
