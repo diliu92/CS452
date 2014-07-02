@@ -1,24 +1,39 @@
 #include <user.h>
 
-//static int start, end;
-
-static unsigned int
-readTimer4(){
-	unsigned int *low = (unsigned int *) TIMER4_LOW;
-		
-	return *low;
-}
-
 
 static void
 idleTask(){
-	unsigned long firstTimer4Read, secondTimer4Read;
+	unsigned int *time4_value = (unsigned int *) TIMER4_LOW;
+	
+	unsigned int currentTime, lastTime;
+	
+	unsigned int idleTime	= 0;
+	unsigned int totalTime 	= 0;
+	
+	unsigned int printInterval = 9830;
+	
+	unsigned int loopTime = 25;
+	
+	currentTime = *time4_value;
+	lastTime 	= *time4_value;
 
 	while (!NeedToShutDown()){
-		firstTimer4Read  = readTimer4();
-		secondTimer4Read = readTimer4();
+		currentTime = *time4_value;
 		
-		sprintf( COM2, "%s\033[4;0H%s%sDiff: %d%s%s", save, clearLine, green, secondTimer4Read-firstTimer4Read, restore, resetColor);
+		totalTime += currentTime - lastTime;
+		
+		if(lastTime + loopTime > currentTime )
+			idleTime += currentTime - lastTime;
+		
+		if( totalTime >= 9830){
+			sprintf( COM2, "%s\033[2;0H%s%sDiff: %d%s%s", save, clearLine, green, (100*idleTime)/totalTime, restore, resetColor);
+			
+			totalTime = 0;
+			idleTime  = 0;
+		}
+		
+		
+		lastTime = currentTime;
 	}
 
 	Exit();
