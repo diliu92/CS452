@@ -24,7 +24,7 @@ idleTask(){
 		firstTimer4Read  = readTimer4();
 		secondTimer4Read = readTimer4();
 		
-		sprintf( COM2, "%s\033[1;0H%s%sDiff: %l%s%s", save, clearLine, green, secondTimer4Read-firstTimer4Read, restore, resetColor);
+		sprintf( COM2, "%s\033[4;0H%s%sDiff: %l%s%s", save, clearLine, green, secondTimer4Read-firstTimer4Read, restore, resetColor);
 	}
 
 	Exit();
