@@ -25,7 +25,7 @@ idleTask(){
 		if(lastTime + loopTime > currentTime )
 			idleTime += currentTime - lastTime;
 		
-		if( totalTime >= 9830){
+		if( totalTime >= 98300){
 			sprintf( COM2, "%s\033[2;0H%s%sDiff: %d%s%s", save, clearLine, green, (100*idleTime)/totalTime, restore, resetColor);
 			
 			totalTime = 0;
