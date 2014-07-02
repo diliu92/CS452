@@ -2,11 +2,28 @@
 
 //static int start, end;
 
-void
-idleTask(){
-	int x;
+static unsigned long
+readTimer4(){
+	unsigned long retval, temp;
+	unsigned int *high = (unsigned int *) TIMER4_HIGH;
+	unsigned int *low = (unsigned int *) TIMER4_LOW;
+	
+	retval = *low;
+	temp = *high;
+	retval = *low + (temp << 32);
+	
+	return retval;
+}
 
-	while (!NeedToShutDown());
+
+static void
+idleTask(){
+	unsigned long firstTimer4Read, secondTimer4Read;
+
+	while (!NeedToShutDown()){
+		firstTimer4Read  = readTimer4();
+		secondTimer4Read = readTimer4();
+	}
 
 	Exit();
 }
@@ -23,14 +40,6 @@ idleTask(){
 // 	}
 // }
 
-void 
-debugTimerInit(){
-	int *high = (int *) 0x80810064;
-	int *low = (int *) 0x80810060;
-
-	*high = (*high) | 1 << 8;
-}
-
 void
 firstUserTask()	//priority 3
 {
@@ -45,8 +54,6 @@ firstUserTask()	//priority 3
 	//bwprintf( COM2, "UART1_Server initialized.\r\nTID of UART1_Server: %u(should be 7)\r\n", uart1ServerTID);
 	
 	sprintf( COM2, "%s\033[H", clearScreen);
-
-	debugTimerInit();
 
 	Create(4, sensorFeedProcessor);
 	Create(4, cmdProcessor);

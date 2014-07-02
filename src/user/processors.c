@@ -347,8 +347,8 @@ int sensorFeedProcessor (){
 	int endSensor = 'B' * 17 + 15;
 	int curSensor;
 	unsigned long startTime, endTime, temp;
-	unsigned int *high = (unsigned int *) 0x80810064;
-	unsigned int *low = (unsigned int *) 0x80810060;
+	unsigned int *high = (unsigned int *) TIMER4_HIGH;
+	unsigned int *low = (unsigned int *) TIMER4_LOW;
 
 	while(1){
 		int feed = getc(COM1);

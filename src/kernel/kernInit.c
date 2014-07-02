@@ -12,6 +12,13 @@ Timer3Init(){
 	*timerControl = *timerControl | CLKSEL_MASK; //uncomment to use 508Hz
 	*timerControl = *timerControl | ENABLE_MASK; //enable timer
 }
+static void 
+Timer4Init(){
+	int *high = (int *) TIMER4_HIGH;
+
+	*high = (*high) | 1 << 8;
+}
+
 
 static void
 UartInit(int base){
@@ -85,6 +92,8 @@ hardwareInit(){
 	*hwi_addr = (int)&hwi_kerent;
 
 	Timer3Init();
+	Timer4Init();
+	
 	UartInit(UART1_BASE);
 	UartInit(UART2_BASE);
 
