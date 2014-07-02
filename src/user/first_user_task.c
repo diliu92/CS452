@@ -10,7 +10,7 @@ idleTask(){
 	unsigned int idleTime	= 0;
 	unsigned int totalTime 	= 0;
 	
-	unsigned int printInterval = 9830;
+	unsigned int printInterval = 500000;
 	
 	unsigned int loopTime = 20;
 	
