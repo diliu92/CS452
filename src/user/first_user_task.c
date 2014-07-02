@@ -10,7 +10,7 @@ idleTask(){
 	unsigned int idleTime	= 0;
 	unsigned int totalTime 	= 0;
 	
-	unsigned int printInterval = 1474560;
+	unsigned int printInterval = 147456*3;
 	
 	unsigned int loopTime = 23;
 	
@@ -26,7 +26,7 @@ idleTask(){
 			idleTime += currentTime - lastTime;
 		
 		if( totalTime >= printInterval){
-			sprintf( COM2, "%s\033[2;0H%s%sDiff: %d\%%s%s", save, clearLine, green, (100*idleTime)/totalTime, restore, resetColor);
+			sprintf( COM2, "%s\033[2;0H%s%sDiff: %d%%%s%s", save, clearLine, green, (100*idleTime)/totalTime, restore, resetColor);
 			
 			totalTime = 0;
 			idleTime  = 0;
