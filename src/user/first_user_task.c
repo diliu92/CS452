@@ -12,7 +12,7 @@ idleTask(){
 	
 	unsigned int printInterval = 500000;
 	
-	unsigned int loopTime = 20;
+	unsigned int loopTime = 25;
 	
 	currentTime = *time4_value;
 	lastTime 	= *time4_value;
