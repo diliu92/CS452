@@ -32,7 +32,6 @@ idleTask(){
 			idleTime  = 0;
 		}
 		
-		
 		lastTime = currentTime;
 	}
 
