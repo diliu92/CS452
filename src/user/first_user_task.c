@@ -2,17 +2,11 @@
 
 //static int start, end;
 
-static unsigned long
+static unsigned int
 readTimer4(){
-	unsigned long retval, temp;
-	unsigned int *high = (unsigned int *) TIMER4_HIGH;
 	unsigned int *low = (unsigned int *) TIMER4_LOW;
-	
-	retval = *low;
-	temp = *high;
-	retval = *low + (temp << 32);
-	
-	return retval;
+		
+	return *TIMER4_LOW;
 }
 
 
