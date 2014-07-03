@@ -1,5 +1,5 @@
-#include <train.h>
 #include <user.h>
+#include <train.h>
 
 
 typedef struct trackServerData{
@@ -67,16 +67,20 @@ trackServer(){
 
 
 
-
-
-
-
 float
-getTrainSpeed(int trainNo); 
+getTrainSpeed(int trainNo){
+	return 0;
+}
 void 
-updateTrainSpeed(int trainNo, float trainSpeed);
+updateTrainSpeed(int trainNo, float trainSpeed){
+	
+}
 
 int
-getSwitchStatus(int switchNo);
+getSwitchStatus(int switchNo){
+	return 0;
+}
 void
-updateSwitchStatus(int switchNo, int switchStatus);
+updateSwitchStatus(int switchNo, int switchStatus){
+	
+}
