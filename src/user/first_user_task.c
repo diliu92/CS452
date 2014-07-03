@@ -1,4 +1,5 @@
 #include <user.h>
+#include <train.h>
 
 
 static void
@@ -26,7 +27,7 @@ idleTask(){
 			idleTime += currentTime - lastTime;
 		
 		if( totalTime >= printInterval){
-			sprintf( COM2, "%s\033[2;50H%s%sIdleTask: %d%%%s%s", save, clearLine, yellow, (100*idleTime)/totalTime, restore, resetColor);
+			sprintf( COM2, "%s\033[2;50H%s%sIdle: %d%%%s%s", save, clearLine, yellow, (100*idleTime)/totalTime, restore, resetColor);
 			
 			totalTime = 0;
 			idleTime  = 0;
@@ -65,6 +66,7 @@ firstUserTask()	//priority 3
 	
 	sprintf( COM2, "%s\033[H", clearScreen);
 
+	Create(4, trackServer);
 	Create(4, sensorFeedProcessor);
 	Create(4, cmdProcessor);
 	//Create(4, com2_testone);
