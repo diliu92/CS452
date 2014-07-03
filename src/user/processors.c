@@ -315,6 +315,7 @@ int sensorFeedProcessor (){
 	}
 
 	//init track
+	/*
 	putc(COM1, 96);
 	int i = 0, j = 44;
 	while (j >= 44 && j <= 54){
@@ -338,7 +339,7 @@ int sensorFeedProcessor (){
 		putc(COM1, 32);
 		i++;
 	}
-
+	*/
 	//send first query
 	putc(COM1, 192);
 	putc(COM1, 133);
