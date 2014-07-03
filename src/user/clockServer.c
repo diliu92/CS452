@@ -6,7 +6,7 @@ static void printTime (int ticks){
 	int m = ticks / 6000 % 60;
 	int h = ticks / 360000;
 
-	sprintf( COM2, "%s\033[0;30H%s%sTime: %d:%d:%d:%d%s%s", save, clearLine, green, h, m, s, ds, restore, resetColor);
+	sprintf( COM2, "%s\033[0;20H%s%sTime: %d:%d:%d:%d%s%s", save, clearLine, green, h, m, s, ds, restore, resetColor);
 }
 
 static void clockNotifier(){
