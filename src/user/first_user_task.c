@@ -1,5 +1,6 @@
 #include <user.h>
-#include <train.h>
+
+#include <train/trackServer.h>
 
 
 static void
