@@ -8,7 +8,6 @@
 
 #include <common/syscall_information.h>
 #include <common/utils.h>
-//#include <common/bwio.h>
 #include <common/serialio.h>
 #include <common/ts7200.h>
 
