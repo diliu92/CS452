@@ -48,7 +48,7 @@ TRAIN_OBJS=	$(OUT_DIR)/trackServer.o		\
 all: kernelF.elf
 
 kernelF.elf: $(KERN_OBJS) $(USER_OBJS) $(COMMON_OBJS) $(TRAIN_OBJS) 
-	$(LD) $(LDFLAGS) -o $@ $(KERN_OBJS) $(USER_OBJS) $(COMMON_OBJS) -lgcc	
+	$(LD) $(LDFLAGS) -o $@ $(KERN_OBJS) $(USER_OBJS) $(COMMON_OBJS) $(TRAIN_OBJS) -lgcc	
 	
 #-------------------------------------kernel related----------------------------------------#
 $(OUT_DIR)/kernel.o: $(OUT_DIR)/kernel.s
