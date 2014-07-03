@@ -1,5 +1,6 @@
-#include <train.h>
-
+//#include <train.h>
+#include <user/syscall_userHandler.h>
+#include <train/trackServer.h>
 
 typedef struct trackServerData{
 	float 	trainsSpeed[MAX_TRAINS];
