@@ -2,6 +2,8 @@
 #define __TRAIN_H__
 
 #include <user/syscall_userHandler.h>
+#include <user/first_user_task.h>
+#include <user/server.h>
 
 #include <train/trackServer.h>
 #include <train/routeServer.h>

@@ -45,8 +45,6 @@ initTrackServerData(trackServerData* trkSvrData){
 }
 
 
-
-
 void
 trackServer(){
 	trackServerData trkSvrData;
