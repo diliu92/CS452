@@ -23,7 +23,10 @@ typedef struct trackServerRequest{
 	float 	value;
 }trackServerRequest;
 	
-	
+void 
+trackServer();
+
+
 float
 getTrainSpeed(int trainNo); 
 void 
@@ -33,10 +36,6 @@ int
 getSwitchStatus(int switchNo);
 void
 updateSwitchStatus(int switchNo, int switchStatus);
-
-
-void 
-trackServer();
 
 
 #endif
