@@ -34,19 +34,20 @@ USER_OBJS=	$(OUT_DIR)/syscall_userHandler.o	\
 		$(OUT_DIR)/clockServer.o		\
 		$(OUT_DIR)/uartServer1.o		\
 		$(OUT_DIR)/uartServer2.o		\
-		$(OUT_DIR)/processors.o	
-
-USER_OBJS=	$(OUT_DIR)/trackServer.o		\
-		$(OUT_DIR)/routeServer.o			
+		$(OUT_DIR)/processors.o				
 
 COMMON_OBJS=	$(OUT_DIR)/contextSwitch.o		\
 		$(OUT_DIR)/bwio.o			\
 		$(OUT_DIR)/serialio.o			\
 		$(OUT_DIR)/utils.o
 
+TRAIN_OBJS=	$(OUT_DIR)/trackServer.o		\
+		$(OUT_DIR)/routeServer.o
+
+
 all: kernelF.elf
 
-kernelF.elf: $(KERN_OBJS) $(USER_OBJS) $(COMMON_OBJS) 
+kernelF.elf: $(KERN_OBJS) $(USER_OBJS) $(COMMON_OBJS) $(TRAIN_OBJS) 
 	$(LD) $(LDFLAGS) -o $@ $(KERN_OBJS) $(USER_OBJS) $(COMMON_OBJS) -lgcc	
 	
 #-------------------------------------kernel related----------------------------------------#
@@ -108,18 +109,6 @@ $(OUT_DIR)/processors.s:
 	$(XCC) 	-o $(OUT_DIR)/processors.s 	-S $(CFLAGS) $(SRC_USER_DIR)/processors.c
 
 
-#-------------------------------------train related----------------------------------------#
-$(OUT_DIR)/trackServer.o: $(OUT_DIR)/trackServer.s
-	$(AS) 	-o $(OUT_DIR)/trackServer.o 	$(ASFLAGS) $(OUT_DIR)/trackServer.s
-$(OUT_DIR)/trackServer.s:
-	$(XCC) 	-o $(OUT_DIR)/trackServer.s 	-S $(CFLAGS) $(SRC_TRAIN_DIR)/trackServer.c
-
-$(OUT_DIR)/routeServer.o: $(OUT_DIR)/routeServer.s
-	$(AS) 	-o $(OUT_DIR)/routeServer.o 	$(ASFLAGS) $(OUT_DIR)/routeServer.s
-$(OUT_DIR)/routeServer.s:
-	$(XCC) 	-o $(OUT_DIR)/routeServer.s 	-S $(CFLAGS) $(SRC_TRAIN_DIR)/routeServer.c
-
-
 #-------------------------------------common related----------------------------------------#
 $(OUT_DIR)/contextSwitch.o: 
 	$(AS)	-o $(OUT_DIR)/contextSwitch.o 	$(ASFLAGS) $(SRC_COMMON_DIR)/contextSwitch.s
@@ -138,6 +127,19 @@ $(OUT_DIR)/utils.o: $(OUT_DIR)/utils.s
 	$(AS)	-o $(OUT_DIR)/utils.o 	$(ASFLAGS) $(OUT_DIR)/utils.s
 $(OUT_DIR)/utils.s: 
 	$(XCC) 	-o $(OUT_DIR)/utils.s 	-S $(CFLAGS) $(SRC_COMMON_DIR)/utils.c
+
+
+#-------------------------------------train related----------------------------------------#
+$(OUT_DIR)/trackServer.o: $(OUT_DIR)/trackServer.s
+	$(AS) 	-o $(OUT_DIR)/trackServer.o 	$(ASFLAGS) $(OUT_DIR)/trackServer.s
+$(OUT_DIR)/trackServer.s:
+	$(XCC) 	-o $(OUT_DIR)/trackServer.s 	-S $(CFLAGS) $(SRC_TRAIN_DIR)/trackServer.c
+
+$(OUT_DIR)/routeServer.o: $(OUT_DIR)/routeServer.s
+	$(AS) 	-o $(OUT_DIR)/routeServer.o 	$(ASFLAGS) $(OUT_DIR)/routeServer.s
+$(OUT_DIR)/routeServer.s:
+	$(XCC) 	-o $(OUT_DIR)/routeServer.s 	-S $(CFLAGS) $(SRC_TRAIN_DIR)/routeServer.c
+
 
 
 clean:
