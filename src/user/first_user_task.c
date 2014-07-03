@@ -26,7 +26,7 @@ idleTask(){
 			idleTime += currentTime - lastTime;
 		
 		if( totalTime >= printInterval){
-			sprintf( COM2, "%s\033[2;20H%s%sIdleTask: %d%%%s%s", save, clearLine, yellow, (100*idleTime)/totalTime, restore, resetColor);
+			sprintf( COM2, "%s\033[2;50H%s%sIdleTask: %d%%%s%s", save, clearLine, yellow, (100*idleTime)/totalTime, restore, resetColor);
 			
 			totalTime = 0;
 			idleTime  = 0;
