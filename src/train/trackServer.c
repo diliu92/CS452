@@ -1,7 +1,7 @@
 #include <train.h>
 #include <user.h>
 
-l
+
 typedef struct trackServerData{
 	float 	trainsSpeed[MAX_TRAINS];
 	int		switchesStatus[MAX_SWITCHES];
