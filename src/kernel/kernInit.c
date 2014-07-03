@@ -159,5 +159,5 @@ Init(kernGlobal* kernelData){
 	tasksInit(kernelData);
 	queuesInit(kernelData);
 
-	Task_create(kernelData, 3, firstUserTask);		//first_user_task	tid:0
+	Task_create(kernelData, 6, firstUserTask);		//first_user_task	tid:0
 }

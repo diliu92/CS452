@@ -314,32 +314,7 @@ int sensorFeedProcessor (){
 		feedHistory[a] = -1;
 	}
 
-	//init track
-	/*
-	putc(COM1, 96);
-	int i = 0, j = 44;
-	while (j >= 44 && j <= 54){
-		putc(COM1, 0); 
-		putc(COM1, j + 1);
-		j++;
-	}
-	while (i < 22){
-		if ((i == 19) || (i == 21)){ //154, 156
-			putc(COM1, 33);
-			putc(COM1, i + 135);
-		}
-		else if (i > 17){
-			putc(COM1, 34);
-			putc(COM1, i + 135);
-		}
-		else{
-			putc(COM1, 34);
-			putc(COM1, i + 1);
-		}
-		putc(COM1, 32);
-		i++;
-	}
-	*/
+
 	//send first query
 	putc(COM1, 192);
 	putc(COM1, 133);
