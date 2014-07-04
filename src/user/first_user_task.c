@@ -53,7 +53,7 @@ idleTask(){
 // }
 
 void
-firstUserTask()	//priority 3
+firstUserTask()	//priority 6
 {
 	/* DO NOT CHANGE THE ORDER OF THE FOLLOWING FUNCTION CALLS	*/ 
 	int nameServerTID =  Create(2, nameServer);
