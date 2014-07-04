@@ -68,8 +68,8 @@ firstUserTask()	//priority 3
 	sprintf( COM2, "%s\033[H", clearScreen);
 
 	Create(4, trackServer);
-	Create(4, sensorFeedProcessor);
-	Create(4, cmdProcessor);
+	Create(7, sensorFeedProcessor);
+	Create(7, cmdProcessor);
 	//Create(4, com2_testone);
 	//Create(4, com2_testtwo);
 

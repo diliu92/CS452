@@ -514,8 +514,6 @@ int sensorFeedProcessor (){
 		feedHistory[a] = -1;
 	}
 
-	putc(COM1, 96);
-
 	//send first query
 	putc(COM1, 192);
 	putc(COM1, 133);
