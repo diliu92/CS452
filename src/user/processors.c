@@ -20,67 +20,38 @@ void initUI(){
 
 	//recent snesor
 	sprintf( COM2, "\033[12;0H%sRecently triggered sensors: (last to 5th last)%s", yellow, resetColor);
+	
+
+	//track
+	sprintf( COM2, "\033[16;0H%s*  *  *  *  A  $  *  *  $  *  *  A  *  *  *  *  *  A  *  *  * ", "");
+	sprintf( COM2, "\033[17;0H%s              *       *                                       *", "");
+	sprintf( COM2, "\033[18;0H%s*  *  *  A  $       *   *  A  *  *  $  A  *  A  $  A  *  *  *   A", "");
+	sprintf( COM2, "\033[19;0H%s         *           *                A       A                A", "");
+	sprintf( COM2, "\033[20;0H%s*  A  *            $                    A * A                    $", "");
+	sprintf( COM2, "\033[21;0H%s                  A                      $ $                      *", "");
+	sprintf( COM2, "\033[22;0H%s                  *                       *                       *", "");
+	sprintf( COM2, "\033[23;0H%s                  *                       *                       *", "");
+	sprintf( COM2, "\033[24;0H%s                  A                      $ $                      *", "");
+	sprintf( COM2, "\033[25;0H%s*  A  *            $                    A * A                    $", "");
+	sprintf( COM2, "\033[26;0H%s         *           *                A       A                A", "");
+	sprintf( COM2, "\033[27;0H%s*  A  *  A  $       *   *  A  *  *  $  A  *  A  $  *  A  *  *   A", "");
+	sprintf( COM2, "\033[28;0H%s               *      *                                       *", "");
+	sprintf( COM2, "\033[29;0H%s*  A  *  *  *  A  $     *  *  A  $  *  A  *  A  *  $  A  *  *", "");
+	sprintf( COM2, "\033[30;0H%s                     *             *             *", "");
+	sprintf( COM2, "\033[31;0H%s*  A  *  *  *  *  A  *  $  *  *  A  $  *  *  *  $  A  *  *  *  *  *  *  *  *", "");
 
 	//command
-	sprintf( COM2, "\033[16;0H%scommand> %s", green, resetColor);
+	sprintf( COM2, "\033[34;0H%scommand> %s", green, resetColor);
 }
 
 void updateSwitchState(int sn, int sv){
-	switch(sn){
-		case 1:
+	int r, c;
+
+	r = 4 + (sn/4);
+			c = ((sn%4) * 8) + 1; 
 			sprintf(COM2, "\033[4;9H");
-			break;
-		case 2:
-			sprintf(COM2, "\033[4;17H");
-			break;
-		case 3:
-			sprintf(COM2, "\033[4;25H");
-			break;
-		case 4:
-			sprintf(COM2, "\033[4;33H");
-			break;
-		case 5:
-			sprintf(COM2, "\033[5;9H");
-			break;
-		case 6:
-			sprintf(COM2, "\033[5;17H");
-			break;
-		case 7:
-			sprintf(COM2, "\033[5;25H");
-			break;
-		case 8:
-			sprintf(COM2, "\033[5;33H");
-			break;
-		case 9:
-			sprintf(COM2, "\033[6;9H");
-			break;
-		case 10:
-			sprintf(COM2, "\033[6;17H");
-			break;
-		case 11:
-			sprintf(COM2, "\033[6;25H");
-			break;
-		case 12:
-			sprintf(COM2, "\033[6;33H");
-			break;
-		case 13:
-			sprintf(COM2, "\033[7;9H");
-			break;
-		case 14:
-			sprintf(COM2, "\033[7;17H");
-			break;
-		case 15:
-			sprintf(COM2, "\033[7;25H");
-			break;
-		case 16:
-			sprintf(COM2, "\033[7;33H");
-			break;
-		case 17:
-			sprintf(COM2, "\033[8;9H");
-			break;
-		case 18:
-			sprintf(COM2, "\033[8;17H");
-			break;
+
+	switch(sn){
 		case 153:
 			sprintf(COM2, "\033[9;9H");
 			break;
@@ -93,6 +64,10 @@ void updateSwitchState(int sn, int sv){
 		case 156:
 			sprintf(COM2, "\033[9;33H");
 			break;
+		default:
+			r = 4 + ((sn-1) /4);
+			c = ((((sn - 1) %4) +1) * 8) + 1; 
+			sprintf(COM2, "\033[%u;%uH", r, c);
 	}
 	if (sv == 33){
 		sprintf(COM2, "%sS", magenta);
@@ -223,7 +198,7 @@ int processCmd(char *cmd, int *trainSpeed){
 		putc(COM1, target);
 	}
 
-	sprintf(COM2, "\033[18;0H%s%sCommand '%s' processed.%s", clearLine, green, cmd, resetColor);
+	sprintf(COM2, "\033[35;0H%s%sCommand '%s' processed.%s", clearLine, green, cmd, resetColor);
 	return 0;
 }
 
@@ -304,6 +279,231 @@ int processFeed(int *sensorFeed, int *feedHistory){
 	}
 }
 
+int highlightSensor(int sensor, int prevLoc){
+	int r,c;
+	if (prevLoc > 0){
+		r = prevLoc / 100;
+		c = prevLoc % 100;
+		sprintf(COM2, "%s\033[%u;%uH%sA%s", save, r, c, resetColor, restore);
+	}
+	r = 0;
+	c = 0;
+	//sprintf(COM2, "%d\r\n" ,sensor);
+
+	switch(sensor){
+		case ('A' * 17 + 1):
+		case ('A' * 17 + 2):
+			r = 1;
+			c = 12;
+			break;
+		case ('A' * 17 + 3):
+		case ('A' * 17 + 4):
+			r = 6;
+			c = 18;
+			break;
+		case ('A' * 17 + 5):
+		case ('A' * 17 + 6):
+			r = 16;
+			c = 18;
+			break;
+		case ('A' * 17 + 7):
+		case ('A' * 17 + 8):
+			r = 14;
+			c = 15;
+			break;
+		case ('A' * 17 + 9):
+		case ('A' * 17 + 10):
+			r = 12;
+			c = 9;
+			break;
+		case ('A' * 17 + 11):
+		case ('A' * 17 + 12):
+			r = 10;
+			c = 3;
+			break;
+		case ('A' * 17 + 13):
+		case ('A' * 17 + 14):
+			r = 3;
+			c = 9;
+			break;
+		case ('A' * 17 + 15):
+		case ('A' * 17 + 16):
+			r = 5;
+			c = 3;
+			break;
+		case ('B' * 17 + 1):
+		case ('B' * 17 + 2):
+			r = 12;
+			c = 39;
+			break;
+		case ('B' * 17 + 3):
+		case ('B' * 17 + 4):
+			r = 11;
+			c = 38;
+			break;
+		case ('B' * 17 + 5):
+		case ('B' * 17 + 6):
+			r = 3;
+			c = 39;
+			break;
+		case ('B' * 17 + 7):
+		case ('B' * 17 + 8):
+			r = 12;
+			c = 3;
+			break;
+		case ('B' * 17 + 9):
+		case ('B' * 17 + 10):
+			r = 16;
+			c = 3;
+			break;
+		case ('B' * 17 + 11):
+		case ('B' * 17 + 12):
+			r = 14;
+			c = 3;
+			break;
+		case ('B' * 17 + 13):
+		case ('B' * 17 + 14):
+			r = 10;
+			c = 44;
+			break;
+		case ('B' * 17 + 15):
+		case ('B' * 17 + 16):
+			r = 9;
+			c = 18;
+			break;
+		case ('C' * 17 + 1):
+		case ('C' * 17 + 2):
+			r = 10;
+			c = 40;
+			break;
+		case ('C' * 17 + 3):
+		case ('C' * 17 + 4):
+			r = 16;
+			c = 51;
+			break;
+		case ('C' * 17 + 5):
+		case ('C' * 17 + 6):
+			r = 14;
+			c = 30;
+			break;
+		case ('C' * 17 + 7):
+		case ('C' * 17 + 8):
+			r = 16;
+			c = 33;
+			break;
+		case ('C' * 17 + 9):
+		case ('C' * 17 + 10):
+			r = 12;
+			c = 27;
+			break;
+		case ('C' * 17 + 11):
+		case ('C' * 17 + 12):
+			r = 3;
+			c = 27;
+			break;
+		case ('C' * 17 + 13):
+		case ('C' * 17 + 14):
+			r = 1;
+			c = 33;
+			break;
+		case ('C' * 17 + 15):
+		case ('C' * 17 + 16):
+			r = 14;
+			c = 39;
+			break;
+		case ('D' * 17 + 1):
+		case ('D' * 17 + 2):
+			r = 5;
+			c = 44;
+			break;
+		case ('D' * 17 + 3):
+		case ('D' * 17 + 4):
+			r = 3;
+			c = 45;
+			break;
+		case ('D' * 17 + 5):
+		case ('D' * 17 + 6):
+			r = 4;
+			c = 63;
+			break;
+		case ('D' * 17 + 7):
+		case ('D' * 17 + 8):
+			r = 3;
+			c = 64;
+			break;
+		case ('D' * 17 + 9):
+		case ('D' * 17 + 10):
+			r = 12;
+			c = 64;
+			break;
+		case ('D' * 17 + 11):
+		case ('D' * 17 + 12):
+			r = 14;
+			c = 45;
+			break;
+		case ('D' * 17 + 13):
+		case ('D' * 17 + 14):
+			r = 12;
+			c = 45;
+			break;
+		case ('D' * 17 + 15):
+		case ('D' * 17 + 16):
+			r = 11;
+			c = 46;
+			break;
+		case ('E' * 17 + 1):
+		case ('E' * 17 + 2):
+			r = 5;
+			c = 40;
+			break;
+		case ('E' * 17 + 3):
+		case ('E' * 17 + 4):
+			r = 4;
+			c = 46;
+			break;
+		case ('E' * 17 + 5):
+		case ('E' * 17 + 6):
+			r = 3;
+			c = 51;
+			break;
+		case ('E' * 17 + 7):
+		case ('E' * 17 + 8):
+			r = 1;
+			c = 51;
+			break;
+		case ('E' * 17 + 9):
+		case ('E' * 17 + 10):
+			r = 11;
+			c = 63;
+			break;
+		case ('E' * 17 + 11):
+		case ('E' * 17 + 12):
+			r = 14;
+			c = 54;
+			break;
+		case ('E' * 17 + 13):
+		case ('E' * 17 + 14):
+			r = 12;
+			c = 54;
+			break;
+		case ('E' * 17 + 15):
+		case ('E' * 17 + 16):
+			r = 4;
+			c = 38;
+			break;
+	}
+
+
+	int loc = -1;
+	if (r != 0 && c != 0){
+		r = r + 15;
+		c = c + 1;
+		loc = r * 100 + c;
+		sprintf(COM2, "%s\033[%u;%uH%sA%s", save, r, c, magenta, restore);
+	}
+	return loc;	
+}
+
 int sensorFeedProcessor (){
 	int sensorFeed[10];
 	int feedHistory[5];
@@ -314,42 +514,20 @@ int sensorFeedProcessor (){
 		feedHistory[a] = -1;
 	}
 
-	//init track
-	/*
 	putc(COM1, 96);
-	int i = 0, j = 44;
-	while (j >= 44 && j <= 54){
-		putc(COM1, 0); 
-		putc(COM1, j + 1);
-		j++;
-	}
-	while (i < 22){
-		if ((i == 19) || (i == 21)){ //154, 156
-			putc(COM1, 33);
-			putc(COM1, i + 135);
-		}
-		else if (i > 17){
-			putc(COM1, 34);
-			putc(COM1, i + 135);
-		}
-		else{
-			putc(COM1, 34);
-			putc(COM1, i + 1);
-		}
-		putc(COM1, 32);
-		i++;
-	}
-	*/
+
 	//send first query
 	putc(COM1, 192);
 	putc(COM1, 133);
 
-	int startSensor = 'C' * 17 + 9;
-	int endSensor = 'B' * 17 + 15;
+	// int startSensor = 'C' * 17 + 9;
+	// int endSensor = 'B' * 17 + 15;
 	int curSensor;
-	unsigned long startTime, endTime, temp;
-	unsigned int *high = (unsigned int *) TIMER4_HIGH;
-	unsigned int *low = (unsigned int *) TIMER4_LOW;
+	int prevSensor = -1;
+	int prevLoc = -1;
+	// unsigned long startTime, endTime, temp;
+	// unsigned int *high = (unsigned int *) TIMER4_HIGH;
+	// unsigned int *low = (unsigned int *) TIMER4_LOW;
 
 	while(1){
 		int feed = getc(COM1);
@@ -360,17 +538,21 @@ int sensorFeedProcessor (){
 			curSensor = processFeed(sensorFeed, feedHistory);
 			putc(COM1, 192);
 			putc(COM1, 133);
-			if (curSensor == startSensor){
-				startTime = *low;
-				temp = *high;
-				startTime = startTime + (temp << 32);
+			if (curSensor != prevSensor){
+				prevLoc = highlightSensor(curSensor, prevLoc);
+				prevSensor = curSensor;
 			}
-			else if (curSensor == endSensor){
-				endTime = *low;
-				temp = *high;
-				endTime = endTime + (temp << 32);
-				sprintf(COM2, "%s\033[45;0H%d%s\033[K", save, endTime - startTime, restore);
-			}
+			// if (curSensor == startSensor){
+			// 	startTime = *low;
+			// 	temp = *high;
+			// 	startTime = startTime + (temp << 32);
+			// }
+			// else if (curSensor == endSensor){
+			// 	endTime = *low;
+			// 	temp = *high;
+			// 	endTime = endTime + (temp << 32);
+			// 	//sprintf(COM2, "%s\033[45;0H%d%s\033[K", save, endTime - startTime, restore);
+			// }
 		}
 	 }
 
@@ -400,15 +582,15 @@ void cmdProcessor (){
 			switch (ret){
 				case 1: 
 					putc(COM1, 97);	
-					sprintf(COM2, "\033[20;0HShutting down\r\n");
+					sprintf(COM2, "\033[36;0HShutting down\r\n");
 					Delay(300);	//Magic number
 					ShutDown();
 					break;
 				case -1:
-					sprintf(COM2, "\033[18;0H%s%sInvalid command!%s", clearLine, red, resetColor);
+					sprintf(COM2, "\033[35;0H%s%sInvalid command!%s", clearLine, red, resetColor);
 					break;
 			}
-			sprintf(COM2, "\033[16;10H%s%s",clearLine,resetColor);
+			sprintf(COM2, "\033[34;10H%s%s",clearLine,resetColor);
 			i = 0;
 		}
 		else if (cmd[i] == '\b'){
