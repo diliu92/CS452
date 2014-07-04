@@ -11,6 +11,8 @@
 #define TRACKSERVER_SWITCH_GET			3
 #define TRACKSERVER_SWITCH_CHANGE		4
 
+#define TRACKSERVER_REVERSE				5
+
 #define STRAIGHT		33
 #define CURVED			34
 
@@ -25,26 +27,27 @@ typedef struct trackServerRequest{
 	int 	trkSvrReq_uid;
 	float	retval;
 	
-	int 	key;
-	float 	value;
+	int 	target;
+	int 	value;
 }trackServerRequest;
 	
 void 
 trackServer();
 
 
-float
+int
 getTrainSpeed(int trainNo); 
 void 
-changeTrainSpeed(int trainNo, float trainSpeed);
-void
-changeTrainDirection(int trainNo);
+changeTrainSpeed(int trainNo, int trainSpeed);	//0-15
 
+void
+reverseTrain(int trainNo);						//rv
 
 int
 getSwitchStatus(int switchNo);
 void
 changeSwitchStatus(int switchNo, int switchStatus);
 
-
+void
+updateLastTriggeredSensor(int sensorUID);
 #endif
