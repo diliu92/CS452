@@ -25,7 +25,7 @@
 	
 typedef struct trackServerRequest{		
 	int 	trkSvrReq_uid;
-	float	retval;
+	int		retval;
 	
 	int 	target;
 	int 	value;

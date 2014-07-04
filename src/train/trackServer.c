@@ -55,15 +55,9 @@ initTrackServerData(trackServerData* trkSvrData){
 			
 			putc(COM1, STRAIGHT);
 			putc(COM1, i + 135);			
-		}				
+		}
+		putc(COM1, 32);				
 	}
-}
-
-static void
-changeDirection(int trainNo){
-	trkSvrData.trainsStatus[req.target-45].direction = 
-		(trkSvrData.trainsStatus[req.target-45].direction == FORWARD) ? BACKWARD : FORWARD;
-	return;
 }
 
 void
@@ -84,15 +78,20 @@ trackServer(){
 		{
 			case TRACKSERVER_SPEED_GET:
 			{			
-				Reply(requester, &(trkSvrData.trainsStatus[req.target-45].trainSpeed), sizeof(int));
+				Reply(requester, &(trkSvrData.trainsStatus[req.target-45].currentTrainSpeed), sizeof(int));
 				break;
 			}
 			case TRACKSERVER_SPEED_CHANGE:
 			{
-				trkSvrData.trainsStatus[req.key-45].trainSpeed = req.value % 15;
+				trainStatus *targetTrainStatus = &(trkSvrData.trainsStatus[req.target-45]);
+
+				targetTrainStatus->previousTrainSpeed = targetTrainStatus->currentTrainSpeed;
+				targetTrainStatus->lastSpeedChange = Time();
+				targetTrainStatus->currentTrainSpeed = req.value % 15;
 				
 				if (req.value == 15){
-					changeDirection(req.target);
+					targetTrainStatus->trainDirection = 
+						(targetTrainStatus->trainDirection == FORWARD) ? BACKWARD : FORWARD;
 				}
 							
 				Reply(requester, NULL, 0);									
@@ -118,7 +117,8 @@ trackServer(){
 			}
 			case TRACKSERVER_REVERSE:
 			{
-				changeDirection(req.target);
+				trkSvrData.trainsStatus[req.target-45].trainDirection = 
+					(trkSvrData.trainsStatus[req.target-45].trainDirection == FORWARD) ? BACKWARD : FORWARD;
 				Reply(requester, NULL, 0);
 			}	
 		}
@@ -136,8 +136,7 @@ getTrainSpeed(int trainNo){
 		
 	req.target = trainNo;
 	
-	Send(TRACKSERVER_TID, &req, sizeof(trackServerRequest), &(req.retval), sizeof(float));	
-	
+	Send(TRACKSERVER_TID, &req, sizeof(trackServerRequest), &(req.retval), sizeof(int));	
 	return req.retval;
 }
 void 
@@ -150,7 +149,7 @@ changeTrainSpeed(int trainNo, int trainSpeed){
 	req.trkSvrReq_uid = TRACKSERVER_SPEED_CHANGE;
 		
 	req.target 	= trainNo;
-	req.value	= trainsSpeed;
+	req.value	= trainSpeed;
 	
 	Send(TRACKSERVER_TID, &req, sizeof(trackServerRequest), NULL, 0);	
 }
@@ -181,11 +180,11 @@ getSwitchStatus(int switchNo){
 		
 	req.trkSvrReq_uid = TRACKSERVER_SWITCH_GET;
 		
-	req.key = switchNo;
+	req.target = switchNo;
 	
-	Send(TRACKSERVER_TID, &req, sizeof(trackServerRequest), &(req.retval), sizeof(float));	
+	Send(TRACKSERVER_TID, &req, sizeof(trackServerRequest), &(req.retval), sizeof(int));	
 	
-	return (int)req.retval;
+	return req.retval;
 }
 void
 changeSwitchStatus(int switchNo, int switchStatus){
@@ -193,10 +192,11 @@ changeSwitchStatus(int switchNo, int switchStatus){
 	
 	putc(COM1,switchStatus);
 	putc(COM1,switchNo);
+	putc(COM1, 32);
 	
 	req.trkSvrReq_uid = TRACKSERVER_SWITCH_CHANGE;
 		
-	req.key 	= switchNo;
+	req.target 	= switchNo;
 	req.value	= (float)switchStatus;
 	
 	Send(TRACKSERVER_TID, &req, sizeof(trackServerRequest), NULL, 0);	

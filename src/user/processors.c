@@ -173,9 +173,10 @@ int processCmd(char *cmd, int *trainSpeed){
 			return -1;
 		}
 		updateSwitchState(target, value);
-		putc(COM1, value);
-		putc(COM1, target);
-		putc(COM1, 32);
+		// putc(COM1, value);
+		// putc(COM1, target);
+		// putc(COM1, 32);
+		changeSwitchStatus(target, value);
 	}
 	else if (value < 15){
 		value = array2int(cmdValue); 
@@ -184,18 +185,20 @@ int processCmd(char *cmd, int *trainSpeed){
 		}
 		if (value % 16 != 15){
 			trainSpeed[target - 1] = value;
-			putc(COM1, value);
-			putc(COM1, target);
+			// putc(COM1, value);
+			// putc(COM1, target);
+			changeTrainSpeed(target, value);
 		}
 	}
 	
 	if (value == 15){
-		putc(COM1, 0);
-		putc(COM1, target);
-		putc(COM1, value);
-		putc(COM1, target);
-		putc(COM1, trainSpeed[target-1]);
-		putc(COM1, target);
+	// 	putc(COM1, 0);
+	// 	putc(COM1, target);
+	// 	putc(COM1, value);
+	// 	putc(COM1, target);
+	// 	putc(COM1, trainSpeed[target-1]);
+	// 	putc(COM1, target);
+		reverseTrain(target);
 	}
 
 	sprintf(COM2, "\033[35;0H%s%sCommand '%s' processed.%s", clearLine, green, cmd, resetColor);
