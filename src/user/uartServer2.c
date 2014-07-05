@@ -145,7 +145,7 @@ void UART2_Server(){
 								while (sendWaitingListLength > 0 && sendWaitingListChar[sendWaitingListNextReady] != 19){
 									if (sendReady == 1){
 										sendReady = 0;
-										Reply(sendNotifierTid, &(req.data), sizeof(char));
+										Reply(sendNotifierTid, &(sendWaitingListChar[sendWaitingListNextReady]), sizeof(char));
 									}
 									else{
 										sendBuffer[sendBufferNextFree] = req.data;
@@ -156,7 +156,14 @@ void UART2_Server(){
 									sendWaitingListNextReady = (sendWaitingListNextReady + 1) % 64;
 									sendWaitingListLength--;
 								}
-								curSendTask == sendWaitingListTid[sendWaitingListNextReady];
+								if (sendWaitingListLength > 0){
+									curSendTask == sendWaitingListTid[sendWaitingListNextReady];
+									sendWaitingListNextReady = (sendWaitingListNextReady + 1) % 64;
+									sendWaitingListLength--;
+								}
+								else{
+									curSendTask = -1;
+								}
 							}
 							else if (sendReady == 1){
 								sendReady = 0;

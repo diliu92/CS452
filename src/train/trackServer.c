@@ -164,10 +164,7 @@ trackServer(){
 			}	
 		}
 	}
-	
 }
-
-
 
 int
 getTrainSpeed(int trainNo){
