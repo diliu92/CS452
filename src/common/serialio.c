@@ -157,7 +157,9 @@ sprintf( int channel, char *fmt, ... ) {
         va_list va;
 
         va_start(va,fmt);
+        putc(COM2, 19);
         format( channel, fmt, va );
+        putc(COM2, 20);
         va_end(va);
 }
 

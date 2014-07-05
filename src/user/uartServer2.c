@@ -59,16 +59,24 @@ void UART2_Server(){
 	int recvBufferNextReady = 0;
 	int recvBufferLength = 0;
 
-	int sendReady = 0;
+	int recvWaitingList[64];
+	int recvWaitingListNextReady = 0;
+	int recvWaitingListNextFree = 0;
+	int recvWaitingListLength = 0;
 
-	int waitingList[64];
-	int waitingListNextReady = 0;
-	int waitingListNextFree = 0;
-	int waitingListLength = 0;
+	int sendReady = 0;
+	int curSendTask = -1;
+
+	int sendWaitingListTid[64];
+	char sendWaitingListChar[64];
+	int sendWaitingListNextReady = 0;
+	int sendWaitingListNextFree = 0;
+	int sendWaitingListLength = 0;
+
 
 	int i;
 	for (i = 0; i < 64; i++){
-		waitingList[i] = 0;
+		recvWaitingList[i] = 0;
 	}
 
 	Send(sendNotifierTid, &sendEvtType, sizeof(int), NULL, 0);
@@ -95,15 +103,15 @@ void UART2_Server(){
 				recvBuffer[recvBufferNextFree] = req.data;
 				recvBufferNextFree = (recvBufferNextFree + 1) % 4096;
 				recvBufferLength++;
-				while(recvBufferLength > 0 && waitingListLength > 0){
+				while(recvBufferLength > 0 && recvWaitingListLength > 0){
 
-					Reply(waitingList[waitingListNextReady], &recvBuffer[recvBufferNextReady], sizeof(char));
+					Reply(recvWaitingList[recvWaitingListNextReady], &recvBuffer[recvBufferNextReady], sizeof(char));
 					
 					recvBufferNextReady = (recvBufferNextReady + 1) % 4096;
-					waitingListNextReady = (waitingListNextReady + 1) % 64;
+					recvWaitingListNextReady = (recvWaitingListNextReady + 1) % 64;
 
 					recvBufferLength--;
-					waitingListLength--;
+					recvWaitingListLength--;
 				}
 
 				Reply(requester, NULL, 0);
@@ -117,23 +125,51 @@ void UART2_Server(){
 							recvBufferLength--;
 						}
 						else{
-							waitingList[waitingListNextFree] = req.tid;
-							waitingListNextFree = (waitingListNextFree + 1) % 64;
-							waitingListLength++;
+							recvWaitingList[recvWaitingListNextFree] = req.tid;
+							recvWaitingListNextFree = (recvWaitingListNextFree + 1) % 64;
+							recvWaitingListLength++;
 						}
 						break;
 					case SYSCALL_PUTC:
-						if (sendReady == 1 ){
-							sendReady = 0;
-							Reply(sendNotifierTid, &(req.data), sizeof(char));
+						if (curSendTask != req.tid && curSendTask != -1){
+							sendWaitingListChar[sendBufferNextFree] = req.data;
+							sendWaitingListTid[sendBufferNextFree] = req.tid;
+							sendWaitingListNextFree = (sendWaitingListNextFree + 1) % 64;
+							sendWaitingListLength++;
 						}
 						else{
-							sendBuffer[sendBufferNextFree] = req.data;
-							sendBufferNextFree = (sendBufferNextFree + 1) % 4096;
-							sendBufferLength++;
-						}
+							if (req.data == 19){
+								curSendTask == req.tid;
+							}
+							else if (req.data == 20){
+								while (sendWaitingListLength > 0 && sendWaitingListChar[sendWaitingListNextReady] != 19){
+									if (sendReady == 1){
+										sendReady = 0;
+										Reply(sendNotifierTid, &(req.data), sizeof(char));
+									}
+									else{
+										sendBuffer[sendBufferNextFree] = req.data;
+										sendBufferNextFree = (sendBufferNextFree + 1) % 4096;
+										sendBufferLength++;
+									}
+									Reply(sendWaitingListTid[sendWaitingListNextReady], &success, sizeof(int));
+									sendWaitingListNextReady = (sendWaitingListNextReady + 1) % 64;
+									sendWaitingListLength--;
+								}
+								curSendTask == sendWaitingListTid[sendWaitingListNextReady];
+							}
+							else if (sendReady == 1){
+								sendReady = 0;
+								Reply(sendNotifierTid, &(req.data), sizeof(char));
+							}
+							else{
+								sendBuffer[sendBufferNextFree] = req.data;
+								sendBufferNextFree = (sendBufferNextFree + 1) % 4096;
+								sendBufferLength++;
+							}
 
-						Reply(requester, &success, sizeof(int));
+							Reply(requester, &success, sizeof(int));
+						}						
 						break;
 				}
 				break;

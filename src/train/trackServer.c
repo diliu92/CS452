@@ -14,6 +14,8 @@ typedef struct trainStatus{
 typedef struct trackServerData{
 	trainStatus trainsStatus[MAX_TRAINS];
 	int			switchesStatus[MAX_SWITCHES];
+	int 		lastTriggeredSensor;
+	int 		initTrainNum;
 }trackServerData;
 
 
@@ -58,6 +60,9 @@ initTrackServerData(trackServerData* trkSvrData){
 		}
 		putc(COM1, 32);				
 	}
+
+	trkSvrData->initTrainNum = -1;
+	trkSvrData->lastTriggeredSensor = -1;
 }
 
 void
@@ -76,6 +81,11 @@ trackServer(){
 		
 		switch (req.trkSvrReq_uid)
 		{
+			case TRACKSERVER_INIT_TRAIN:
+			{
+				trkSvrData.initTrainNum = req.target;
+				Reply(requester, NULL, 0);
+			}
 			case TRACKSERVER_SPEED_GET:
 			{			
 				Reply(requester, &(trkSvrData.trainsStatus[req.target-45].currentTrainSpeed), sizeof(int));
@@ -88,11 +98,13 @@ trackServer(){
 				targetTrainStatus->previousTrainSpeed = targetTrainStatus->currentTrainSpeed;
 				targetTrainStatus->lastSpeedChange = Time();
 				targetTrainStatus->currentTrainSpeed = req.value % 15;
+
+				sprintf(COM2, "\033[5;70H%d", req.value % 15);
 				
-				if (req.value == 15){
-					targetTrainStatus->trainDirection = 
-						(targetTrainStatus->trainDirection == FORWARD) ? BACKWARD : FORWARD;
-				}
+				// if (req.value == 15){
+				// 	targetTrainStatus->trainDirection = 
+				// 		(targetTrainStatus->trainDirection == FORWARD) ? BACKWARD : FORWARD;
+				// }
 							
 				Reply(requester, NULL, 0);									
 				break;		
@@ -117,8 +129,37 @@ trackServer(){
 			}
 			case TRACKSERVER_REVERSE:
 			{
-				trkSvrData.trainsStatus[req.target-45].trainDirection = 
-					(trkSvrData.trainsStatus[req.target-45].trainDirection == FORWARD) ? BACKWARD : FORWARD;
+				if (trkSvrData.trainsStatus[req.target-45].trainDirection == FORWARD){
+					trkSvrData.trainsStatus[req.target-45].trainDirection = BACKWARD;
+					sprintf(COM2, "\033[4;70HBackward");
+				}
+				else{
+					trkSvrData.trainsStatus[req.target-45].trainDirection = FORWARD;
+					sprintf(COM2, "\033[4;70HForward");
+				}
+				
+				Reply(requester, NULL, 0);
+			}
+			case TRACKSERVER_UPDATE_LAST_SENSOR:
+			{
+				trkSvrData.lastTriggeredSensor = req.value;
+				int n = trkSvrData.initTrainNum;
+				if (n != -1 && req.value == ('B' * 17 + 2)){
+					putc(COM1, 0);
+					putc(COM1, n);
+					
+					Delay(100);
+
+					putc(COM1, 15);
+					putc(COM1, n);
+					
+					putc(COM1, trkSvrData.trainsStatus[n-45].currentTrainSpeed);
+					putc(COM1, n);
+					trkSvrData.initTrainNum = -1;
+				}
+				else if (n != -1 && req.value == ('D' * 17 + 14)){
+					trkSvrData.initTrainNum = -1;
+				}
 				Reply(requester, NULL, 0);
 			}	
 		}
@@ -153,24 +194,24 @@ changeTrainSpeed(int trainNo, int trainSpeed){
 	
 	Send(TRACKSERVER_TID, &req, sizeof(trackServerRequest), NULL, 0);	
 }
+
 void
 reverseTrain(int trainNo){
 	trackServerRequest req;
-	int previousSpeed;
 
 	putc(COM1, 0);								//soft-stop
 	putc(COM1, trainNo);
 	
+	//Delay(200);									//delay 2s
+
 	putc(COM1, 15);								//change direction and hard-stop
 	putc(COM1, trainNo);
 	
 	putc(COM1, getTrainSpeed(trainNo));			//go back with prev speed
 	putc(COM1, trainNo);
-	
+
 	req.trkSvrReq_uid = TRACKSERVER_REVERSE;
-	
 	req.target = trainNo;
-	
 	Send(TRACKSERVER_TID, &req, sizeof(trackServerRequest), NULL, 0);
 }
 
@@ -197,7 +238,32 @@ changeSwitchStatus(int switchNo, int switchStatus){
 	req.trkSvrReq_uid = TRACKSERVER_SWITCH_CHANGE;
 		
 	req.target 	= switchNo;
-	req.value	= (float)switchStatus;
+	req.value	= switchStatus;
 	
 	Send(TRACKSERVER_TID, &req, sizeof(trackServerRequest), NULL, 0);	
+}
+
+void
+updateLastTriggeredSensor(int sensorUID){
+	trackServerRequest req;
+	
+	req.trkSvrReq_uid = TRACKSERVER_UPDATE_LAST_SENSOR;
+		
+	req.target 	= NULL;
+	req.value	= sensorUID;
+	
+	Send(TRACKSERVER_TID, &req, sizeof(trackServerRequest), NULL, 0);
+}
+
+void 
+initTrain(int trainNo){
+
+	changeTrainSpeed(trainNo, 8);
+
+	trackServerRequest req;
+	
+	req.trkSvrReq_uid = TRACKSERVER_INIT_TRAIN;	
+	req.target 	= trainNo;
+
+	Send(TRACKSERVER_TID, &req, sizeof(trackServerRequest), NULL, 0);
 }

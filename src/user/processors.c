@@ -19,8 +19,13 @@ void initUI(){
 		cyan, yellow, magenta, yellow, cyan, yellow, magenta, resetColor);
 
 	//recent snesor
-	sprintf( COM2, "\033[12;0H%sRecently triggered sensors: (last to 5th last)%s", yellow, resetColor);
-	
+	sprintf( COM2, "\033[12;0H%sPrevious sensor: ", yellow);
+	sprintf( COM2, "\033[13;0HActual time: ");
+	sprintf( COM2, "\033[14;0HExpected time: %s", resetColor);
+
+	//Train status
+	sprintf( COM2, "\033[4;40HCurrent Train Direction:      Forward");
+	sprintf( COM2, "\033[5;40HCurrent Train Speed:          0");	
 
 	//track
 	sprintf( COM2, "\033[16;0H%s*  *  *  *  A  $  *  *  $  *  *  A  *  *  *  *  *  A  *  *  * ", "");
@@ -115,6 +120,9 @@ int processCmd(char *cmd, int *trainSpeed){
 	else if (cmdType[0] == 's' && cmdType[1] == 'w' && cmdType[2] == '\0'){
 		value = 33;
 	}
+	else if (cmdType[0] == 'i' && cmdType[1] == 't' && cmdType[2] == '\0'){
+		value = -1;
+	}
 	else{
 		return -1;
 	}
@@ -139,66 +147,59 @@ int processCmd(char *cmd, int *trainSpeed){
 				return -1;
 		}
 	}
-	else{
-		if(target <= 0 || target > 80){
-			return -1;
-		}
-	}
-
-	//get command value
-	j = 0;
-	while (cmd[i] == ' ') i++;
-	while (cmd[i] != ' ' && cmd[i] != '\0' && i < BUFFER_MAX_SIZE){
-		if (j >= 2){
-			return -1;
-		}
-		cmdValue[j] = cmd[i];
-		i++;
-		j++;
-	}
-
-	if (cmd[i] != '\0'){
+	else if(target <= 0 || target > 80){
 		return -1;
 	}
-	else if (value > 15){
-		if ((cmdValue[0] == 'S' || cmdValue[0] == 's') && 
-			cmdValue[1] == '\0' && cmdValue[2] == '\0'){
-			value = 33;
-		} 
-		else if ((cmdValue[0] == 'C' || cmdValue[0] == 'c') && 
-			cmdValue[1] == '\0' && cmdValue[2] == '\0'){
-			value = 34;
-		} 
-		else{
+	else if (value == -1){
+		initTrain(target);
+	}
+	else{
+		//get command value
+		j = 0;
+		while (cmd[i] == ' ') i++;
+		while (cmd[i] != ' ' && cmd[i] != '\0' && i < BUFFER_MAX_SIZE){
+			if (j >= 2){
+				return -1;
+			}
+			cmdValue[j] = cmd[i];
+			i++;
+			j++;
+		}
+
+		if (cmd[i] != '\0'){
 			return -1;
 		}
-		updateSwitchState(target, value);
-		// putc(COM1, value);
-		// putc(COM1, target);
-		// putc(COM1, 32);
-		changeSwitchStatus(target, value);
-	}
-	else if (value < 15){
-		value = array2int(cmdValue); 
-		if (value < 0){
-			return -1;
+		else if (value > 15){
+			if ((cmdValue[0] == 'S' || cmdValue[0] == 's') && 
+				cmdValue[1] == '\0' && cmdValue[2] == '\0'){
+				value = 33;
+			} 
+			else if ((cmdValue[0] == 'C' || cmdValue[0] == 'c') && 
+				cmdValue[1] == '\0' && cmdValue[2] == '\0'){
+				value = 34;
+			} 
+			else{
+				return -1;
+			}
+			updateSwitchState(target, value);
+			changeSwitchStatus(target, value);
 		}
-		if (value % 16 != 15){
-			trainSpeed[target - 1] = value;
-			// putc(COM1, value);
-			// putc(COM1, target);
-			changeTrainSpeed(target, value);
+		else if (value < 15){
+			value = array2int(cmdValue); 
+			if (value < 0){
+				return -1;
+			}
+			if (value % 16 != 15){
+				trainSpeed[target - 1] = value;
+				// putc(COM1, value);
+				// putc(COM1, target);
+				changeTrainSpeed(target, value);
+			}
 		}
-	}
-	
-	if (value == 15){
-	// 	putc(COM1, 0);
-	// 	putc(COM1, target);
-	// 	putc(COM1, value);
-	// 	putc(COM1, target);
-	// 	putc(COM1, trainSpeed[target-1]);
-	// 	putc(COM1, target);
-		reverseTrain(target);
+		
+		if (value == 15){
+			reverseTrain(target);
+		}
 	}
 
 	sprintf(COM2, "\033[35;0H%s%sCommand '%s' processed.%s", clearLine, green, cmd, resetColor);
@@ -220,8 +221,9 @@ int array2int (char *ca){
 	return num;
 }
 
-int processFeed(int *sensorFeed, int *feedHistory){
+int processFeed(int *sensorFeed, int lastfeed){
 	int cur, i, j, k;
+	int t = Time();
 	for(i = 0; i < 10; i++){
 		cur = sensorFeed[i];
 		if (cur != 0){
@@ -260,24 +262,18 @@ int processFeed(int *sensorFeed, int *feedHistory){
 			}
 
 			int newfeed = group * 17 + id;
-			int lastfeed = feedHistory[0];
 			if (newfeed != lastfeed) {
-				for (j = 3; j >= 0; j--){
-					feedHistory[j+1] = feedHistory[j];
-				}
-				feedHistory[0] = newfeed;
-				sprintf(COM2, "%s\033[13;0H%s%s%s", save, yellow, clearLine, tab);
-				putc(COM2, group);
-				sprintf(COM2, "%d%s", id, tab);
-				for (k = 1; k < 5; k++){
-					if (feedHistory[k] > 0){
-						putc(COM2, feedHistory[k] / 17);
-						sprintf(COM2, "%d%s", feedHistory[k] % 17, tab);
-					}
-				}
-				sprintf(COM2, "%s%s", resetColor, restore);
+				int ds = t / 10 % 10;
+				int s = t / 100 % 60;
+				int m = t / 6000 % 60;
+				int h = t / 360000;
+				sprintf(COM2, "%s\033[12;18H%s%s%c%d\033[13;18H%s%d:%d:%d:%d%s%s", 
+					save, yellow, clearLine, (char)group, id, clearLine, h, m, s, ds, resetColor, restore);
+				return newfeed;
 			}
-			return newfeed;
+			else{
+				return -1;
+			}
 		}
 	}
 }
@@ -509,13 +505,7 @@ int highlightSensor(int sensor, int prevLoc){
 
 int sensorFeedProcessor (){
 	int sensorFeed[10];
-	int feedHistory[5];
 	int sensorCount = 0;
-
-	int a;
-	for (a = 0; a < 5; a++){
-		feedHistory[a] = -1;
-	}
 
 	//send first query
 	putc(COM1, 192);
@@ -536,13 +526,16 @@ int sensorFeedProcessor (){
 		sensorCount++;
 		if (sensorCount == 10){
 			sensorCount = 0;
-			curSensor = processFeed(sensorFeed, feedHistory);
+			curSensor = processFeed(sensorFeed, prevSensor);
 			putc(COM1, 192);
 			putc(COM1, 133);
-			if (curSensor != prevSensor){
+			if (curSensor != -1 && curSensor != prevSensor){
 				prevLoc = highlightSensor(curSensor, prevLoc);
+				updateLastTriggeredSensor(curSensor);
 				prevSensor = curSensor;
 			}
+
+
 			// if (curSensor == startSensor){
 			// 	startTime = *low;
 			// 	temp = *high;
