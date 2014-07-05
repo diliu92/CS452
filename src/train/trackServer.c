@@ -10,8 +10,9 @@ typedef struct trainStatus{
 	int 	trainDirection;
 }trainStatus;
 
-
 typedef struct trackServerData{
+	float 		trainsActualSpeeds[2][14];
+	
 	trainStatus trainsStatus[MAX_TRAINS];
 	int			switchesStatus[MAX_SWITCHES];
 	int 		lastTriggeredSensor;
@@ -21,7 +22,11 @@ typedef struct trackServerData{
 
 static void
 initTrackServerData(trackServerData* trkSvrData){
-	int i;
+	int i, j;
+	
+	trkSvrData->trainsActualSpeeds[0][7] = 38.269; 
+	trkSvrData->trainsActualSpeeds[0][8] = 42.781;
+	
 	
 	for (i = 0; i < MAX_TRAINS; i++)
 	{
@@ -74,6 +79,8 @@ trackServer(){
 	
 	putc(COM1, 96);	
 	initTrackServerData(&trkSvrData);
+	
+	sprintf(COM2, "\033[5;70H%d", (int)trainsActualSpeeds[0][7]);
 	
 	while (1)
 	{
