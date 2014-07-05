@@ -59,7 +59,7 @@ initTrainsSpecData(trackServerData* trkSvrData){
 	trkSvrData->trainsActualStraightLineStopDistances[0][1] = -1; 
 	trkSvrData->trainsActualStraightLineStopDistances[0][2] = 14.917; 
 	trkSvrData->trainsActualStraightLineStopDistances[0][3] = 22.583; 
-	trkSvrData->trainsActualStraightLineStopDistances[0][4] = 29.167; 
+	trkSvrData->trainsActualStraightLineStopDistances[0][4] = 29.16l7; 
 	trkSvrData->trainsActualStraightLineStopDistances[0][5] = 36.167; 
 	trkSvrData->trainsActualStraightLineStopDistances[0][6] = 45.833; 
 	trkSvrData->trainsActualStraightLineStopDistances[0][7] = 51.083;
@@ -70,20 +70,20 @@ initTrainsSpecData(trackServerData* trkSvrData){
 	trkSvrData->trainsActualStraightLineStopDistances[0][12] = 82.083; 
 	trkSvrData->trainsActualStraightLineStopDistances[0][13] = 81.667;  
 	
-	trkSvrData->trainsActualStraightLineStopDistances[1][0] =  0.945; 
-	trkSvrData->trainsActualStraightLineStopDistances[1][1] =  7.482; 
-	trkSvrData->trainsActualStraightLineStopDistances[1][2] =  12.923;
-	trkSvrData->trainsActualStraightLineStopDistances[1][3] =  17.263; 
-	trkSvrData->trainsActualStraightLineStopDistances[1][4] =  22.015; 
-	trkSvrData->trainsActualStraightLineStopDistances[1][5] =  27.196; 
-	trkSvrData->trainsActualStraightLineStopDistances[1][6] =  33.286; 
-	trkSvrData->trainsActualStraightLineStopDistances[1][7] =  38.269; 
-	trkSvrData->trainsActualStraightLineStopDistances[1][8] =  42.781; 
-	trkSvrData->trainsActualStraightLineStopDistances[1][9] =  47.828; 
-	trkSvrData->trainsActualStraightLineStopDistances[1][10] = 51.079; 
-	trkSvrData->trainsActualStraightLineStopDistances[1][11] = 57.041; 
-	trkSvrData->trainsActualStraightLineStopDistances[1][12] = 59.658; 
-	trkSvrData->trainsActualStraightLineStopDistances[1][13] = 55.469;  	
+	trkSvrData->trainsActualStraightLineStopDistances[1][0] =  -1; 
+	trkSvrData->trainsActualStraightLineStopDistances[1][1] =  -1; 
+	trkSvrData->trainsActualStraightLineStopDistances[1][2] =  13.417;
+	trkSvrData->trainsActualStraightLineStopDistances[1][3] =  20.500; 
+	trkSvrData->trainsActualStraightLineStopDistances[1][4] =  26.417; 
+	trkSvrData->trainsActualStraightLineStopDistances[1][5] =  32.833; 
+	trkSvrData->trainsActualStraightLineStopDistances[1][6] =  40.417; 
+	trkSvrData->trainsActualStraightLineStopDistances[1][7] =  47.333; 
+	trkSvrData->trainsActualStraightLineStopDistances[1][8] =  52.500; 
+	trkSvrData->trainsActualStraightLineStopDistances[1][9] =  59.000; 
+	trkSvrData->trainsActualStraightLineStopDistances[1][10] = 66.250; 
+	trkSvrData->trainsActualStraightLineStopDistances[1][11] = 71.833; 
+	trkSvrData->trainsActualStraightLineStopDistances[1][12] = 75.250; 
+	trkSvrData->trainsActualStraightLineStopDistances[1][13] = 77.667;  	
 }
 
 
