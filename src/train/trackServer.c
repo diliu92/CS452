@@ -80,7 +80,7 @@ trackServer(){
 	putc(COM1, 96);	
 	initTrackServerData(&trkSvrData);
 	
-	sprintf(COM2, "\033[5;70H%d", (int)trainsActualSpeeds[0][7]);
+	sprintf(COM2, "\033[5;70H%d", (int)trkSvrData.trainsActualSpeeds[0][7]);
 	
 	while (1)
 	{
