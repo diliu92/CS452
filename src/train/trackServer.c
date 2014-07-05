@@ -11,7 +11,10 @@ typedef struct trainStatus{
 }trainStatus;
 
 typedef struct trackServerData{
-	float 		trainsActualSpeeds[2][14];
+	float 		trainsActualStraightLineSpeeds[2][14];			//0->49, 1->50	in cm/s
+	float 		trainsActualCurveLineSpeeds[2][14];	
+	
+	float		trainsActualStraightLineStopDistances[2][14];	//0->49, 1->50	in cm
 	
 	trainStatus trainsStatus[MAX_TRAINS];
 	int			switchesStatus[MAX_SWITCHES];
@@ -19,14 +22,76 @@ typedef struct trackServerData{
 	int 		initTrainNum;
 }trackServerData;
 
+static void
+initTrainsSpecData(trackServerData* trkSvrData){
+		
+	trkSvrData->trainsActualStraightLineSpeeds[0][0] = 1.348; 
+	trkSvrData->trainsActualStraightLineSpeeds[0][1] = 8.225; 
+	trkSvrData->trainsActualStraightLineSpeeds[0][2] = 13.388; 
+	trkSvrData->trainsActualStraightLineSpeeds[0][3] = 18.065; 
+	trkSvrData->trainsActualStraightLineSpeeds[0][4] = 23.386; 
+	trkSvrData->trainsActualStraightLineSpeeds[0][5] = 28.516; 
+	trkSvrData->trainsActualStraightLineSpeeds[0][6] = 35.332; 
+	trkSvrData->trainsActualStraightLineSpeeds[0][7] = 41.806;
+	trkSvrData->trainsActualStraightLineSpeeds[0][8] = 45.630; 
+	trkSvrData->trainsActualStraightLineSpeeds[0][9] = 48.900; 
+	trkSvrData->trainsActualStraightLineSpeeds[0][10] = 57.038; 
+	trkSvrData->trainsActualStraightLineSpeeds[0][11] = 58.700; 
+	trkSvrData->trainsActualStraightLineSpeeds[0][12] = 62.222; 
+	trkSvrData->trainsActualStraightLineSpeeds[0][13] = 62.221;  
+	
+	trkSvrData->trainsActualStraightLineSpeeds[1][0] =  0.945; 
+	trkSvrData->trainsActualStraightLineSpeeds[1][1] =  7.482; 
+	trkSvrData->trainsActualStraightLineSpeeds[1][2] =  12.923;
+	trkSvrData->trainsActualStraightLineSpeeds[1][3] =  17.263; 
+	trkSvrData->trainsActualStraightLineSpeeds[1][4] =  22.015; 
+	trkSvrData->trainsActualStraightLineSpeeds[1][5] =  27.196; 
+	trkSvrData->trainsActualStraightLineSpeeds[1][6] =  33.286; 
+	trkSvrData->trainsActualStraightLineSpeeds[1][7] =  38.269; 
+	trkSvrData->trainsActualStraightLineSpeeds[1][8] =  42.781; 
+	trkSvrData->trainsActualStraightLineSpeeds[1][9] =  47.828; 
+	trkSvrData->trainsActualStraightLineSpeeds[1][10] = 51.079; 
+	trkSvrData->trainsActualStraightLineSpeeds[1][11] = 57.041; 
+	trkSvrData->trainsActualStraightLineSpeeds[1][12] = 59.658; 
+	trkSvrData->trainsActualStraightLineSpeeds[1][13] = 55.469;  
+
+	trkSvrData->trainsActualStraightLineStopDistances[0][0] = -1; 
+	trkSvrData->trainsActualStraightLineStopDistances[0][1] = -1; 
+	trkSvrData->trainsActualStraightLineStopDistances[0][2] = 14.917; 
+	trkSvrData->trainsActualStraightLineStopDistances[0][3] = 22.583; 
+	trkSvrData->trainsActualStraightLineStopDistances[0][4] = 29.167; 
+	trkSvrData->trainsActualStraightLineStopDistances[0][5] = 36.167; 
+	trkSvrData->trainsActualStraightLineStopDistances[0][6] = 45.833; 
+	trkSvrData->trainsActualStraightLineStopDistances[0][7] = 51.083;
+	trkSvrData->trainsActualStraightLineStopDistances[0][8] = 57.917; 
+	trkSvrData->trainsActualStraightLineStopDistances[0][9] = 64.917; 
+	trkSvrData->trainsActualStraightLineStopDistances[0][10] = 71.333; 
+	trkSvrData->trainsActualStraightLineStopDistances[0][11] = 77.917; 
+	trkSvrData->trainsActualStraightLineStopDistances[0][12] = 82.083; 
+	trkSvrData->trainsActualStraightLineStopDistances[0][13] = 81.667;  
+	
+	trkSvrData->trainsActualStraightLineStopDistances[1][0] =  0.945; 
+	trkSvrData->trainsActualStraightLineStopDistances[1][1] =  7.482; 
+	trkSvrData->trainsActualStraightLineStopDistances[1][2] =  12.923;
+	trkSvrData->trainsActualStraightLineStopDistances[1][3] =  17.263; 
+	trkSvrData->trainsActualStraightLineStopDistances[1][4] =  22.015; 
+	trkSvrData->trainsActualStraightLineStopDistances[1][5] =  27.196; 
+	trkSvrData->trainsActualStraightLineStopDistances[1][6] =  33.286; 
+	trkSvrData->trainsActualStraightLineStopDistances[1][7] =  38.269; 
+	trkSvrData->trainsActualStraightLineStopDistances[1][8] =  42.781; 
+	trkSvrData->trainsActualStraightLineStopDistances[1][9] =  47.828; 
+	trkSvrData->trainsActualStraightLineStopDistances[1][10] = 51.079; 
+	trkSvrData->trainsActualStraightLineStopDistances[1][11] = 57.041; 
+	trkSvrData->trainsActualStraightLineStopDistances[1][12] = 59.658; 
+	trkSvrData->trainsActualStraightLineStopDistances[1][13] = 55.469;  	
+}
+
 
 static void
 initTrackServerData(trackServerData* trkSvrData){
-	int i, j;
+	int i; 
 	
-	trkSvrData->trainsActualSpeeds[0][7] = 38.269; 
-	trkSvrData->trainsActualSpeeds[0][8] = 42.781;
-	
+	initTrainsSpecData(trkSvrData);
 	
 	for (i = 0; i < MAX_TRAINS; i++)
 	{
