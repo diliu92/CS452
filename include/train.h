@@ -5,6 +5,7 @@
 
 #include <train/trackServer.h>
 #include <train/routeServer.h>
+#include <train/trackData.h>
 
 #include <common/syscall_information.h>
 #include <common/utils.h>

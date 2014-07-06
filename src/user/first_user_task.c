@@ -1,6 +1,7 @@
 #include <user.h>
 
 #include <train/trackServer.h>
+#include <train/routeServer.h>
 
 
 static void
@@ -28,7 +29,7 @@ idleTask(){
 			idleTime += currentTime - lastTime;
 		
 		if( totalTime >= printInterval){
-			sprintf( COM2, "%s\033[2;50H%s%sIdle: %d%%%s%s", save, clearLine, yellow, (100*idleTime)/totalTime, restore, resetColor);
+			sprintf( COM2, "%s\033[2;0H%s%sIdle: %d%%%s%s", save, clearLine, green, (100*idleTime)/totalTime, restore, resetColor);
 			
 			totalTime = 0;
 			idleTime  = 0;
@@ -65,9 +66,11 @@ firstUserTask()	//priority 6
 	int uart1ServerTID = Create(2, UART1_Server);
 	//bwprintf( COM2, "UART1_Server initialized.\r\nTID of UART1_Server: %u(should be 7)\r\n", uart1ServerTID);
 	
+	Create(4, trackServer);
+	// Create(4, routeServer);
+
 	sprintf( COM2, "%s\033[H", clearScreen);
 
-	Create(4, trackServer);
 	Create(7, sensorFeedProcessor);
 	Create(7, cmdProcessor);
 	//Create(4, com2_testone);

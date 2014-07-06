@@ -1,4 +1,5 @@
 #include <user.h>
+#include <train.h>
 
 #define BUFFER_MAX_SIZE 256
 
@@ -19,34 +20,37 @@ void initUI(){
 		cyan, yellow, magenta, yellow, cyan, yellow, magenta, resetColor);
 
 	//recent snesor
-	sprintf( COM2, "\033[12;0H%sPrevious sensor: ", yellow);
-	sprintf( COM2, "\033[13;0HActual time: ");
-	sprintf( COM2, "\033[14;0HExpected time: %s", resetColor);
+	sprintf( COM2, "\033[12;0H%sCurrent Location: ", yellow);
+	sprintf( COM2, "\033[13;0HExpect Sensor:      at: ");
+	sprintf( COM2, "\033[15;0HPrevious sensor: ");
+	sprintf( COM2, "\033[16;4HActual time: ");
+	sprintf( COM2, "\033[17;4HExpected time: ");
+	sprintf( COM2, "\033[18;4HTime difference: %s", resetColor);
 
 	//Train status
 	sprintf( COM2, "\033[4;40HCurrent Train Direction:      Forward");
 	sprintf( COM2, "\033[5;40HCurrent Train Speed:          0");	
 
 	//track
-	sprintf( COM2, "\033[16;0H%s*  *  *  *  A  $  *  *  $  *  *  A  *  *  *  *  *  A  *  *  * ", "");
-	sprintf( COM2, "\033[17;0H%s              *       *                                       *", "");
-	sprintf( COM2, "\033[18;0H%s*  *  *  A  $       *   *  A  *  *  $  A  *  A  $  A  *  *  *   A", "");
-	sprintf( COM2, "\033[19;0H%s         *           *                A       A                A", "");
-	sprintf( COM2, "\033[20;0H%s*  A  *            $                    A * A                    $", "");
-	sprintf( COM2, "\033[21;0H%s                  A                      $ $                      *", "");
-	sprintf( COM2, "\033[22;0H%s                  *                       *                       *", "");
-	sprintf( COM2, "\033[23;0H%s                  *                       *                       *", "");
-	sprintf( COM2, "\033[24;0H%s                  A                      $ $                      *", "");
-	sprintf( COM2, "\033[25;0H%s*  A  *            $                    A * A                    $", "");
-	sprintf( COM2, "\033[26;0H%s         *           *                A       A                A", "");
-	sprintf( COM2, "\033[27;0H%s*  A  *  A  $       *   *  A  *  *  $  A  *  A  $  *  A  *  *   A", "");
-	sprintf( COM2, "\033[28;0H%s               *      *                                       *", "");
-	sprintf( COM2, "\033[29;0H%s*  A  *  *  *  A  $     *  *  A  $  *  A  *  A  *  $  A  *  *", "");
-	sprintf( COM2, "\033[30;0H%s                     *             *             *", "");
-	sprintf( COM2, "\033[31;0H%s*  A  *  *  *  *  A  *  $  *  *  A  $  *  *  *  $  A  *  *  *  *  *  *  *  *", "");
+	sprintf( COM2, "\033[20;0H%s*  *  *  *  A  $  *  *  $  *  *  A  *  *  *  *  *  A  *  *  * ", "");
+	sprintf( COM2, "\033[21;0H%s              *       *                                       *", "");
+	sprintf( COM2, "\033[22;0H%s*  *  *  A  $       *   *  A  *  *  $  A  *  A  $  A  *  *  *   A", "");
+	sprintf( COM2, "\033[23;0H%s         *           *                A       A                A", "");
+	sprintf( COM2, "\033[24;0H%s*  A  *            $                    A * A                    $", "");
+	sprintf( COM2, "\033[25;0H%s                  A                      $ $                      *", "");
+	sprintf( COM2, "\033[26;0H%s                  *                       *                       *", "");
+	sprintf( COM2, "\033[27;0H%s                  *                       *                       *", "");
+	sprintf( COM2, "\033[28;0H%s                  A                      $ $                      *", "");
+	sprintf( COM2, "\033[29;0H%s*  A  *            $                    A * A                    $", "");
+	sprintf( COM2, "\033[30;0H%s         *           *                A       A                A", "");
+	sprintf( COM2, "\033[31;0H%s*  A  *  A  $       *   *  A  *  *  $  A  *  A  $  *  A  *  *   A", "");
+	sprintf( COM2, "\033[32;0H%s               *      *                                       *", "");
+	sprintf( COM2, "\033[33;0H%s*  A  *  *  *  A  $     *  *  A  $  *  A  *  A  *  $  A  *  *", "");
+	sprintf( COM2, "\033[34;0H%s                     *             *             *", "");
+	sprintf( COM2, "\033[35;0H%s*  A  *  *  *  *  A  *  $  *  *  A  $  *  *  *  $  A  *  *  *  *  *  *  *  *", "");
 
 	//command
-	sprintf( COM2, "\033[34;0H%scommand> %s", green, resetColor);
+	sprintf( COM2, "\033[38;0H%scommand> %s", green, resetColor);
 }
 
 void updateSwitchState(int sn, int sv){
@@ -141,19 +145,19 @@ int processCmd(char *cmd, int *trainSpeed){
 
 	target = array2int(cmdTarget);
 
-	if (value > 15){
-		if (target <= 0 || 
-			(target > 18 && !((target >= 153) && (target <= 156)))){
-				return -1;
-		}
-	}
-	else if(target <= 0 || target > 80){
-		return -1;
-	}
-	else if (value == -1){
+	if (value == -1){
+		//sprintf(COM2, "\033[45;0H+++%d:%d", target, value);
 		initTrain(target);
 	}
 	else{
+		if (value > 15 && 
+			(target <= 0 || (target > 18 && !((target >= 153) && (target <= 156))))){
+				return -1;
+		}
+		else if(value <= 15 && (target <= 0 || target > 80)){
+			return -1;
+		}
+
 		//get command value
 		j = 0;
 		while (cmd[i] == ' ') i++;
@@ -202,7 +206,7 @@ int processCmd(char *cmd, int *trainSpeed){
 		}
 	}
 
-	sprintf(COM2, "\033[35;0H%s%sCommand '%s' processed.%s", clearLine, green, cmd, resetColor);
+	sprintf(COM2, "\033[39;0H%s%sCommand '%s' processed.%s", clearLine, green, cmd, resetColor);
 	return 0;
 }
 
@@ -221,9 +225,8 @@ int array2int (char *ca){
 	return num;
 }
 
-int processFeed(int *sensorFeed, int lastfeed){
-	int cur, i, j, k;
-	int t = Time();
+int processFeed(int *sensorFeed, int lastfeed, int ts){
+	int cur, i, j;
 	for(i = 0; i < 10; i++){
 		cur = sensorFeed[i];
 		if (cur != 0){
@@ -262,13 +265,7 @@ int processFeed(int *sensorFeed, int lastfeed){
 			}
 
 			int newfeed = group * 17 + id;
-			if (newfeed != lastfeed) {
-				int ds = t / 10 % 10;
-				int s = t / 100 % 60;
-				int m = t / 6000 % 60;
-				int h = t / 360000;
-				sprintf(COM2, "%s\033[12;18H%s%s%c%d\033[13;18H%s%d:%d:%d:%d%s%s", 
-					save, yellow, clearLine, (char)group, id, clearLine, h, m, s, ds, resetColor, restore);
+			if (newfeed != lastfeed && newfeed > ('A'*17)) {
 				return newfeed;
 			}
 			else{
@@ -276,6 +273,7 @@ int processFeed(int *sensorFeed, int lastfeed){
 			}
 		}
 	}
+	return -1;
 }
 
 int highlightSensor(int sensor, int prevLoc){
@@ -495,7 +493,7 @@ int highlightSensor(int sensor, int prevLoc){
 
 	int loc = -1;
 	if (r != 0 && c != 0){
-		r = r + 15;
+		r = r + 19;
 		c = c + 1;
 		loc = r * 100 + c;
 		sprintf(COM2, "%s\033[%u;%uH%sA%s", save, r, c, magenta, restore);
@@ -513,9 +511,10 @@ int sensorFeedProcessor (){
 
 	// int startSensor = 'C' * 17 + 9;
 	// int endSensor = 'B' * 17 + 15;
-	int curSensor;
+	int curSensor = -1;
 	int prevSensor = -1;
 	int prevLoc = -1;
+	int t = 0;
 	// unsigned long startTime, endTime, temp;
 	// unsigned int *high = (unsigned int *) TIMER4_HIGH;
 	// unsigned int *low = (unsigned int *) TIMER4_LOW;
@@ -526,15 +525,15 @@ int sensorFeedProcessor (){
 		sensorCount++;
 		if (sensorCount == 10){
 			sensorCount = 0;
-			curSensor = processFeed(sensorFeed, prevSensor);
+			t = Time();
+			curSensor = processFeed(sensorFeed, prevSensor, t);
 			putc(COM1, 192);
 			putc(COM1, 133);
-			if (curSensor != -1 && curSensor != prevSensor){
+			if (curSensor > ('A'*17) && curSensor != prevSensor){
 				prevLoc = highlightSensor(curSensor, prevLoc);
-				updateLastTriggeredSensor(curSensor);
+				updateLastTriggeredSensor(curSensor, t);
 				prevSensor = curSensor;
-			}
-
+			};
 
 			// if (curSensor == startSensor){
 			// 	startTime = *low;
@@ -576,15 +575,15 @@ void cmdProcessor (){
 			switch (ret){
 				case 1: 
 					putc(COM1, 97);	
-					sprintf(COM2, "\033[36;0HShutting down\r\n");
+					sprintf(COM2, "\033[39;0H%sShutting down\r\n",clearLine);
 					Delay(300);	//Magic number
 					ShutDown();
 					break;
 				case -1:
-					sprintf(COM2, "\033[35;0H%s%sInvalid command!%s", clearLine, red, resetColor);
+					sprintf(COM2, "\033[39;0H%s%sInvalid command!%s", clearLine, red, resetColor);
 					break;
 			}
-			sprintf(COM2, "\033[34;10H%s%s",clearLine,resetColor);
+			sprintf(COM2, "\033[38;10H%s%s",clearLine,resetColor);
 			i = 0;
 		}
 		else if (cmd[i] == '\b'){

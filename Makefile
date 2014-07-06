@@ -42,6 +42,7 @@ COMMON_OBJS=	$(OUT_DIR)/contextSwitch.o		\
 		$(OUT_DIR)/utils.o
 
 TRAIN_OBJS=	$(OUT_DIR)/trackServer.o		\
+		$(OUT_DIR)/trackData.o		\
 		$(OUT_DIR)/routeServer.o
 
 
@@ -134,6 +135,11 @@ $(OUT_DIR)/trackServer.o: $(OUT_DIR)/trackServer.s
 	$(AS) 	-o $(OUT_DIR)/trackServer.o 	$(ASFLAGS) $(OUT_DIR)/trackServer.s
 $(OUT_DIR)/trackServer.s:
 	$(XCC) 	-o $(OUT_DIR)/trackServer.s 	-S $(CFLAGS) $(SRC_TRAIN_DIR)/trackServer.c
+
+$(OUT_DIR)/trackData.o: $(OUT_DIR)/trackData.s
+	$(AS) 	-o $(OUT_DIR)/trackData.o 	$(ASFLAGS) $(OUT_DIR)/trackData.s
+$(OUT_DIR)/trackData.s:
+	$(XCC) 	-o $(OUT_DIR)/trackData.s 	-S $(CFLAGS) $(SRC_TRAIN_DIR)/trackData.c
 
 $(OUT_DIR)/routeServer.o: $(OUT_DIR)/routeServer.s
 	$(AS) 	-o $(OUT_DIR)/routeServer.o 	$(ASFLAGS) $(OUT_DIR)/routeServer.s
