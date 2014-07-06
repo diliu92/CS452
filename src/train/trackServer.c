@@ -301,6 +301,7 @@ trackServer(){
 				}
 				
 				Reply(requester, NULL, 0);
+				break;
 			}
 			case TRACKSERVER_UPDATE_LAST_SENSOR:
 			{
@@ -395,6 +396,7 @@ trackServer(){
 				}
 
 				Reply(requester, NULL, 0);
+				break;
 			}	
 		}
 	}
@@ -428,16 +430,17 @@ changeTrainSpeed(int trainNo, int trainSpeed){
 
 void
 reverseTrain(int trainNo){
+
 	trackServerRequest req;
 
 	putc(COM1, 0);								//soft-stop
 	putc(COM1, trainNo);
-	
-	//Delay(200);									//delay 2s
+
+	Delay(200);									//delay 2s
 
 	putc(COM1, 15);								//change direction and hard-stop
 	putc(COM1, trainNo);
-	
+
 	putc(COM1, getTrainSpeed(trainNo));			//go back with prev speed
 	putc(COM1, trainNo);
 

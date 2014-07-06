@@ -29,7 +29,7 @@ bss             0x0000000000218000        0x0
  *(.bss)
                 0x0000000000218000                _BssEnd = .
 
-text            0x0000000000218000    0x10458
+text            0x0000000000218000    0x10464
  *(.text)
  .text          0x0000000000218000       0xbc bin/kernel.o
                 0x0000000000218000                main
@@ -118,42 +118,42 @@ text            0x0000000000218000    0x10458
                 0x000000000021ebb4                memcpy
                 0x000000000021ecf4                strEnq
                 0x000000000021eca0                strLen
- .text          0x000000000021ed74     0x22e0 bin/trackServer.o
-                0x0000000000220ffc                initTrain
-                0x0000000000220f10                changeSwitchStatus
+ .text          0x000000000021ed74     0x22ec bin/trackServer.o
+                0x0000000000221008                initTrain
+                0x0000000000220f1c                changeSwitchStatus
                 0x000000000021fbf0                trackServer
-                0x0000000000220d78                changeTrainSpeed
-                0x0000000000220df8                reverseTrain
-                0x0000000000220eb4                getSwitchStatus
-                0x0000000000220f9c                updateLastTriggeredSensor
-                0x0000000000220d1c                getTrainSpeed
- .text          0x0000000000221054     0x63bc bin/trackData.o
-                0x00000000002210c0                init_tracka
- .text          0x0000000000227410      0x110 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_udivsi3.o)
-                0x0000000000227410                __udivsi3
-                0x0000000000227508                __aeabi_uidivmod
- .text          0x0000000000227520      0x140 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_divsi3.o)
-                0x0000000000227520                __divsi3
-                0x0000000000227648                __aeabi_idivmod
- .text          0x0000000000227660       0xcc /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_umodsi3.o)
-                0x0000000000227660                __umodsi3
- .text          0x000000000022772c        0x4 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_dvmd_tls.o)
-                0x000000000022772c                __aeabi_ldiv0
-                0x000000000022772c                __div0
-                0x000000000022772c                __aeabi_idiv0
+                0x0000000000220d7c                changeTrainSpeed
+                0x0000000000220dfc                reverseTrain
+                0x0000000000220ec0                getSwitchStatus
+                0x0000000000220fa8                updateLastTriggeredSensor
+                0x0000000000220d20                getTrainSpeed
+ .text          0x0000000000221060     0x63bc bin/trackData.o
+                0x00000000002210cc                init_tracka
+ .text          0x000000000022741c      0x110 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_udivsi3.o)
+                0x000000000022741c                __udivsi3
+                0x0000000000227514                __aeabi_uidivmod
+ .text          0x000000000022752c      0x140 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_divsi3.o)
+                0x000000000022752c                __divsi3
+                0x0000000000227654                __aeabi_idivmod
+ .text          0x000000000022766c       0xcc /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_umodsi3.o)
+                0x000000000022766c                __umodsi3
+ .text          0x0000000000227738        0x4 /u/wbcowan/gnuarm-4.0.2/lib/gcc/arm-elf/4.0.2/libgcc.a(_dvmd_tls.o)
+                0x0000000000227738                __aeabi_ldiv0
+                0x0000000000227738                __div0
+                0x0000000000227738                __aeabi_idiv0
  *(.got)
- .got           0x0000000000227730       0x40 bin/kernInit.o
+ .got           0x000000000022773c       0x40 bin/kernInit.o
  *(.got.plt)
- .got.plt       0x0000000000227770        0xc bin/kernInit.o
-                0x0000000000227770                _GLOBAL_OFFSET_TABLE_
+ .got.plt       0x000000000022777c        0xc bin/kernInit.o
+                0x000000000022777c                _GLOBAL_OFFSET_TABLE_
  *(.rodata)
- .rodata        0x000000000022777c       0x48 bin/first_user_task.o
- .rodata        0x00000000002277c4       0x50 bin/clockServer.o
- .rodata        0x0000000000227814       0x10 bin/uartServer1.o
- .rodata        0x0000000000227824       0x10 bin/uartServer2.o
- .rodata        0x0000000000227834      0x878 bin/processors.o
- .rodata        0x00000000002280ac       0xfc bin/trackServer.o
- .rodata        0x00000000002281a8      0x2b0 bin/trackData.o
+ .rodata        0x0000000000227788       0x48 bin/first_user_task.o
+ .rodata        0x00000000002277d0       0x50 bin/clockServer.o
+ .rodata        0x0000000000227820       0x10 bin/uartServer1.o
+ .rodata        0x0000000000227830       0x10 bin/uartServer2.o
+ .rodata        0x0000000000227840      0x878 bin/processors.o
+ .rodata        0x00000000002280b8       0xfc bin/trackServer.o
+ .rodata        0x00000000002281b4      0x2b0 bin/trackData.o
  *(.glue_7)
  *(.glue_7t)
 

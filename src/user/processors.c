@@ -146,7 +146,6 @@ int processCmd(char *cmd, int *trainSpeed){
 	target = array2int(cmdTarget);
 
 	if (value == -1){
-		//sprintf(COM2, "\033[45;0H+++%d:%d", target, value);
 		initTrain(target);
 	}
 	else{
@@ -509,15 +508,10 @@ int sensorFeedProcessor (){
 	putc(COM1, 192);
 	putc(COM1, 133);
 
-	// int startSensor = 'C' * 17 + 9;
-	// int endSensor = 'B' * 17 + 15;
 	int curSensor = -1;
 	int prevSensor = -1;
 	int prevLoc = -1;
 	int t = 0;
-	// unsigned long startTime, endTime, temp;
-	// unsigned int *high = (unsigned int *) TIMER4_HIGH;
-	// unsigned int *low = (unsigned int *) TIMER4_LOW;
 
 	while(1){
 		int feed = getc(COM1);
@@ -534,18 +528,6 @@ int sensorFeedProcessor (){
 				updateLastTriggeredSensor(curSensor, t);
 				prevSensor = curSensor;
 			};
-
-			// if (curSensor == startSensor){
-			// 	startTime = *low;
-			// 	temp = *high;
-			// 	startTime = startTime + (temp << 32);
-			// }
-			// else if (curSensor == endSensor){
-			// 	endTime = *low;
-			// 	temp = *high;
-			// 	endTime = endTime + (temp << 32);
-			// 	//sprintf(COM2, "%s\033[45;0H%d%s\033[K", save, endTime - startTime, restore);
-			// }
 		}
 	 }
 
