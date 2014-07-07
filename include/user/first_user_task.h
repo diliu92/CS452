@@ -14,10 +14,10 @@ void
 firstUserTask();
 
 void 
-stopTrain49_Worker();
+stopTrain1_Worker();
 
 void
-stopTrain50_Worker();
+stopTrain2_Worker();
 /*
  * To be added
  */

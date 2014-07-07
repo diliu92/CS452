@@ -49,7 +49,7 @@ initTrainsSpecData(trackServerData* trkSvrData){
 	trkSvrData->trainsActualSpeeds[0][12] = 62222; 
 	trkSvrData->trainsActualSpeeds[0][13] = 62221;  
 	
-	trkSvrData->trainsActualSpeeds[1][0] =  945; 
+	trkSvrData->trainsActualSpeeds[1][0] =  945; 		//for tr50, works ok with tr48
 	trkSvrData->trainsActualSpeeds[1][1] =  7482; 
 	trkSvrData->trainsActualSpeeds[1][2] =  12923;
 	trkSvrData->trainsActualSpeeds[1][3] =  17263; 
@@ -374,10 +374,10 @@ trackServer(){
 							delay < trkSvrData.trainsStopTimes[i%2][trainStat->currentTrainSpeed-1]){
 							int tid;
 							if (i % 2 == 0){
-								tid = WhoIs("stopTrain49_Worker");
+								tid = WhoIs("stopTrain1_Worker");
 							}
 							else{
-								tid = WhoIs("stopTrain50_Worker");
+								tid = WhoIs("stopTrain2_Worker");
 							}
 							trainStat->destInfo.sensor = 0;
 							trainStat->destInfo.displacement = 0;

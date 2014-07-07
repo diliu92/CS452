@@ -636,7 +636,7 @@ void showTrainLocation(){
 	locationInfo locInfo50;
 
 	while(!NeedToShutDown()){
-		locInfo49 = getTrainLocation(49);
+		locInfo49 = getTrainLocation(49); //for demo1, train number doesn't matter
 		//locInfo50 = getTrainLocation(50);
 		if (locInfo49.sensor > 'A'*17){
 			group = locInfo49.sensor / 17;
@@ -656,8 +656,8 @@ void showTrainLocation(){
 	Exit();
 }
 
-void stopTrain49_Worker(){
-	RegisterAs("stopTrain49_Worker");
+void stopTrain1_Worker(){
+	RegisterAs("stopTrain1_Worker");
 	int tid;
 	int wakeupTime;
 	while(!NeedToShutDown()){
@@ -670,8 +670,8 @@ void stopTrain49_Worker(){
 	Exit();
 }
 
-void stopTrain50_Worker(){
-	RegisterAs("stopTrain50_Worker");
+void stopTrain2_Worker(){
+	RegisterAs("stopTrain2_Worker");
 	int tid;
 	int wakeupTime;
 	while(!NeedToShutDown()){
@@ -679,6 +679,7 @@ void stopTrain50_Worker(){
 		Reply(tid, NULL, 0);
 		DelayUntil(wakeupTime);
 		changeTrainSpeed(50, 0);
+		changeTrainSpeed(48, 0);
 	}
 
 	Exit();
