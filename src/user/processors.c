@@ -32,22 +32,22 @@ void initUI(){
 	sprintf( COM2, "\033[5;40HCurrent Train Speed:          0");	
 
 	//track
-	sprintf( COM2, "\033[20;0H%s*  *  *  *  A  $  *  *  $  *  *  A  *  *  *  *  *  A  *  *  * ", "");
+	sprintf( COM2, "\033[20;0H%s*  *  *  *  A $12 *  * $11 *  *  A  *  *  *  *  *  A  *  *  * ", "");
 	sprintf( COM2, "\033[21;0H%s              *       *                                       *", "");
-	sprintf( COM2, "\033[22;0H%s*  *  *  A  $       *   *  A  *  *  $  A  *  A  $  A  *  *  *   A", "");
+	sprintf( COM2, "\033[22;0H%s*  *  *  A $04      *   *  A  *  * $13 A  *  A $10 A  *  *  *   A", "");
 	sprintf( COM2, "\033[23;0H%s         *           *                A       A                A", "");
-	sprintf( COM2, "\033[24;0H%s*  A  *            $                    A * A                    $", "");
-	sprintf( COM2, "\033[25;0H%s                  A                      $ $                      *", "");
+	sprintf( COM2, "\033[24;0H%s*  A  *            $14                  A * A                  09$", "");
+	sprintf( COM2, "\033[25;0H%s                  A                   156$ $155                   *", "");
 	sprintf( COM2, "\033[26;0H%s                  *                       *                       *", "");
 	sprintf( COM2, "\033[27;0H%s                  *                       *                       *", "");
-	sprintf( COM2, "\033[28;0H%s                  A                      $ $                      *", "");
-	sprintf( COM2, "\033[29;0H%s*  A  *            $                    A * A                    $", "");
+	sprintf( COM2, "\033[28;0H%s                  A                   153$ $154                   *", "");
+	sprintf( COM2, "\033[29;0H%s*  A  *            $15                  A * A                  08$", "");
 	sprintf( COM2, "\033[30;0H%s         *           *                A       A                A", "");
-	sprintf( COM2, "\033[31;0H%s*  A  *  A  $       *   *  A  *  *  $  A  *  A  $  *  A  *  *   A", "");
+	sprintf( COM2, "\033[31;0H%s*  A  *  A $01      *   *  A  *  * $16 A  *  A $17 *  A  *  *   A", "");
 	sprintf( COM2, "\033[32;0H%s               *      *                                       *", "");
-	sprintf( COM2, "\033[33;0H%s*  A  *  *  *  A  $     *  *  A  $  *  A  *  A  *  $  A  *  *", "");
+	sprintf( COM2, "\033[33;0H%s*  A  *  *  *  A $02    *  *  A $06 *  A  *  A  * $07 A  *  *", "");
 	sprintf( COM2, "\033[34;0H%s                     *             *             *", "");
-	sprintf( COM2, "\033[35;0H%s*  A  *  *  *  *  A  *  $  *  *  A  $  *  *  *  $  A  *  *  *  *  *  *  *  *", "");
+	sprintf( COM2, "\033[35;0H%s*  A  *  *  *  *  A  * $03 *  *  A $18 *  *  * $05 A  *  *  *  *  *  *  *  *", "");
 
 	//command
 	sprintf( COM2, "\033[38;0H%scommand> %s", green, resetColor);
@@ -118,6 +118,9 @@ int processCmd(char *cmd, int *trainSpeed){
 	else if (cmdType[0] == 't' && cmdType[1] == 'r' && cmdType[2] == '\0'){
 		value = 0;
 	}
+	else if (cmdType[0] == 'g' && cmdType[1] == 'o' && cmdType[2] == '\0'){
+		value = 1;
+	}
 	else if (cmdType[0] == 'r' && cmdType[1] == 'v' && cmdType[2] == '\0'){
 		value = 15;
 	}
@@ -153,6 +156,9 @@ int processCmd(char *cmd, int *trainSpeed){
 			(target <= 0 || (target > 18 && !((target >= 153) && (target <= 156))))){
 				return -1;
 		}
+		else if ((value == 1) && (target <= 0 || target > 80)){
+			return -1;
+		}
 		else if(value <= 15 && (target <= 0 || target > 80)){
 			return -1;
 		}
@@ -169,8 +175,44 @@ int processCmd(char *cmd, int *trainSpeed){
 			j++;
 		}
 
-		if (cmd[i] != '\0'){
+		if (value != 1 && cmd[i] != '\0'){
 			return -1;
+		}
+		else if (value == 1){	//go cmd
+			value = array2int(cmdValue); 
+
+			char cmdValue2[5];
+			j = 0;
+			while (cmd[i] == ' ') i++;
+
+			int group = cmd[i];
+			i++;
+
+			while (cmd[i] != ' ' && cmd[i] != '\0' && i < BUFFER_MAX_SIZE){
+				if (j >= 3){
+					return -1;
+				}
+				cmdValue2[j] = cmd[i % BUFFER_MAX_SIZE];
+				i++;
+				j++;
+			}
+			int id = array2int(cmdValue2);
+
+			if (group >= 'A' && group <= 'E' && id >= 1 && id <= 16){
+				locationInfo destInfo;
+				destInfo.sensor = group * 17 + id;
+				destInfo.displacement = value;
+				sprintf(COM2, "%s\033[7;40H%sExpect train to stop at: %c%d + %d%s", 
+					save, clearLine, (char)group, id, value, restore);
+				int i = goToPosition(target, destInfo);
+				if (i != 0){
+					return -2;
+				}
+			}
+			else{
+				return -1;
+			}
+
 		}
 		else if (value > 15){
 			if ((cmdValue[0] == 'S' || cmdValue[0] == 's') && 
@@ -199,8 +241,7 @@ int processCmd(char *cmd, int *trainSpeed){
 				changeTrainSpeed(target, value);
 			}
 		}
-		
-		if (value == 15){
+		else if (value == 15){
 			reverseTrain(target);
 		}
 	}
@@ -564,6 +605,8 @@ void cmdProcessor (){
 				case -1:
 					sprintf(COM2, "\033[39;0H%s%sInvalid command!%s", clearLine, red, resetColor);
 					break;
+				case -2:
+					sprintf(COM2, "\033[39;0H%s%sCannot accomplish command%s", clearLine, red, resetColor);
 			}
 			sprintf(COM2, "\033[38;10H%s%s",clearLine,resetColor);
 			i = 0;
@@ -584,5 +627,59 @@ void cmdProcessor (){
 
 	Send(0, NULL, 0, NULL, 0);
 	//clearPutBuffers();
+	Exit();
+}
+
+void showTrainLocation(){
+	int displacement, id, group;
+	locationInfo locInfo49;
+	locationInfo locInfo50;
+
+	while(!NeedToShutDown()){
+		locInfo49 = getTrainLocation(49);
+		//locInfo50 = getTrainLocation(50);
+		if (locInfo49.sensor > 'A'*17){
+			group = locInfo49.sensor / 17;
+			id = locInfo49.sensor % 17; 
+			displacement = locInfo49.displacement;
+			sprintf(COM2, "%s\033[12;18H%s %c%d + %dmm%s", save, clearLine, (char)group, id, displacement, restore);
+		}
+		// else if (locInfo50.sensor > 'A'*17){
+		// 	group = locInfo50.sensor / 17;
+		// 	id = locInfo50.sensor % 17; 
+		// 	displacement = locInfo50.displacement;
+		// 	sprintf(COM2, "%s\033[12;18H%s %c%d + %dmm%s", save, clearLine, (char)group, id, displacement, restore);
+		// }
+		Delay(8);
+	}
+
+	Exit();
+}
+
+void stopTrain49_Worker(){
+	RegisterAs("stopTrain49_Worker");
+	int tid;
+	int wakeupTime;
+	while(!NeedToShutDown()){
+		Receive(&tid, &wakeupTime, sizeof(int));
+		Reply(tid, NULL, 0);
+		DelayUntil(wakeupTime);
+		changeTrainSpeed(49, 0);
+	}
+
+	Exit();
+}
+
+void stopTrain50_Worker(){
+	RegisterAs("stopTrain50_Worker");
+	int tid;
+	int wakeupTime;
+	while(!NeedToShutDown()){
+		Receive(&tid, &wakeupTime, sizeof(int));
+		Reply(tid, NULL, 0);
+		DelayUntil(wakeupTime);
+		changeTrainSpeed(50, 0);
+	}
+
 	Exit();
 }

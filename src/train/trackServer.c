@@ -11,15 +11,20 @@ typedef struct trainStatus{
 	int 	lastTriggeredSensor;
 	int 	lastTimeStemp;
 	int 	expectedSensor;
+	int 	distToExpectedSensor;
 	int 	expectedSensorTime;
+
+	locationInfo 	destInfo;
+	int 			needToCheckStopTime;
 }trainStatus;
 
 typedef struct trackServerData{
 	track_node 	trackA[TRACK_MAX];
-	int 		trackFraction[MAX_SENSORS];
-	int 		trainsActualSpeeds[2][14];			//0->49, 1->50	in cm/s
+	int 		trainsActualSpeeds[2][14];			//0->49, 1->50	in (mm/10ms * 10000)
 	
-	int			trainsActualStopDistances[2][14];	//0->49, 1->50	in cm
+	int			trainsStopDistances[2][14];	//0->49, 1->50	in mm
+	int 		trainsStopTimes[2][14];
+	int 		trainsStopDeceleration[2][14];
 	
 	trainStatus trainsStatus[MAX_TRAINS];
 	int			switchesStatus[MAX_SWITCHES];
@@ -59,116 +64,47 @@ initTrainsSpecData(trackServerData* trkSvrData){
 	trkSvrData->trainsActualSpeeds[1][12] = 59658; 	//0.95879
 	trkSvrData->trainsActualSpeeds[1][13] = 55469;  
 
-	trkSvrData->trainsActualStopDistances[0][0] = -1; 		//need to divide by 100
-	trkSvrData->trainsActualStopDistances[0][1] = -1; 
-	trkSvrData->trainsActualStopDistances[0][2] = 14917; 
-	trkSvrData->trainsActualStopDistances[0][3] = 22583; 
-	trkSvrData->trainsActualStopDistances[0][4] = 29167; 
-	trkSvrData->trainsActualStopDistances[0][5] = 36167; 
-	trkSvrData->trainsActualStopDistances[0][6] = 45833; 
-	trkSvrData->trainsActualStopDistances[0][7] = 51083;
-	trkSvrData->trainsActualStopDistances[0][8] = 57917; 
-	trkSvrData->trainsActualStopDistances[0][9] = 64917; 
-	trkSvrData->trainsActualStopDistances[0][10] = 71333; 
-	trkSvrData->trainsActualStopDistances[0][11] = 77917; 
-	trkSvrData->trainsActualStopDistances[0][12] = 82083; 
-	trkSvrData->trainsActualStopDistances[0][13] = 81667;  
+	trkSvrData->trainsStopDistances[0][0] = -1; 		//in mm
+	trkSvrData->trainsStopDistances[0][1] = -1; 
+	trkSvrData->trainsStopDistances[0][2] = 149; 
+	trkSvrData->trainsStopDistances[0][3] = 226; 
+	trkSvrData->trainsStopDistances[0][4] = 292; 
+	trkSvrData->trainsStopDistances[0][5] = 362; 
+	trkSvrData->trainsStopDistances[0][6] = 458; 
+	trkSvrData->trainsStopDistances[0][7] = 511;
+	trkSvrData->trainsStopDistances[0][8] = 579; 
+	trkSvrData->trainsStopDistances[0][9] = 649; 
+	trkSvrData->trainsStopDistances[0][10] = 713; 
+	trkSvrData->trainsStopDistances[0][11] = 779; 
+	trkSvrData->trainsStopDistances[0][12] = 821; 
+	trkSvrData->trainsStopDistances[0][13] = 816;  
 	
-	trkSvrData->trainsActualStopDistances[1][0] =  -1; 
-	trkSvrData->trainsActualStopDistances[1][1] =  -1; 
-	trkSvrData->trainsActualStopDistances[1][2] =  13417;
-	trkSvrData->trainsActualStopDistances[1][3] =  20500; 
-	trkSvrData->trainsActualStopDistances[1][4] =  26417; 
-	trkSvrData->trainsActualStopDistances[1][5] =  32833; 
-	trkSvrData->trainsActualStopDistances[1][6] =  40417; 
-	trkSvrData->trainsActualStopDistances[1][7] =  47333; 
-	trkSvrData->trainsActualStopDistances[1][8] =  52500; 
-	trkSvrData->trainsActualStopDistances[1][9] =  59000; 
-	trkSvrData->trainsActualStopDistances[1][10] = 66250; 
-	trkSvrData->trainsActualStopDistances[1][11] = 71833; 
-	trkSvrData->trainsActualStopDistances[1][12] = 75250; 
-	trkSvrData->trainsActualStopDistances[1][13] = 77667;  
+	trkSvrData->trainsStopDistances[1][0] =  -1; 
+	trkSvrData->trainsStopDistances[1][1] =  -1; 
+	trkSvrData->trainsStopDistances[1][2] =  134;
+	trkSvrData->trainsStopDistances[1][3] =  205; 
+	trkSvrData->trainsStopDistances[1][4] =  264; 
+	trkSvrData->trainsStopDistances[1][5] =  328; 
+	trkSvrData->trainsStopDistances[1][6] =  404; 
+	trkSvrData->trainsStopDistances[1][7] =  473; 
+	trkSvrData->trainsStopDistances[1][8] =  525; 
+	trkSvrData->trainsStopDistances[1][9] =  590; 
+	trkSvrData->trainsStopDistances[1][10] = 662; 
+	trkSvrData->trainsStopDistances[1][11] = 718; 
+	trkSvrData->trainsStopDistances[1][12] = 752; 
+	trkSvrData->trainsStopDistances[1][13] = 777;  
 
-	trkSvrData->trackFraction[0] =  1;
-	trkSvrData->trackFraction[1] =  1;
-	trkSvrData->trackFraction[2] =  1;
-	trkSvrData->trackFraction[3] =  1; 	
-	trkSvrData->trackFraction[4] =  1;
-	trkSvrData->trackFraction[5] =  1;
-	trkSvrData->trackFraction[6] =  1;
-	trkSvrData->trackFraction[7] =  1;
-	trkSvrData->trackFraction[8] =  1;
-	trkSvrData->trackFraction[9] =  1;
-	trkSvrData->trackFraction[10] =  1;
-	trkSvrData->trackFraction[11] =  1;
-	trkSvrData->trackFraction[12] =  1;
-	trkSvrData->trackFraction[13] =  1;	
-	trkSvrData->trackFraction[14] =  1;
-	trkSvrData->trackFraction[15] =  1;
-	trkSvrData->trackFraction[16] =  1;
-	trkSvrData->trackFraction[17] =  1;
-	trkSvrData->trackFraction[18] =  1;
-	trkSvrData->trackFraction[19] =  1;
-	trkSvrData->trackFraction[20] =  1;
-	trkSvrData->trackFraction[21] =  1;
-	trkSvrData->trackFraction[22] =  1;
-	trkSvrData->trackFraction[23] =  1; 	
-	trkSvrData->trackFraction[24] =  1;
-	trkSvrData->trackFraction[25] =  1;
-	trkSvrData->trackFraction[26] =  1;
-	trkSvrData->trackFraction[27] =  1;
-	trkSvrData->trackFraction[28] =  1;
-	trkSvrData->trackFraction[29] =  1;
-	trkSvrData->trackFraction[30] =  1;
-	trkSvrData->trackFraction[31] =  1;
-	trkSvrData->trackFraction[32] =  1;
-	trkSvrData->trackFraction[33] =  1; 	
-	trkSvrData->trackFraction[34] =  1;
-	trkSvrData->trackFraction[35] =  1;
-	trkSvrData->trackFraction[36] =  1;
-	trkSvrData->trackFraction[37] =  1;
-	trkSvrData->trackFraction[38] =  1;
-	trkSvrData->trackFraction[39] =  1;
-	trkSvrData->trackFraction[40] =  1;
-	trkSvrData->trackFraction[41] =  1;
-	trkSvrData->trackFraction[42] =  1;
-	trkSvrData->trackFraction[43] =  1;	
-	trkSvrData->trackFraction[44] =  1;
-	trkSvrData->trackFraction[45] =  1;
-	trkSvrData->trackFraction[46] =  1;
-	trkSvrData->trackFraction[47] =  1;
-	trkSvrData->trackFraction[48] =  1;
-	trkSvrData->trackFraction[49] =  1;
-	trkSvrData->trackFraction[50] =  1;
-	trkSvrData->trackFraction[51] =  1;
-	trkSvrData->trackFraction[52] =  1;
-	trkSvrData->trackFraction[53] =  1; 	
-	trkSvrData->trackFraction[54] =  1;
-	trkSvrData->trackFraction[55] =  1;
-	trkSvrData->trackFraction[56] =  1;
-	trkSvrData->trackFraction[57] =  1;
-	trkSvrData->trackFraction[58] =  1;
-	trkSvrData->trackFraction[59] =  1;
-	trkSvrData->trackFraction[60] =  1;
-	trkSvrData->trackFraction[61] =  1;
-	trkSvrData->trackFraction[62] =  1;
-	trkSvrData->trackFraction[63] =  1; 	
-	trkSvrData->trackFraction[64] =  1;
-	trkSvrData->trackFraction[65] =  1;
-	trkSvrData->trackFraction[66] =  1;
-	trkSvrData->trackFraction[67] =  1;
-	trkSvrData->trackFraction[68] =  1;
-	trkSvrData->trackFraction[69] =  1;
-	trkSvrData->trackFraction[70] =  1;
-	trkSvrData->trackFraction[71] =  1;
-	trkSvrData->trackFraction[72] =  1;
-	trkSvrData->trackFraction[73] =  1; 	
-	trkSvrData->trackFraction[74] =  1;
-	trkSvrData->trackFraction[75] =  1;
-	trkSvrData->trackFraction[76] =  1;
-	trkSvrData->trackFraction[77] =  1;
-	trkSvrData->trackFraction[78] =  1;
-	trkSvrData->trackFraction[79] =  1;
+	int i, j;
+	for(i = 0; i < 2; i++){
+		for(j = 0; j < 14; j++){
+			int vi = trkSvrData->trainsActualSpeeds[i][j];
+			int va = vi / 2;
+			int stopDist = trkSvrData->trainsStopDistances[i][j];
+			trkSvrData->trainsStopTimes[i][j] = stopDist * 10000 / va;
+			trkSvrData->trainsStopDeceleration[i][j] = vi / trkSvrData->trainsStopTimes[i][j];
+		}
+	}
+	
 }
 
 static void
@@ -186,10 +122,14 @@ initTrackServerData(trackServerData* trkSvrData){
 
 		(trkSvrData->trainsStatus[i]).trainDirection	= FORWARD;
 
-		(trkSvrData->trainsStatus[i]).lastTriggeredSensor  = 0;
-		(trkSvrData->trainsStatus[i]).expectedSensor  = 0;
-		(trkSvrData->trainsStatus[i]).expectedSensorTime  = 0;
+		(trkSvrData->trainsStatus[i]).lastTriggeredSensor  = -1;
+		(trkSvrData->trainsStatus[i]).lastTimeStemp  = -1;
+		(trkSvrData->trainsStatus[i]).expectedSensor  = -1;
+		(trkSvrData->trainsStatus[i]).expectedSensorTime  = -1;
 
+		(trkSvrData->trainsStatus[i]).needToCheckStopTime  = -1;
+		(trkSvrData->trainsStatus[i]).destInfo.sensor = 0;
+		(trkSvrData->trainsStatus[i]).destInfo.displacement = 0;
 		
 		putc(COM1, 0); 
 		putc(COM1, i + 45);
@@ -249,7 +189,7 @@ trackServer(){
 				Reply(requester, NULL, 0);
 			}
 			case TRACKSERVER_SPEED_GET:
-			{			
+			{
 				Reply(requester, &(trkSvrData.trainsStatus[req.target-45].currentTrainSpeed), sizeof(int));
 				break;
 			}
@@ -261,13 +201,8 @@ trackServer(){
 				targetTrainStatus->lastSpeedChange = Time();
 				targetTrainStatus->currentTrainSpeed = req.value % 15;
 
-				sprintf(COM2, "\033[5;70H%s%d", clearLine, req.value % 15);
-				
-				// if (req.value == 15){
-				// 	targetTrainStatus->trainDirection = 
-				// 		(targetTrainStatus->trainDirection == FORWARD) ? BACKWARD : FORWARD;
-				// }
-							
+				sprintf(COM2, "%s\033[5;70H%s%d%s", save, clearLine, req.value % 15, restore);
+					
 				Reply(requester, NULL, 0);									
 				break;		
 			}	
@@ -293,11 +228,11 @@ trackServer(){
 			{
 				if (trkSvrData.trainsStatus[req.target-45].trainDirection == FORWARD){
 					trkSvrData.trainsStatus[req.target-45].trainDirection = BACKWARD;
-					sprintf(COM2, "\033[4;70H%sBackward", clearLine);
+					sprintf(COM2, "%s\033[4;70H%sBackward%s", save, clearLine, restore);
 				}
 				else{
 					trkSvrData.trainsStatus[req.target-45].trainDirection = FORWARD;
-					sprintf(COM2, "\033[4;70H%sForward", clearLine);
+					sprintf(COM2, "%s\033[4;70H%sForward%s", save, clearLine, restore);
 				}
 				
 				Reply(requester, NULL, 0);
@@ -322,7 +257,7 @@ trackServer(){
 				else if (n != -1 && req.value == ('D' * 17 + 14)){
 					trkSvrData.initTrainNum = -1;
 				}
-				else{
+				else {
 					int group = req.value / 17;
 					int id = req.value % 17;
 
@@ -336,7 +271,7 @@ trackServer(){
 					int i = trkSvrData.currentTrain;
 					trainStatus *trainStat = &(trkSvrData.trainsStatus[i]);
 
-					if (trainStat->expectedSensor > 0){
+					if (trainStat->expectedSensor > 'A'*17){
 						int expt = trainStat->expectedSensorTime + trainStat->lastTimeStemp;
 						ds = expt / 10 % 10;
 						s = expt / 100 % 60;
@@ -349,9 +284,9 @@ trackServer(){
 						sprintf(COM2, "%s\033[18;22H%s%s%d ticks%s%s", 
 							save, yellow, clearLine, diff, resetColor, restore);
 
-						sprintf(COM2, "%s\033[%u;100H%s%d:%d%s", 
-							save, 20 + (trainStat->expectedSensor)/2, clearLine,
-							trainStat->expectedSensor-1, 10000 - ((diff * 10000) / trainStat->expectedSensorTime), restore);
+						// sprintf(COM2, "%s\033[%u;100H%s%d:%d%s", 
+						// 	save, 20 + (trainStat->expectedSensor)/2, clearLine,
+						// 	trainStat->expectedSensor-1, 10000 - ((diff * 10000) / trainStat->expectedSensorTime), restore);
 					}
 					
 					int index = (id + (group - 'A') * 16) - 1;
@@ -381,7 +316,8 @@ trackServer(){
 
 					trainStat->lastTriggeredSensor = req.value;
 					trainStat->lastTimeStemp = req.ts;
-					trainStat->expectedSensor = nextLandmark->num; 
+					trainStat->expectedSensor = ((nextLandmark->num / 16) + 'A') * 17 + ((nextLandmark->num % 16) + 1); 
+					trainStat->distToExpectedSensor = totalDist;
 					int t = (totalDist * 10000 / speed);// * trkSvrData.trackFraction[nextLandmark->num-1] ; // ticks
 					trainStat->expectedSensorTime = t;
 					
@@ -392,10 +328,128 @@ trackServer(){
 					m = t / 6000 % 60;
 					h = t / 360000;
 					sprintf(COM2, "%s%s\033[13;16H%s%s\033[13;21Hat: %d:%d:%d:%d%s", 
-						save, yellow, clearLine, nextLandmark->name, h, m, s, ds, restore);					
+						save, yellow, clearLine, nextLandmark->name, h, m, s, ds, restore);			
+
+					if (trainStat->destInfo.sensor > 'A'*17){
+						int stopDist = trkSvrData.trainsStopDistances[i%2][trainStat->currentTrainSpeed-1];
+						int additionalLength = (trainStat->trainDirection == FORWARD) ? 140 : 20;
+						int tempSensorId = ((nextLandmark->num / 16) + 'A') * 17 + ((nextLandmark->num % 16) + 1);
+						
+						int a = 0;
+						while (!(nextLandmark->type != NODE_EXIT &&
+								tempSensorId == trainStat->destInfo.sensor && 			//sensor is dest sensor
+								totalDist + trainStat->destInfo.displacement > stopDist + additionalLength)){					
+							
+							totalDist += nextLandmark->edge[DIR_AHEAD].dist;
+							nextLandmark = nextLandmark->edge[DIR_AHEAD].dest;
+
+							while(nextLandmark->type != NODE_SENSOR && nextLandmark->type != NODE_EXIT){
+								int direction = DIR_AHEAD;
+								if(nextLandmark->type == NODE_BRANCH){
+									int status = nextLandmark->num <= 18 ? 
+										trkSvrData.switchesStatus[nextLandmark->num-1] : 
+										trkSvrData.switchesStatus[nextLandmark->num-135];
+									switch(status){
+										case STRAIGHT:
+											direction = DIR_STRAIGHT;
+											break;
+										case CURVED:
+											direction = DIR_CURVED;
+											break;
+									}
+									a++;
+								}
+
+								totalDist += nextLandmark->edge[direction].dist;
+								nextLandmark = nextLandmark->edge[direction].dest;
+							}							
+							tempSensorId = ((nextLandmark->num / 16) + 'A') * 17 + ((nextLandmark->num % 16) + 1);
+						}
+
+						int temp = totalDist + trainStat->destInfo.displacement - stopDist - additionalLength;
+						int delay = (temp * 10000 / speed) + a - ((trainStat->currentTrainSpeed - 10) / 2);
+						int stopSignalTime = delay + trainStat->lastTimeStemp;
+
+						if (delay > 0 && 
+							delay < trkSvrData.trainsStopTimes[i%2][trainStat->currentTrainSpeed-1]){
+							int tid;
+							if (i % 2 == 0){
+								tid = WhoIs("stopTrain49_Worker");
+							}
+							else{
+								tid = WhoIs("stopTrain50_Worker");
+							}
+							trainStat->destInfo.sensor = 0;
+							trainStat->destInfo.displacement = 0;
+							Send(tid, &stopSignalTime, sizeof(int), NULL, 0);
+						}
+					}
 				}
 
 				Reply(requester, NULL, 0);
+				break;
+			}
+			case TRACKSERVER_TRAIN_LOCATION_GET:
+			{
+				int curVelocity;
+				int displacement;
+				//int i = req.target-45;	//for specific train
+				int i = trkSvrData.currentTrain; 	//for demo 1
+				int sensorTimeStemp = trkSvrData.trainsStatus[i].lastTimeStemp;
+				locationInfo locInfo;
+
+				int n = trkSvrData.trainsStatus[i].currentTrainSpeed;
+				if (n > 0){
+					curVelocity = trkSvrData.trainsActualSpeeds[i%2][n-1];
+					displacement = (Time() - sensorTimeStemp) * curVelocity / 10000;
+				}
+				else{
+					int m = trkSvrData.trainsStatus[i].previousTrainSpeed;
+					int prevVelocity = trkSvrData.trainsActualSpeeds[i%2][m-1];
+					curVelocity = prevVelocity / 2;
+					int stopDist = trkSvrData.trainsStopDistances[i%2][m-1];
+					int stopTime = trkSvrData.trainsStopTimes[i%2][m-1];
+					int deceleration = trkSvrData.trainsStopDeceleration[i%2][m-1];
+					int speedChangeTime = trkSvrData.trainsStatus[i].lastSpeedChange;
+
+					// sprintf(COM2, "%s\033[44;0H%sm = %d; pV = %d; cV = %d; sD = %d; sT = %d; sCT = %d; a = -%d %s", 
+					// 		save, clearLine, m, prevVelocity, curVelocity, stopDist, stopTime, speedChangeTime, deceleration, restore);
+
+					if (sensorTimeStemp > speedChangeTime){ // stop before this sensor
+						//d = vi*t + (1/2)at^2
+						int t = sensorTimeStemp - speedChangeTime;
+						displacement = stopDist - (t * prevVelocity / 10000 - deceleration * t * t / 2 / 10000);
+						// sprintf(COM2, "%s\033[46;0H%s %d - %d * %d * %d / 2 / 10000 = %d%s", 
+						// 	save, clearLine, stopDist, deceleration, t, t, displacement, restore);
+					}
+					else{	//stop after this sensor
+						int t = Time();
+						int x = (speedChangeTime - sensorTimeStemp);
+						int y = (t - speedChangeTime) > stopTime ? stopTime : (t - speedChangeTime);
+
+						//d = vi*t + (1/2)at^2
+						displacement = (x * prevVelocity / 10000) + (y * prevVelocity / 10000 - deceleration * y * y / 2 / 10000);
+						// sprintf(COM2, "%s\033[48;0H%s (%d * %d / 10000) + (%d * %d / 10000 - %d * %d * %d / 2 / 10000) = %d%s", 
+						// 	save, clearLine, x, prevVelocity, y, prevVelocity, deceleration, y, y, displacement, restore);
+					}
+				}
+
+				displacement += (trkSvrData.trainsStatus[i].trainDirection == FORWARD) ? 140 : 20;
+				locInfo.displacement = displacement;
+				locInfo.sensor = trkSvrData.trainsStatus[i].lastTriggeredSensor;
+				Reply(requester, &locInfo, sizeof(locationInfo));
+				break;
+			}
+			case TRACKSERVER_GO_TO_POSITION:
+			{
+
+				trainStatus *targetTrainStatus = &(trkSvrData.trainsStatus[req.target-45]);
+				targetTrainStatus->destInfo.sensor = req.value;
+				targetTrainStatus->destInfo.displacement = req.value2;
+				targetTrainStatus->needToCheckStopTime = 1;
+
+				req.retval = 0;
+				Reply(requester, &(req.retval), sizeof(int));
 				break;
 			}	
 		}
@@ -413,6 +467,7 @@ getTrainSpeed(int trainNo){
 	Send(TRACKSERVER_TID, &req, sizeof(trackServerRequest), &(req.retval), sizeof(int));	
 	return req.retval;
 }
+
 void 
 changeTrainSpeed(int trainNo, int trainSpeed){
 	trackServerRequest req;
@@ -501,4 +556,32 @@ initTrain(int trainNo){
 	req.target 	= trainNo;
 
 	Send(TRACKSERVER_TID, &req, sizeof(trackServerRequest), NULL, 0);
+}
+
+locationInfo
+getTrainLocation(int trainNo){
+	locationInfo response;
+	trackServerRequest req;
+	
+	req.trkSvrReq_uid = TRACKSERVER_TRAIN_LOCATION_GET;
+		
+	req.target 	= trainNo;
+
+	Send(TRACKSERVER_TID, &req, sizeof(trackServerRequest), &response, sizeof(locationInfo));
+	
+	return response;
+}
+
+int 
+goToPosition(int trainNo, locationInfo destInfo){
+	trackServerRequest req;
+	
+	req.trkSvrReq_uid = TRACKSERVER_GO_TO_POSITION;
+	req.target 	= trainNo;
+	req.value = destInfo.sensor;
+	req.value2 = destInfo.displacement;
+
+	Send(TRACKSERVER_TID, &req, sizeof(trackServerRequest), &(req.retval), sizeof(int));
+
+	return req.retval;	
 }

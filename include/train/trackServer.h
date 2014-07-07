@@ -13,9 +13,14 @@
 #define TRACKSERVER_SWITCH_GET				3
 #define TRACKSERVER_SWITCH_CHANGE			4
 
-#define TRACKSERVER_REVERSE					5
+#define TRACKSERVER_TRAIN_LOCATION_GET		5
 
-#define TRACKSERVER_UPDATE_LAST_SENSOR		6
+#define TRACKSERVER_REVERSE					6
+
+#define TRACKSERVER_UPDATE_LAST_SENSOR		7
+#define TRACKSERVER_GET_LAST_SENSOR			8
+
+#define TRACKSERVER_GO_TO_POSITION			9
 
 #define STRAIGHT		33
 #define CURVED			34
@@ -34,14 +39,21 @@ typedef struct trackServerRequest{
 	
 	int 	target;
 	int 	value;
+	int 	value2;
 	int 	ts;
 }trackServerRequest;
-	
+
+typedef struct locationInfo{	
+	int 	sensor;
+	int 	displacement;
+}locationInfo;
+
 void 
 trackServer();
 
 int
 getTrainSpeed(int trainNo); 
+
 void 
 changeTrainSpeed(int trainNo, int trainSpeed);	//0-15
 
@@ -50,6 +62,7 @@ reverseTrain(int trainNo);		//rv
 
 int
 getSwitchStatus(int switchNo);
+
 void
 changeSwitchStatus(int switchNo, int switchStatus);
 
@@ -58,4 +71,11 @@ updateLastTriggeredSensor(int sensorUID, int ts);
 
 void 
 initTrain(int trainNo);
+
+locationInfo
+getTrainLocation(int trainNo);
+
+int 
+goToPosition(int trainNo, locationInfo destInfo);
+
 #endif

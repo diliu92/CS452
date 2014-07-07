@@ -71,8 +71,11 @@ firstUserTask()	//priority 6
 
 	sprintf( COM2, "%s\033[H", clearScreen);
 
+	Create(7, stopTrain49_Worker);
+	Create(7, stopTrain50_Worker);
 	Create(7, sensorFeedProcessor);
 	Create(7, cmdProcessor);
+	Create(7, showTrainLocation);
 	//Create(4, com2_testone);
 	//Create(4, com2_testtwo);
 

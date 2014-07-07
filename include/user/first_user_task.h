@@ -1,12 +1,23 @@
 #ifndef __FIRSTUSERTASK_H__
 #define __FIRSTUSERTASK_H__
 
-int sensorFeedProcessor();
+int 
+sensorFeedProcessor();
 
-void cmdProcessor();
+void 
+cmdProcessor();
+
+void 
+showTrainLocation();
 
 void
 firstUserTask();
+
+void 
+stopTrain49_Worker();
+
+void
+stopTrain50_Worker();
 /*
  * To be added
  */
