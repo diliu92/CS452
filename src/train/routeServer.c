@@ -26,6 +26,85 @@ typedef struct DijkstraEntry{
 }DijkstraEntry;
 
 
+
+/*
+ *	DijkstraEntry related functions
+ */
+
+static int 
+NodeToIdx(track_node* track, track_node* src){
+	return track - src;
+}
+static int
+isNeighbor(track_node* src, track_node* dest, int* cost, int* isReverse){	//can src link to dest?
+	switch (src->type)
+	{
+		case NODE_BRANCH:
+			//if (src->edge[DIR_STRAIGHT].dest == dest || src->edge[DIR_CURVED].dest == dest || src->reverse == dest)
+			//	return 1;
+			if (src->edge[DIR_STRAIGHT].dest == dest){
+				*cost = src->edge[DIR_STRAIGHT].dist;
+				return 1;
+			}
+			else if (src->edge[DIR_CURVED].dest == dest){
+				*cost = src->edge[DIR_CURVED].dist;
+				return 1;
+			}
+			else if (src->reverse == dest){
+				*cost = REVERSE_COST;
+				*isReverse = 1;
+				return 1;
+			}
+			
+			break;
+		case NODE_SENSOR:
+		case NODE_ENTER:
+		case NODE_MERGE:
+			//if (src->edge[DIR_AHEAD].dest == dest || src->reverse == dest)
+			//	return 1;
+			if (src->edge[DIR_AHEAD].dest == dest){
+				*cost = src->edge[DIR_AHEAD].dist;
+				return 1;
+			}
+			else if (src->reverse == dest){
+				*cost = REVERSE_COST;
+				*isReverse = 1;
+				return 1;
+			}
+			break;
+		case NODE_EXIT:
+			if (src->reverse == dest){
+				*cost = REVERSE_COST;
+				*isReverse = 1;
+				return 1;
+			}
+			break;			
+	}
+
+	return 0;
+}
+static int
+findMin(DijkstraEntry* dests){	
+	int retval = -1;
+	int minCost = INFINITY;
+	
+	int i;
+	for (i = 0; i < TRACK_MAX; i++)
+	{
+		if(dests[i]->isFinished == 1)
+			continue;
+		else if(dests[i]->D < minCost){
+			minCost = dests[i]->D;
+			retval = dests[i]->v;
+		}
+	}
+	
+	return retval;
+}
+
+
+
+
 static void
 initRouteServerData(routeServerData* rtSvrData){
 	int i;
@@ -146,84 +225,5 @@ routeServer(){
 		}
 	}
 }
-
-
-/*
- *	DijkstraEntry related functions
- */
-
-static int 
-NodeToIdx(track_node* track, track_node* src){
-	return track - src;
-}
-
-static int
-isNeighbor(track_node* src, track_node* dest, int* cost, int* isReverse){	//can src link to dest?
-	switch (src->type)
-	{
-		case NODE_BRANCH:
-			//if (src->edge[DIR_STRAIGHT].dest == dest || src->edge[DIR_CURVED].dest == dest || src->reverse == dest)
-			//	return 1;
-			if (src->edge[DIR_STRAIGHT].dest == dest){
-				*cost = src->edge[DIR_STRAIGHT].dist;
-				return 1;
-			}
-			else if (src->edge[DIR_CURVED].dest == dest){
-				*cost = src->edge[DIR_CURVED].dist;
-				return 1;
-			}
-			else if (src->reverse == dest){
-				*cost = REVERSE_COST;
-				*isReverse = 1;
-				return 1;
-			}
-			
-			break;
-		case NODE_SENSOR:
-		case NODE_ENTER:
-		case NODE_MERGE:
-			//if (src->edge[DIR_AHEAD].dest == dest || src->reverse == dest)
-			//	return 1;
-			if (src->edge[DIR_AHEAD].dest == dest){
-				*cost = src->edge[DIR_AHEAD].dist;
-				return 1;
-			}
-			else if (src->reverse == dest){
-				*cost = REVERSE_COST;
-				*isReverse = 1;
-				return 1;
-			}
-			break;
-		case NODE_EXIT:
-			if (src->reverse == dest){
-				*cost = REVERSE_COST;
-				*isReverse = 1;
-				return 1;
-			}
-			break;			
-	}
-
-	return 0;
-}
-
-static int
-findMin(DijkstraEntry* dests){	
-	int retval = -1;
-	int minCost = INFINITY;
-	
-	int i;
-	for (i = 0; i < TRACK_MAX; i++)
-	{
-		if(dests[i]->isFinished == 1)
-			continue;
-		else if(dests[i]->D < minCost){
-			minCost = dests[i]->D;
-			retval = dests[i]->v;
-		}
-	}
-	
-	return retval;
-}
-
 
 
