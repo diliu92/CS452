@@ -24,14 +24,6 @@ typedef struct routeServerResponse_Path{
 }routeServerResponse_Path;
 
 
-
-
-typedef struct nextSensorInfo{
-	char *nextSensorLabel;
-	int dist;
-	int expectedTime;
-}nextSensorInfo;
-
-nextSensorInfo
-predictNextSensor(int curSensor, int ts);
+void
+GetPath(int src, int dest);
 #endif

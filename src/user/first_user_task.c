@@ -67,15 +67,16 @@ firstUserTask()	//priority 6
 	//bwprintf( COM2, "UART1_Server initialized.\r\nTID of UART1_Server: %u(should be 7)\r\n", uart1ServerTID);
 	
 	Create(4, trackServer);
-	// Create(4, routeServer);
+	Create(4, routeServer);
 
 	sprintf( COM2, "%s\033[H", clearScreen);
 
-	Create(7, stopTrain1_Worker);
-	Create(7, stopTrain2_Worker);
-	Create(7, sensorFeedProcessor);
-	Create(7, cmdProcessor);
-	Create(7, showTrainLocation);
+	//Create(7, stopTrain1_Worker);
+	//Create(7, stopTrain2_Worker);
+	//Create(7, sensorFeedProcessor);
+	//Create(7, cmdProcessor);
+	//Create(7, showTrainLocation);
+	
 	//Create(4, com2_testone);
 	//Create(4, com2_testtwo);
 

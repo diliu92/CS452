@@ -226,4 +226,15 @@ routeServer(){
 	}
 }
 
-
+void
+GetPath(int src, int dest){
+	routeServerRequest req;
+	
+	req.rtSvrReq_uid = ROUTESERVER_ROUTE_GET_SHORTEST;
+	
+	req.src  = src;
+	req.dest = dest;
+	
+	Send(ROUTESERVER_TID, &req. sizeof(routeServerRequest), NULL, 0);
+	
+}
