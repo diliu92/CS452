@@ -91,11 +91,11 @@ findMin(DijkstraEntry* dests){
 	int i;
 	for (i = 0; i < TRACK_MAX; i++)
 	{
-		if(dests[i]->isFinished == 1)
+		if(dests[i].isFinished == 1)
 			continue;
-		else if(dests[i]->D < minCost){
-			minCost = dests[i]->D;
-			retval = dests[i]->v;
+		else if(dests[i].D < minCost){
+			minCost = dests[i].D;
+			retval = dests[i].v;
 		}
 	}
 	
