@@ -187,7 +187,7 @@ routeServer(){
 					
 					dests[mineNodeIdx].isFinished = 1;
 					
-					if(mineNodeIdx = dest || mineNodeIdx = -1)
+					if(mineNodeIdx == dest || mineNodeIdx == -1)
 						break;
 					
 					if (rtSvrData.blockedTrackNodes[mineNodeIdx] == BLOCKED)
