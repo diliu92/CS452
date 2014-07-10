@@ -91,7 +91,7 @@ findMin(DijkstraEntry* dests){
 	int i;
 	for (i = 0; i < TRACK_MAX; i++)
 	{
-		if(dests[i].isFinished == 1)
+		if(dests[i].isFinished == FINISHED)
 			continue;
 		else if(dests[i].D < minCost){
 			minCost = dests[i].D;
@@ -206,7 +206,9 @@ routeServer(){
 						}						
 					}					
 				}	
-				
+				sprintf(COM2, "%s\033[42;0H%d%s", 
+					save, 799, restore);
+									
 				int a = 0;
 				if (mineNodeIdx != -1){
 					int curIdx = mineNodeIdx;
