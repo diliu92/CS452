@@ -23,6 +23,9 @@ typedef struct routeServerResponse_Path{
 	int		path[TRACK_MAX_NUM];
 }routeServerResponse_Path;
 
+void
+routeServer();
+
 
 void
 GetPath(int src, int dest);
