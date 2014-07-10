@@ -145,7 +145,7 @@ routeServer(){
 				
 				int cost, isReverse;
 				
-				sprintf(COM2, "%s\033[40;H%d%s", 
+				sprintf(COM2, "%s\033[40;0%d%s", 
 					save, 0, 699, restore);				
 				/*
 				 * Dijkstra's Algo: Init Step
