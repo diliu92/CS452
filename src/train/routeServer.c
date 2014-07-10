@@ -206,8 +206,8 @@ routeServer(){
 						}						
 					}					
 				}	
-				sprintf(COM2, "%s\033[42;0H%d%s", 
-					save, 799, restore);
+				sprintf(COM2, "%s\033[42;0H%d %d%s", 
+					save, 799, mineNodeIdx, restore);
 									
 				int a = 0;
 				if (mineNodeIdx != -1){
