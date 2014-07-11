@@ -38,6 +38,7 @@ NodeToIdx(track_node* track, track_node* src){
 static int
 isNeighbor(track_node* src, track_node* dest, int* cost, int* isReverse){	//can src link to dest?
 	
+	*cost = 0;
 	*isReverse = 0;
 	
 	switch (src->type)
@@ -168,9 +169,7 @@ routeServer(){
 						else{
 							dests[i].D = cost;
 							dests[i].p = src;								
-						}	
-						//sprintf(COM2, "%s\033[%u;70H %d %d %s", 
-						//	save, (a++) % 30 + 20, i, dests[i].D, restore);											
+						}											
 					}
 					else
 					{
@@ -188,8 +187,7 @@ routeServer(){
 				while(1)
 				{
 					mineNodeIdx = findMin(dests);
-					//sprintf(COM2, "%s\033[%u;75H mineNodeIdx:%d %s", 
-					//		save, (a++) % 30 + 20, mineNodeIdx, restore);						
+						
 					dests[mineNodeIdx].isFinished = 1;
 					
 					if(mineNodeIdx == dest || mineNodeIdx == -1)
@@ -201,27 +199,48 @@ routeServer(){
 					for (i = 0; i < TRACK_MAX; i++)
 					{						
 						if (dests[i].isFinished == UNFINISHED && 
-								isNeighbor(&(rtSvrData.trackA[mineNodeIdx]), &(rtSvrData.trackA[i]), &cost, &isReverse)){
-							if(dests[mineNodeIdx].D + cost < dests[i].D){							
-								dests[i].D = dests[mineNodeIdx].D + cost;
-								dests[i].p = dests[mineNodeIdx].v;
+								isNeighbor(&(rtSvrData.trackA[mineNodeIdx]), &(rtSvrData.trackA[i]), &cost, &isReverse))
+							{
+								if(dests[mineNodeIdx].D + cost < dests[i].D){							
+									dests[i].D = dests[mineNodeIdx].D + cost;
+									dests[i].p = dests[mineNodeIdx].v;
 							}								
 						}						
 					}					
-				}					
+				}
+				
+				routeServerResponse_Path response;
+											
 				if (mineNodeIdx != -1){
 					int curIdx = mineNodeIdx;
+					
+					int i = 0;
 					while(curIdx != src){
-						sprintf(COM2, "%s\033[45;%uH%d%s", 
-							save, a, curIdx, restore);
-						a = a + 6;
+						//sprintf(COM2, "%s\033[45;%uH%d%s", 
+						//	save, a, curIdx, restore);
+						//a = a + 6;
+						response.path[(TRACK_MAX-1) - i] = curIdx;
+						
 						curIdx = dests[curIdx].p;
+						i++;
 					}
+					
+					response.path[0] = (TRACK_MAX-1) - (i-1);
+				}
+				else{
+					response.path[0] = -1;
+				}
+				
+				for (i = response.path[0]; i < TRACK_MAX; i++)
+				{
+						sprintf(COM2, "%s\033[45;%uH%d%s", 
+							save, a, response.path[i], restore);
+						a = a + 6;					
 				}
 				
 				
 				
-				Reply(requester, NULL, 0);			
+				Reply(requester, &response, sizeof(routeServerResponse_Path));			
 				break;		
 			}			
 		}
