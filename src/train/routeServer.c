@@ -7,7 +7,7 @@
 #define UNFINISHED	0
 #define FINISHED	1
 
-#define INFINITY	999999999
+#define INFINITY	0xEFFFFFFF;
 
 #define REVERSE_COST	1000		//750*2
 
