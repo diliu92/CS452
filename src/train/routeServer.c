@@ -37,13 +37,12 @@ NodeToIdx(track_node* track, track_node* src){
 }
 static int
 isNeighbor(track_node* src, track_node* dest, int* cost, int* isReverse){	//can src link to dest?
+	
 	*isReverse = 0;
-	*cost = 0;
+	
 	switch (src->type)
 	{
 		case NODE_BRANCH:
-			//if (src->edge[DIR_STRAIGHT].dest == dest || src->edge[DIR_CURVED].dest == dest || src->reverse == dest)
-			//	return 1;
 			if (src->edge[DIR_STRAIGHT].dest == dest){
 				*cost = src->edge[DIR_STRAIGHT].dist;
 				return 1;
@@ -100,7 +99,8 @@ findMin(DijkstraEntry* dests){
 			retval = dests[i].v;
 		}
 	}
-	
+	sprintf(COM2, "%s\033[%u;78H retval:%d %s", 
+			save, 23, retval, restore);	
 	return retval;
 }
 
