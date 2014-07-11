@@ -95,13 +95,10 @@ findMin(DijkstraEntry* dests){
 			continue;
 		else if(dests[i].D < minCost){
 			minCost = dests[i].D;
-			retval = dests[i].v;
-		//sprintf(COM2, "%s\033[%u;68H in loop retval:%d %s", 
-		//	save, 23, retval, restore);				
+			retval = dests[i].v;			
 		}
 	}
-	//sprintf(COM2, "%s\033[%u;78H retval:%d %s", 
-	//		save, 23, retval, restore);	
+	
 	return retval;
 }
 
@@ -157,7 +154,10 @@ routeServer(){
 				{
 					dests[i].v = i;
 					dests[i].isFinished = UNFINISHED;
+					dests[i].D = INFINITY;
+					dests[i].p = -1;	
 					
+					/*
 					if(isNeighbor(&(rtSvrData.trackA[src]), &(rtSvrData.trackA[i]), &cost, &isReverse))
 					{
 						if (firstReverseFree == 1 && isReverse == 1){
@@ -175,10 +175,12 @@ routeServer(){
 					{
 						dests[i].D = INFINITY;
 						dests[i].p = -1;							
-					}					
+					}
+					*/					
 				}
 				
-				dests[src].isFinished = FINISHED; 		
+				//dests[src].isFinished = FINISHED; 	
+				dests[src].D = 0;	
 						
 				/*
 				 * Dijkstra's Algo: Main loop
@@ -231,12 +233,12 @@ routeServer(){
 					response.path[0] = -1;
 				}
 				
-				for (i = response.path[0]; i < TRACK_MAX; i++)
-				{
-						sprintf(COM2, "%s\033[45;%uH%d%s", 
-							save, a, response.path[i], restore);
-						a = a + 6;					
-				}
+				//for (i = response.path[0]; i < TRACK_MAX; i++)
+				//{
+				//		sprintf(COM2, "%s\033[45;%uH%d%s", 
+				//			save, a, response.path[i], restore);
+				//		a = a + 6;					
+				//}
 				
 				
 				
@@ -258,5 +260,6 @@ GetPath(int src, int dest){
 	req.dest = dest;
 	
 	Send(ROUTESERVER_TID, &req, sizeof(routeServerRequest), &response, sizeof(routeServerResponse_Path));
+	
 	
 }
