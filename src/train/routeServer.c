@@ -97,6 +97,8 @@ findMin(DijkstraEntry* dests){
 		else if(dests[i].D < minCost){
 			minCost = dests[i].D;
 			retval = dests[i].v;
+		sprintf(COM2, "%s\033[%u;68H in loop retval:%d %s", 
+			save, 23, retval, restore);				
 		}
 	}
 	sprintf(COM2, "%s\033[%u;78H retval:%d %s", 
