@@ -37,6 +37,8 @@ NodeToIdx(track_node* track, track_node* src){
 }
 static int
 isNeighbor(track_node* src, track_node* dest, int* cost, int* isReverse){	//can src link to dest?
+	*isReverse = 0;
+	*cost = 0;
 	switch (src->type)
 	{
 		case NODE_BRANCH:
@@ -163,7 +165,7 @@ routeServer(){
 							dests[i].D = 0;
 							dests[i].p = src;	
 							
-							firstReverseFree == 0;
+							firstReverseFree = 0;
 						}
 						else{
 							dests[i].D = cost;
