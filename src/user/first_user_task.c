@@ -80,7 +80,7 @@ firstUserTask()	//priority 6
 	//Create(4, com2_testone);
 	//Create(4, com2_testtwo);
 
-	GetPath(41, 70);
+	GetPath(47, 39);
 
 	Create(16, idleTask);
 
