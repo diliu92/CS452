@@ -154,28 +154,30 @@ routeServer(){
 				{
 					dests[i].v = i;
 					dests[i].isFinished = UNFINISHED;
+					dests[i].D = INFINITY;
+					dests[i].p = -1;
 					
-					if(isNeighbor(&(rtSvrData.trackA[src]), &(rtSvrData.trackA[i]), &cost, &isReverse))
-					{
-						if (firstReverseFree == 1 && isReverse == 1){
-							dests[i].D = 0;
-							dests[i].p = src;	
+					//if(isNeighbor(&(rtSvrData.trackA[src]), &(rtSvrData.trackA[i]), &cost, &isReverse))
+					//{
+						//if (firstReverseFree == 1 && isReverse == 1){
+							//dests[i].D = 0;
+							//dests[i].p = src;	
 							
-							firstReverseFree = 0;
-						}
-						else{
-							dests[i].D = cost;
-							dests[i].p = src;								
-						}											
-					}
-					else
-					{
-						dests[i].D = INFINITY;
-						dests[i].p = -1;							
-					}					
+							//firstReverseFree = 0;
+						//}
+						//else{
+							//dests[i].D = cost;
+							//dests[i].p = src;								
+						//}											
+					//}
+					//else
+					//{
+						//dests[i].D = INFINITY;
+						//dests[i].p = -1;							
+					//}					
 				}
 				
-				dests[src].isFinished = FINISHED; 		
+				dests[src].D = 0; 		
 						
 				/*
 				 * Dijkstra's Algo: Main loop
@@ -228,12 +230,12 @@ routeServer(){
 					response.path[0] = -1;
 				}
 				
-				//for (i = response.path[0]; i < TRACK_MAX; i++)
-				//{
-				//		sprintf(COM2, "%s\033[45;%uH%d%s", 
-				//			save, a, response.path[i], restore);
-				//		a = a + 6;					
-				//}
+				for (i = response.path[0]; i < TRACK_MAX; i++)
+				{
+						sprintf(COM2, "%s\033[45;%uH%d%s", 
+							save, a, response.path[i], restore);
+						a = a + 6;					
+				}
 				
 				
 				
