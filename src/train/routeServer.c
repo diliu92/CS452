@@ -196,16 +196,13 @@ routeServer(){
 					
 					int i = 0;
 					while(curIdx != src){
-						//sprintf(COM2, "%s\033[45;%uH%d%s", 
-						//	save, a, curIdx, restore);
-						//a = a + 6;
 						response.path[(TRACK_MAX-1) - i] = curIdx;
 						
 						curIdx = dests[curIdx].p;
 						i++;
 					}
-					
 					response.path[(TRACK_MAX-1) - i] = curIdx;
+					
 					
 					response.path[0] = (TRACK_MAX-1) - i;
 				}
@@ -219,8 +216,6 @@ routeServer(){
 							save, a, response.path[i], restore);
 						a = a + 6;					
 				}
-				
-				
 				
 				Reply(requester, &response, sizeof(routeServerResponse_Path));			
 				break;		

@@ -15,7 +15,7 @@ idleTask(){
 	
 	unsigned int printInterval = 98304*5;
 	
-	unsigned int loopTime = 19;
+	unsigned int loopTime = 21;
 	
 	currentTime = *time4_value;
 	lastTime 	= *time4_value;
@@ -71,16 +71,16 @@ firstUserTask()	//priority 6
 
 	sprintf( COM2, "%s\033[H", clearScreen);
 
-	//Create(7, stopTrain1_Worker);
-	//Create(7, stopTrain2_Worker);
-	//Create(7, sensorFeedProcessor);
-	//Create(7, cmdProcessor);
-	//Create(7, showTrainLocation);
+	Create(7, stopTrain1_Worker);
+	Create(7, stopTrain2_Worker);
+	Create(7, sensorFeedProcessor);
+	Create(7, cmdProcessor);
+	Create(7, showTrainLocation);
 	
 	//Create(4, com2_testone);
 	//Create(4, com2_testtwo);
 
-	GetPath(24, 57);
+	//GetPath(24, 57);
 
 	Create(16, idleTask);
 

@@ -20,15 +20,17 @@ typedef struct trainStatus{
 
 typedef struct trackServerData{
 	track_node 	trackA[TRACK_MAX];
-	int 		trainsActualSpeeds[2][14];			//0->49, 1->50	in (mm/10ms * 10000)
 	
-	int			trainsStopDistances[2][14];	//0->49, 1->50	in mm
+	int 		trainsActualSpeeds[2][14];			//0->49, 1->50	in (mm/10ms * 10000)
+	int			trainsStopDistances[2][14];			//0->49, 1->50	in mm
 	int 		trainsStopTimes[2][14];
 	int 		trainsStopDeceleration[2][14];
 	
 	trainStatus trainsStatus[MAX_TRAINS];
+	
 	int			switchesStatus[MAX_SWITCHES];
-	int 		initTrainNum;
+	
+	int 		initTrainNums;
 	int 		currentTrain;
 }trackServerData;
 
@@ -186,7 +188,9 @@ trackServer(){
 			{
 				trkSvrData.initTrainNum = req.target;
 				trkSvrData.currentTrain = req.target - 45;
-				Reply(requester, NULL, 0);
+				
+				Reply(requester, NULL, 0);	
+				break;
 			}
 			case TRACKSERVER_SPEED_GET:
 			{
@@ -212,6 +216,7 @@ trackServer(){
 					Reply(requester, &(trkSvrData.switchesStatus[req.target-1]), sizeof(int));
 				else
 					Reply(requester, &(trkSvrData.switchesStatus[req.target-135]), sizeof(int));					
+				
 				break;	
 			}
 			case TRACKSERVER_SWITCH_CHANGE:
@@ -240,22 +245,53 @@ trackServer(){
 			}
 			case TRACKSERVER_UPDATE_LAST_SENSOR:
 			{
-				int n = trkSvrData.initTrainNum;
-				if (n != -1 && req.value == ('B' * 17 + 2)){
-					putc(COM1, 0);
-					putc(COM1, n);
+				if (trkSvrData.initTrainNum != -1){
+					trainStatus* thisTrainStat = &(trkSvrData.trainsStatus[trkSvrData.initTrainNum - 45]);
 					
-					Delay(100);
+					thisTrainStat->lastTriggeredSensor = req.value;
+					thisTrainStat->lastTimeStemp = 	req.ts;						
 
-					putc(COM1, 15);
-					putc(COM1, n);
-					
-					putc(COM1, trkSvrData.trainsStatus[n-45].currentTrainSpeed);
-					putc(COM1, n);
-					trkSvrData.initTrainNum = -1;
-				}
-				else if (n != -1 && req.value == ('D' * 17 + 14)){
-					trkSvrData.initTrainNum = -1;
+					if(	req.value == ('B' * 17 + 10) 
+						|| req.value == ('B' * 17 + 12) 
+						|| req.value == ('B' * 17 + 8) 
+					){											
+						switch (req.value)
+						{
+							case 'B' * 17 + 10 :
+								thisTrainStat->expectedSensor = 'A' * 17 + 5;  
+								
+								break;
+							case 'B' * 17 + 12 :
+								thisTrainStat->expectedSensor = 'A' * 17 + 8; 							
+								
+								break;
+							case 'B' * 17 + 8 :
+								thisTrainStat->expectedSensor = 'A' * 17 + 10; 
+																
+								break;	
+						}
+									
+						putc(COM1, 0);
+						putc(COM1, trkSvrData.initTrainNum);
+						
+						Delay(100);
+
+						putc(COM1, 15);
+						putc(COM1, trkSvrData.initTrainNum);
+						
+						putc(COM1, thisTrainStat->currentTrainSpeed);
+						putc(COM1, trkSvrData.initTrainNum);
+						
+						trkSvrData.initTrainNum = -1;
+					}
+					else if( req.value == ('A' * 17 + 5) 
+								|| req.value == ('A' * 17 + 8) 
+								|| req.value == ('A' * 17 + 10) 
+					){						
+						thisTrainStat->expectedSensor = 'C' * 17 + 7; 
+						
+						trkSvrData.initTrainNum = -1;
+					}				
 				}
 				else {
 					int group = req.value / 17;
@@ -437,6 +473,7 @@ trackServer(){
 				displacement += (trkSvrData.trainsStatus[i].trainDirection == FORWARD) ? 140 : 20;
 				locInfo.displacement = displacement;
 				locInfo.sensor = trkSvrData.trainsStatus[i].lastTriggeredSensor;
+				
 				Reply(requester, &locInfo, sizeof(locationInfo));
 				break;
 			}
@@ -547,8 +584,7 @@ updateLastTriggeredSensor(int sensorUID, int ts){
 
 void 
 initTrain(int trainNo){
-
-	changeTrainSpeed(trainNo, 8);
+	changeTrainSpeed(trainNo, 10);
 
 	trackServerRequest req;
 	
