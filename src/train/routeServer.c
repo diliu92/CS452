@@ -170,7 +170,7 @@ routeServer(){
 							dests[i].p = src;								
 						}	
 						sprintf(COM2, "%s\033[%u;70H %d %s", 
-							save, (a++) % 30 + 20, 2000, restore);											
+							save, (a++) % 30 + 20, i, restore);											
 					}
 					else
 					{
