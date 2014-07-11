@@ -155,26 +155,7 @@ routeServer(){
 					dests[i].v = i;
 					dests[i].isFinished = UNFINISHED;
 					dests[i].D = INFINITY;
-					dests[i].p = -1;
-					
-					//if(isNeighbor(&(rtSvrData.trackA[src]), &(rtSvrData.trackA[i]), &cost, &isReverse))
-					//{
-						//if (firstReverseFree == 1 && isReverse == 1){
-							//dests[i].D = 0;
-							//dests[i].p = src;	
-							
-							//firstReverseFree = 0;
-						//}
-						//else{
-							//dests[i].D = cost;
-							//dests[i].p = src;								
-						//}											
-					//}
-					//else
-					//{
-						//dests[i].D = INFINITY;
-						//dests[i].p = -1;							
-					//}					
+					dests[i].p = -1;				
 				}
 				
 				dests[src].D = 0; 		
@@ -224,7 +205,9 @@ routeServer(){
 						i++;
 					}
 					
-					response.path[0] = (TRACK_MAX-1) - (i-1);
+					response.path[(TRACK_MAX-1) - i] = curIdx;
+					
+					response.path[0] = (TRACK_MAX-1) - i;
 				}
 				else{
 					response.path[0] = -1;
