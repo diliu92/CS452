@@ -188,7 +188,8 @@ routeServer(){
 				while(1)
 				{
 					mineNodeIdx = findMin(dests);
-					
+					sprintf(COM2, "%s\033[%u;75H mineNodeIdx:%d %s", 
+							save, (a++) % 30 + 20, mineNodeIdx, restore);						
 					dests[mineNodeIdx].isFinished = 1;
 					
 					if(mineNodeIdx == dest || mineNodeIdx == -1)
