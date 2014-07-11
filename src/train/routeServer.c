@@ -250,6 +250,7 @@ routeServer(){
 void
 GetPath(int src, int dest){
 	routeServerRequest req;
+	routeServerResponse_Path response;
 	
 	req.rtSvrReq_uid = ROUTESERVER_ROUTE_GET_SHORTEST;
 	
