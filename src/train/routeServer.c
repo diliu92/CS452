@@ -149,7 +149,8 @@ routeServer(){
 					save, 699, restore);				
 				/*
 				 * Dijkstra's Algo: Init Step
-				 */ 															
+				 */ 	
+				int a = 0;														
 				int i;
 				for (i = 0; i < TRACK_MAX; i++)
 				{
@@ -168,8 +169,8 @@ routeServer(){
 							dests[i].D = cost;
 							dests[i].p = src;								
 						}	
-						sprintf(COM2, "%s\033[41;%uH %d %s", 
-							save, i*2, 2000, restore);											
+						sprintf(COM2, "%s\033[%u;70H %d %s", 
+							save, (a++) % 30 + 20, 2000, restore);											
 					}
 					else
 					{
@@ -211,7 +212,6 @@ routeServer(){
 				sprintf(COM2, "%s\033[42;0H%d %d%s", 
 					save, 799, mineNodeIdx, restore);
 									
-				int a = 0;
 				if (mineNodeIdx != -1){
 					int curIdx = mineNodeIdx;
 					while(curIdx != src){
