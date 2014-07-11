@@ -9,7 +9,7 @@
 
 #define INFINITY	999999;
 
-#define REVERSE_COST	1000		//750*2
+#define REVERSE_COST	400		//750*2
 
 typedef struct routeServerData{
 	track_node trackA[TRACK_MAX];
