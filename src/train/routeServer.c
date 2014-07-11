@@ -7,7 +7,7 @@
 #define UNFINISHED	0
 #define FINISHED	1
 
-#define INFINITY	0xFFFFFFFF
+#define INFINITY	999999999
 
 #define REVERSE_COST	1000		//750*2
 
@@ -92,9 +92,8 @@ findMin(DijkstraEntry* dests){
 	int i;
 	for (i = 0; i < TRACK_MAX; i++)
 	{
-		if(dests[i].isFinished == FINISHED){
+		if(dests[i].isFinished == FINISHED)
 			continue;
-		}
 		else if(dests[i].D < minCost){
 			minCost = dests[i].D;
 			retval = dests[i].v;
