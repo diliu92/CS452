@@ -30,7 +30,7 @@ typedef struct trackServerData{
 	
 	int			switchesStatus[MAX_SWITCHES];
 	
-	int 		initTrainNums;
+	int 		initTrainNum;
 	int 		currentTrain;
 }trackServerData;
 
