@@ -168,8 +168,8 @@ routeServer(){
 							dests[i].D = cost;
 							dests[i].p = src;								
 						}	
-					sprintf(COM2, "%s\033[41;0H%d%s", 
-					save, 1099, restore);											
+						sprintf(COM2, "%s\033[41;%uH %d %s", 
+							save, i*4, 1099, restore);											
 					}
 					else
 					{
