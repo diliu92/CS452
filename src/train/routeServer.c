@@ -157,7 +157,7 @@ routeServer(){
 					dests[i].v = i;
 					dests[i].isFinished = UNFINISHED;
 					
-					if(isNeighbor(&(rtSvrData.trackA[i]), &(rtSvrData.trackA[src]), &cost, &isReverse))
+					if(isNeighbor(&(rtSvrData.trackA[src]), &(rtSvrData.trackA[i]), &cost, &isReverse))
 					{
 						if (firstReverseFree == 1 && isReverse == 1){
 							dests[i].D = 0;
@@ -200,7 +200,7 @@ routeServer(){
 					for (i = 0; i < TRACK_MAX; i++)
 					{						
 						if (dests[i].isFinished == UNFINISHED && 
-								isNeighbor(&(rtSvrData.trackA[i]), &(rtSvrData.trackA[mineNodeIdx]), &cost, &isReverse))
+								isNeighbor(&(rtSvrData.trackA[mineNodeIdx]), &(rtSvrData.trackA[i]), &cost, &isReverse))
 						{
 							if(dests[mineNodeIdx].D + cost < dests[i].D){
 								dests[i].D = dests[mineNodeIdx].D + cost;
