@@ -97,12 +97,12 @@ findMin(DijkstraEntry* dests){
 		else if(dests[i].D < minCost){
 			minCost = dests[i].D;
 			retval = dests[i].v;
-		sprintf(COM2, "%s\033[%u;68H in loop retval:%d %s", 
-			save, 23, retval, restore);				
+		//sprintf(COM2, "%s\033[%u;68H in loop retval:%d %s", 
+		//	save, 23, retval, restore);				
 		}
 	}
-	sprintf(COM2, "%s\033[%u;78H retval:%d %s", 
-			save, 23, retval, restore);	
+	//sprintf(COM2, "%s\033[%u;78H retval:%d %s", 
+	//		save, 23, retval, restore);	
 	return retval;
 }
 
@@ -149,8 +149,8 @@ routeServer(){
 				
 				int cost, isReverse;
 				
-				sprintf(COM2, "%s\033[40;0H%d%s", 
-					save, 699, restore);				
+				//sprintf(COM2, "%s\033[40;0H%d%s", 
+				//	save, 699, restore);				
 				/*
 				 * Dijkstra's Algo: Init Step
 				 */ 	
@@ -173,8 +173,8 @@ routeServer(){
 							dests[i].D = cost;
 							dests[i].p = src;								
 						}	
-						sprintf(COM2, "%s\033[%u;70H %d %d %s", 
-							save, (a++) % 30 + 20, i, dests[i].D, restore);											
+						//sprintf(COM2, "%s\033[%u;70H %d %d %s", 
+						//	save, (a++) % 30 + 20, i, dests[i].D, restore);											
 					}
 					else
 					{
@@ -192,8 +192,8 @@ routeServer(){
 				while(1)
 				{
 					mineNodeIdx = findMin(dests);
-					sprintf(COM2, "%s\033[%u;75H mineNodeIdx:%d %s", 
-							save, (a++) % 30 + 20, mineNodeIdx, restore);						
+					//sprintf(COM2, "%s\033[%u;75H mineNodeIdx:%d %s", 
+					//		save, (a++) % 30 + 20, mineNodeIdx, restore);						
 					dests[mineNodeIdx].isFinished = 1;
 					
 					if(mineNodeIdx == dest || mineNodeIdx == -1)
@@ -208,16 +208,16 @@ routeServer(){
 								isNeighbor(&(rtSvrData.trackA[mineNodeIdx]), &(rtSvrData.trackA[i]), &cost, &isReverse))
 						{
 							if(dests[mineNodeIdx].D + cost < dests[i].D){
-						sprintf(COM2, "%s\033[%u;70H reached:%d %s", 
-							save, (a++) % 30 + 20, i, restore);									
+						//sprintf(COM2, "%s\033[%u;70H reached:%d %s", 
+						//	save, (a++) % 30 + 20, i, restore);									
 								dests[i].D = dests[mineNodeIdx].D + cost;
 								dests[i].p = dests[mineNodeIdx].v;
 							}								
 						}						
 					}					
 				}	
-				sprintf(COM2, "%s\033[42;0H%d %d%s", 
-					save, 799, mineNodeIdx, restore);
+				//sprintf(COM2, "%s\033[42;0H%d %d%s", 
+				//	save, 799, mineNodeIdx, restore);
 									
 				if (mineNodeIdx != -1){
 					int curIdx = mineNodeIdx;
