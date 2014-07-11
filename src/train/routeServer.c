@@ -216,9 +216,9 @@ routeServer(){
 					
 					int i = 0;
 					while(curIdx != src){
-						//sprintf(COM2, "%s\033[45;%uH%d%s", 
-						//	save, a, curIdx, restore);
-						//a = a + 6;
+						sprintf(COM2, "%s\033[45;%uH%d%s", 
+							save, a, curIdx, restore);
+						a = a + 6;
 						response.path[(TRACK_MAX-1) - i] = curIdx;
 						
 						curIdx = dests[curIdx].p;
@@ -233,9 +233,9 @@ routeServer(){
 				
 				for (i = response.path[0]; i < TRACK_MAX; i++)
 				{
-						sprintf(COM2, "%s\033[45;%uH%d%s", 
-							save, a, response.path[i], restore);
-						a = a + 6;					
+						//sprintf(COM2, "%s\033[45;%uH%d%s", 
+						//	save, a, response.path[i], restore);
+						//a = a + 6;					
 				}
 				
 				
