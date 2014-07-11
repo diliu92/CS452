@@ -224,7 +224,7 @@ routeServer(){
 					while(curIdx != src){
 						sprintf(COM2, "%s\033[45;%uH%d%s", 
 							save, a, curIdx, restore);
-						a = a + 3;
+						a = a + 6;
 						curIdx = dests[curIdx].p;
 					}
 				}
