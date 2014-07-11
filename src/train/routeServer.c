@@ -154,10 +154,7 @@ routeServer(){
 				{
 					dests[i].v = i;
 					dests[i].isFinished = UNFINISHED;
-					dests[i].D = INFINITY;
-					dests[i].p = -1;	
 					
-					/*
 					if(isNeighbor(&(rtSvrData.trackA[src]), &(rtSvrData.trackA[i]), &cost, &isReverse))
 					{
 						if (firstReverseFree == 1 && isReverse == 1){
@@ -175,12 +172,10 @@ routeServer(){
 					{
 						dests[i].D = INFINITY;
 						dests[i].p = -1;							
-					}
-					*/					
+					}					
 				}
 				
-				//dests[src].isFinished = FINISHED; 	
-				dests[src].D = 0;	
+				dests[src].isFinished = FINISHED; 		
 						
 				/*
 				 * Dijkstra's Algo: Main loop
