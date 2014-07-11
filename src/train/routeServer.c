@@ -203,6 +203,8 @@ routeServer(){
 								isNeighbor(&(rtSvrData.trackA[mineNodeIdx]), &(rtSvrData.trackA[i]), &cost, &isReverse))
 						{
 							if(dests[mineNodeIdx].D + cost < dests[i].D){
+						sprintf(COM2, "%s\033[%u;70H reached:%d %s", 
+							save, (a++) % 30 + 20, i, restore);									
 								dests[i].D = dests[mineNodeIdx].D + cost;
 								dests[i].p = dests[mineNodeIdx].v;
 							}								
