@@ -451,8 +451,8 @@ trackServer(){
 							Send(tid, &stopSignalTime, sizeof(int), NULL, 0);
 						}
 					}
+					*/
 				}
-				*/
 				
 				Reply(requester, NULL, 0);
 				break;
