@@ -7,7 +7,7 @@
 #define UNFINISHED	0
 #define FINISHED	1
 
-#define INFINITY	0xEFFFFFFF;
+#define INFINITY	999999;
 
 #define REVERSE_COST	1000		//750*2
 
@@ -61,8 +61,6 @@ isNeighbor(track_node* src, track_node* dest, int* cost, int* isReverse){	//can 
 		case NODE_SENSOR:
 		case NODE_ENTER:
 		case NODE_MERGE:
-			//if (src->edge[DIR_AHEAD].dest == dest || src->reverse == dest)
-			//	return 1;
 			if (src->edge[DIR_AHEAD].dest == dest){
 				*cost = src->edge[DIR_AHEAD].dist;
 				return 1;
