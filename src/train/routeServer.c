@@ -256,6 +256,6 @@ GetPath(int src, int dest){
 	req.src  = src;
 	req.dest = dest;
 	
-	Send(ROUTESERVER_TID, &req, sizeof(routeServerRequest), NULL, 0);
+	Send(ROUTESERVER_TID, &req, sizeof(routeServerRequest), &response, sizeof(routeServerResponse_Path));
 	
 }
