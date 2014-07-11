@@ -146,9 +146,7 @@ routeServer(){
 				int firstReverseFree = 1;
 				
 				int cost, isReverse;
-				
-				//sprintf(COM2, "%s\033[40;0H%d%s", 
-				//	save, 699, restore);				
+								
 				/*
 				 * Dijkstra's Algo: Init Step
 				 */ 	
@@ -203,20 +201,14 @@ routeServer(){
 					for (i = 0; i < TRACK_MAX; i++)
 					{						
 						if (dests[i].isFinished == UNFINISHED && 
-								isNeighbor(&(rtSvrData.trackA[mineNodeIdx]), &(rtSvrData.trackA[i]), &cost, &isReverse))
-						{
-							if(dests[mineNodeIdx].D + cost < dests[i].D){
-						//sprintf(COM2, "%s\033[%u;70H reached:%d %s", 
-						//	save, (a++) % 30 + 20, i, restore);									
+								isNeighbor(&(rtSvrData.trackA[mineNodeIdx]), &(rtSvrData.trackA[i]), &cost, &isReverse)){
+							if(dests[mineNodeIdx].D + cost < dests[i].D){							
 								dests[i].D = dests[mineNodeIdx].D + cost;
 								dests[i].p = dests[mineNodeIdx].v;
 							}								
 						}						
 					}					
-				}	
-				//sprintf(COM2, "%s\033[42;0H%d %d%s", 
-				//	save, 799, mineNodeIdx, restore);
-									
+				}					
 				if (mineNodeIdx != -1){
 					int curIdx = mineNodeIdx;
 					while(curIdx != src){
