@@ -174,8 +174,7 @@ initTrackServerData(trackServerData* trkSvrData){
 
 
 static track_node*
-getNextSensorNode(track_node* curSensorNode, int* totalDist, int* switchesStatus){
-	track_node* nextLandmark = curSensorNode;
+getNextSensorNode(track_node* nextLandmark, int* totalDist, int* switchesStatus){
 	
 	while(nextLandmark->type != NODE_SENSOR && nextLandmark->type != NODE_EXIT){
 		int direction = DIR_AHEAD;
@@ -362,9 +361,9 @@ trackServer(){
 								
 								sprintf(COM2, "%s\033[44;0H%s expectedSensor:%d %s", save, clearLine, expectedSensor, restore);
 								
-								track_node*	expectedSensorNode 	= &(trkSvrData.trackA[expectedSensor]);
-								
+								track_node*	expectedSensorNode 	= trkSvrData.trackA[expectedSensor].edge[DIR_AHEAD].dest;	
 								int 		temp;
+								
 								track_node* nextSensorNode = getNextSensorNode(expectedSensorNode, &temp, trkSvrData.switchesStatus);	//forward direction
 								//track_node* backSensorNode = expectedSensorNode.reverse;	//backward direction
 								
@@ -388,7 +387,7 @@ trackServer(){
 						}	
 					}
 					if (trainIdx == MAX_TRAINS){
-						//sprintf(COM2, "%s\033[45;0H%s XXXXXXXXXX %s", save, clearLine, restore);
+						sprintf(COM2, "%s\033[45;0H%s XXXXXXXXXX %s", save, clearLine, restore);
 					}
 									
 					trainStatus *trainStat = &(trkSvrData.trainsStatus[trainIdx]);
@@ -407,10 +406,10 @@ trackServer(){
 						save, yellow, clearLine, diff, resetColor, restore);
 					*/
 					
-					track_node*	curSensorNode 	= trkSvrData.trackA[sensorIndex].edge[DIR_AHEAD].dest;
+					track_node*	nextLandmark 	= trkSvrData.trackA[sensorIndex].edge[DIR_AHEAD].dest;
 					int 		totalDist 		= trkSvrData.trackA[sensorIndex].edge[DIR_AHEAD].dist;
 
-					track_node* nextSensorNode = getNextSensorNode(curSensorNode, &totalDist, trkSvrData.switchesStatus);					
+					track_node* nextSensorNode = getNextSensorNode(nextLandmark, &totalDist, trkSvrData.switchesStatus);					
 
 					int speed = trkSvrData.trainsActualSpeeds[trainIdx%2][trainStat->currentTrainSpeed-1];
 
