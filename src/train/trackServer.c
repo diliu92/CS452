@@ -388,7 +388,7 @@ trackServer(){
 						}	
 					}
 					if (trainIdx == MAX_TRAINS){
-						sprintf(COM2, "%s\033[45;0H%s XXXXXXXXXX %s", save, clearLine, restore);
+						//sprintf(COM2, "%s\033[45;0H%s XXXXXXXXXX %s", save, clearLine, restore);
 					}
 									
 					trainStatus *trainStat = &(trkSvrData.trainsStatus[trainIdx]);
