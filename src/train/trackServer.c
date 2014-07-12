@@ -383,7 +383,7 @@ trackServer(){
 							}						
 						}	
 					}
-					if (trainIdx == -1){
+					if (trainIdx == MAX_TRAINS){
 						sprintf(COM2, "%s\033[45;0H%s XXXXXXXXXX %s", save, clearLine, restore);
 					}
 									
