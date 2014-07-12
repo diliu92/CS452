@@ -375,13 +375,16 @@ trackServer(){
 								}
 									
 								//track_node* backSensorNode = expectedSensorNode.reverse;				//backward direction
-								
+								l
 								
 									
 								//if (req.value == backSensor)
 								//	break;		
 							}						
 						}	
+					}
+					if (trainIdx == -1){
+						sprintf(COM2, "%s\033[45;0H%s XXXXXXXXXX %s", save, clearLine, restore);
 					}
 									
 					trainStatus *trainStat = &(trkSvrData.trainsStatus[trainIdx]);
