@@ -381,7 +381,7 @@ trackServer(){
 										
 								int reverseLastTriggeredSensor = reverseLastTriggeredSensorNode->num;
 								
-								if (req.value == reverseLastTriggeredSensor){
+								if (req.value == reverseLastTriggeredSensor2){
 									//sprintf(COM2, "%s\033[46;0H%s :%d: %s", save, clearLine, trainIdx, restore);
 									break;
 								}	
@@ -389,12 +389,12 @@ trackServer(){
 						}	
 					}
 					if (trainIdx == MAX_TRAINS){
-						sprintf(COM2, "%s\033[45;0H%s XXXXXXXXXX %s", save, clearLine, restore);
+						sprintf(COM2, "%s\033[45;0H%s Cant't find sensor %s", save, clearLine, restore);
 					}
 									
 					trainStatus *trainStat = &(trkSvrData.trainsStatus[trainIdx]);
 					
-					/*
+					
 					int expt = trainStat->expectedSensorTime + trainStat->lastTimeStemp;
 					ds = expt / 10 % 10;
 					s = expt / 100 % 60;
@@ -406,7 +406,7 @@ trackServer(){
 					int diff = expt - req.ts;
 					sprintf(COM2, "%s\033[18;22H%s%s%d ticks%s%s", 
 						save, yellow, clearLine, diff, resetColor, restore);
-					*/
+					
 					
 					track_node*	nextLandmark 	= trkSvrData.trackA[sensorIndex].edge[DIR_AHEAD].dest;
 					int 		totalDist 		= trkSvrData.trackA[sensorIndex].edge[DIR_AHEAD].dist;
