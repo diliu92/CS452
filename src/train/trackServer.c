@@ -353,36 +353,31 @@ trackServer(){
 
 					int trainIdx = determineTrainByTriggeredSensor(sensorIndex, trkSvrData.trainsStatus);	//expected sensor handling(normal case)
 									
-					if (trainIdx == -1){
+					if (trainIdx == -1){																	//expected sensor handling(special case)
 						for (trainIdx = 0; trainIdx <MAX_TRAINS; trainIdx++)
 						{
 							if (trkSvrData.trainsStatus[trainIdx].isUsed == 1){
 								int expectedSensor = trkSvrData.trainsStatus[trainIdx].expectedSensor;
-								
-								sprintf(COM2, "%s\033[44;0H%s expectedSensor:%d %s", save, clearLine, expectedSensor, restore);
-								
-								track_node*	expectedSensorNode 	= trkSvrData.trackA[expectedSensor].edge[DIR_AHEAD].dest;	
-								int 		temp;
-								
-								track_node* nextSensorNode = getNextSensorNode(expectedSensorNode, &temp, trkSvrData.switchesStatus);	//forward direction
-								//track_node* backSensorNode = expectedSensorNode.reverse;	//backward direction
+																
+								track_node*	expectedSensorAheadNode = trkSvrData.trackA[expectedSensor].edge[DIR_AHEAD].dest;	//forward direction
+								int 		tempF;													
+								track_node* nextSensorNode = getNextSensorNode(expectedSensorAheadNode, &tempF, trkSvrData.switchesStatus);
 								
 								int nextSensor = nextSensorNode->num;
-								//int backSensor = ((backSensorNode->num / 16) + 'A') * 17 + ((backSensorNode->num % 16) + 1);	
-								
-								sprintf(COM2, "%s\033[45;0H%s nextSensor:%d %s", save, clearLine, nextSensor, restore);
-								
+
 								if (req.value == nextSensor){
-									sprintf(COM2, "%s\033[46;0H%s :%d: %s", save, clearLine, trainIdx, restore);
+									//sprintf(COM2, "%s\033[46;0H%s :%d: %s", save, clearLine, trainIdx, restore);
 									break;
 								}
-									
-								//track_node* backSensorNode = expectedSensorNode.reverse;				//backward direction
+
+								track_node*	reverseSensorNode = trkSvrData.trackA[expectedSensor].reverse;						//reverse direction
+										
+								int reverseSensor = reverseSensorNode->num;
 								
-								
-									
-								//if (req.value == backSensor)
-								//	break;		
+								if (req.value == reverseSensor){
+									//sprintf(COM2, "%s\033[46;0H%s :%d: %s", save, clearLine, trainIdx, restore);
+									break;
+								}	
 							}						
 						}	
 					}
