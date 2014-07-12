@@ -203,7 +203,8 @@ determineTrainByTriggeredSensor(int TriggeredSensor, trainStatus* trainsStatus){
 	int i;
 	for (i = 0; i <MAX_TRAINS; i++)
 	{
-		if (trainsStatus[i].expectedSensor == TriggeredSensor)
+		if (trainsStatus[i].isUsed == 1 &&
+				trainsStatus[i].expectedSensor == TriggeredSensor)
 			return i;
 	}
 	
