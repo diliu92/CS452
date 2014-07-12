@@ -184,7 +184,7 @@ getNextSensorNode(track_node* curSensorNode, int* totalDist, int* switchesStatus
 								switchesStatus[nextLandmark->num-1] : 
 								switchesStatus[nextLandmark->num-135];
 			
-			sprintf(COM2, "%s\033[45;0H%s%d:%d%s", save, clearLine, curSensorNode->num, status, restore);
+			sprintf(COM2, "%s\033[45;0H%s%d:%d:%d%s", save, clearLine, curSensorNode->num, nextLandmark->num, status, restore);
 			switch(status){
 				case STRAIGHT:
 					direction = DIR_STRAIGHT;
@@ -197,7 +197,6 @@ getNextSensorNode(track_node* curSensorNode, int* totalDist, int* switchesStatus
 		*totalDist += nextLandmark->edge[direction].dist;
 		nextLandmark = nextLandmark->edge[direction].dest;
 	}
-	
 	return nextLandmark;
 }
 static int
