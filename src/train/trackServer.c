@@ -381,7 +381,7 @@ trackServer(){
 										
 								int reverseLastTriggeredSensor = reverseLastTriggeredSensorNode->num;
 								
-								if (req.value == reverseLastTriggeredSensor2){
+								if (req.value == reverseLastTriggeredSensor){
 									//sprintf(COM2, "%s\033[46;0H%s :%d: %s", save, clearLine, trainIdx, restore);
 									break;
 								}	
