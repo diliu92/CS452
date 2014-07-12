@@ -13,9 +13,10 @@ typedef struct trainStatus{
 
 	int 	lastTriggeredSensor;
 	int 	lastTimeStemp;
+	
 	int 	expectedSensor;
-	int 	distToExpectedSensor;
 	int 	expectedSensorTime;
+	int 	distToExpectedSensor;
 
 	locationInfo 	destInfo;
 	int 			needToCheckStopTime;
@@ -181,8 +182,6 @@ getNextSensorNode(track_node* nextLandmark, int* totalDist, int* switchesStatus)
 		if(nextLandmark->type == NODE_BRANCH){
 			int status = (nextLandmark->num <= 18) ? switchesStatus[(nextLandmark->num)-1] : 
 														switchesStatus[(nextLandmark->num)-135] ;
-								
-			//sprintf(COM2, "%s\033[45;0H%s%d:%d:%d%s", save, clearLine, curSensorNode->num, nextLandmark->num, status, restore);
 			switch(status){
 				case STRAIGHT:
 					direction = DIR_STRAIGHT;
@@ -389,12 +388,15 @@ trackServer(){
 						}	
 					}
 					if (trainIdx == MAX_TRAINS){
-						sprintf(COM2, "%s\033[45;0H%s Cant't find sensor %s", save, clearLine, restore);
+						sprintf(COM2, "%s\033[45;0H%s Can't distribute sensor %c%d, please abort the program now! %s", 
+											save, clearLine, (char)sensorGroup, sensorId, restore);
 					}
 									
 					trainStatus *trainStat = &(trkSvrData.trainsStatus[trainIdx]);
 					
-					
+					/*
+					 * Expected time
+					 */
 					int expt = trainStat->expectedSensorTime + trainStat->lastTimeStemp;
 					ds = expt / 10 % 10;
 					s = expt / 100 % 60;
@@ -402,7 +404,9 @@ trackServer(){
 					h = expt / 360000;
 					sprintf(COM2, "%s\033[17;22H%s%s%d:%d:%d:%d%s%s", 
 						save, yellow, clearLine, h, m, s, ds, resetColor, restore);
-
+					/*
+					 * Time difference
+					 */ 
 					int diff = expt - req.ts;
 					sprintf(COM2, "%s\033[18;22H%s%s%d ticks%s%s", 
 						save, yellow, clearLine, diff, resetColor, restore);
@@ -415,9 +419,9 @@ trackServer(){
 
 					int speed = trkSvrData.trainsActualSpeeds[trainIdx%2][trainStat->currentTrainSpeed-1];
 
-					trainStat->lastTriggeredSensor = sensorIndex;
-					trainStat->lastTimeStemp = req.ts;
-					trainStat->expectedSensor = nextSensorNode->num; //((nextSensorNode->num / 16) + 'A') * 17 + ((nextSensorNode->num % 16) + 1); 
+					trainStat->lastTriggeredSensor 	= sensorIndex;
+					trainStat->lastTimeStemp		= req.ts;
+					trainStat->expectedSensor 		= nextSensorNode->num; //((nextSensorNode->num / 16) + 'A') * 17 + ((nextSensorNode->num % 16) + 1); 
 					trainStat->distToExpectedSensor = totalDist;
 					int t = (totalDist * 10000 / speed);// * trkSvrData.trackFraction[nextLandmark->num-1] ; // ticks
 					trainStat->expectedSensorTime = t;
@@ -495,8 +499,9 @@ trackServer(){
 			{
 				int curVelocity;
 				int displacement;
-				//int i = req.target-45;	//for specific train
-				int i = trkSvrData.currentTrain; 	//for demo 1
+				int trainIdx = req.target-45;	//for specific train
+				
+				//int i = trkSvrData.currentTrain; 	//for demo 1
 				int sensorTimeStemp = trkSvrData.trainsStatus[i].lastTimeStemp;
 				locationInfo locInfo;
 
