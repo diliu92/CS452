@@ -351,13 +351,13 @@ trackServer(){
 
 					int sensorIndex = req.value;
 
-					int i = determineTrainByTriggeredSensor(sensorIndex, trkSvrData.trainsStatus);	//expected sensor handling(normal case)
+					int trainIdx = determineTrainByTriggeredSensor(sensorIndex, trkSvrData.trainsStatus);	//expected sensor handling(normal case)
 									
-					if (i == -1){
-						for (i = 0; i <MAX_TRAINS; i++)
+					if (trainIdx == -1){
+						for (trainIdx = 0; trainIdx <MAX_TRAINS; trainIdx++)
 						{
-							if (trkSvrData.trainsStatus[i].isUsed){
-								int expectedSensor = trkSvrData.trainsStatus[i].expectedSensor;
+							if (trkSvrData.trainsStatus[trainIdx].isUsed){
+								int expectedSensor = trkSvrData.trainsStatus[trainIdx].expectedSensor;
 								
 								track_node*	expectedSensorNode 	= &(trkSvrData.trackA[expectedSensor]);
 								
@@ -368,8 +368,9 @@ trackServer(){
 								int nextSensor = nextSensorNode->num;
 								//int backSensor = ((backSensorNode->num / 16) + 'A') * 17 + ((backSensorNode->num % 16) + 1);	
 								
-								if (req.value == nextSensor)
+								if (req.value == nextSensor){
 									break;
+								}
 									
 								//track_node* backSensorNode = expectedSensorNode.reverse;				//backward direction
 								
@@ -381,8 +382,9 @@ trackServer(){
 						}	
 					}
 									
-					trainStatus *trainStat = &(trkSvrData.trainsStatus[i]);
+					trainStatus *trainStat = &(trkSvrData.trainsStatus[trainIdx]);
 					
+					/*
 					int expt = trainStat->expectedSensorTime + trainStat->lastTimeStemp;
 					ds = expt / 10 % 10;
 					s = expt / 100 % 60;
@@ -394,7 +396,7 @@ trackServer(){
 					int diff = expt - req.ts;
 					sprintf(COM2, "%s\033[18;22H%s%s%d ticks%s%s", 
 						save, yellow, clearLine, diff, resetColor, restore);
-
+					*/
 					
 					track_node*	curSensorNode 	= trkSvrData.trackA[sensorIndex].edge[DIR_AHEAD].dest;
 					int 		totalDist 		= trkSvrData.trackA[sensorIndex].edge[DIR_AHEAD].dist;
