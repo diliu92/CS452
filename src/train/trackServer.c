@@ -362,9 +362,9 @@ trackServer(){
 								/*
 								 * nextNode of expectedSensor
 								 */ 								
-								track_node*	expectedSensorAheadNode = trkSvrData.trackA[expectedSensor].edge[DIR_AHEAD].dest;
+								track_node*	aheadExpectedSensorNode = trkSvrData.trackA[expectedSensor].edge[DIR_AHEAD].dest;
 								int 		tempF;													
-								track_node* nextSensorNode = getNextSensorNode(expectedSensorAheadNode, &tempF, trkSvrData.switchesStatus);
+								track_node* nextSensorNode = getNextSensorNode(aheadExpectedSensorNode, &tempF, trkSvrData.switchesStatus);
 								
 								int nextSensor = nextSensorNode->num;
 
@@ -374,13 +374,14 @@ trackServer(){
 								}
 
 								/*
-								 * reverseNode of expectedSensor
+								 * reverseNode of lastTriggeredSensor
 								 */ 
-								track_node*	reverseSensorNode = trkSvrData.trackA[expectedSensor].reverse;
+								int lastTriggeredSensor = trkSvrData.trainsStatus[trainIdx].lastTriggeredSensor;
+								track_node*	reverseLastTriggeredSensorNode = trkSvrData.trackA[lastTriggeredSensor].reverse;
 										
-								int reverseSensor = reverseSensorNode->num;
+								int reverseLastTriggeredSensor = reverseLastTriggeredSensorNode->num;
 								
-								if (req.value == reverseSensor){
+								if (req.value == reverseLastTriggeredSensor){
 									//sprintf(COM2, "%s\033[46;0H%s :%d: %s", save, clearLine, trainIdx, restore);
 									break;
 								}	
