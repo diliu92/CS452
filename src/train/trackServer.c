@@ -180,7 +180,7 @@ getNextSensorNode(track_node* curSensorNode, int* totalDist, int* switchesStatus
 	while(nextLandmark->type != NODE_SENSOR && nextLandmark->type != NODE_EXIT){
 		int direction = DIR_AHEAD;
 		if(nextLandmark->type == NODE_BRANCH){
-			int status = nextLandmark->num <= 18 ? 
+			int status = (nextLandmark->num <= 18) ? 
 								switchesStatus[nextLandmark->num-1] : 
 								switchesStatus[nextLandmark->num-135];
 			
@@ -358,7 +358,8 @@ trackServer(){
 						save, yellow, clearLine, (char)sensorGroup, sensorId, clearLine, h, m, s, ds, resetColor, restore);
 
 					int i = determineTrainByTriggeredSensor(req.value, trkSvrData.trainsStatus);	//normal case handling
-
+					
+					/*
 					if (i == -1){
 						for (i = 0; i <MAX_TRAINS; i++)
 						{
@@ -387,7 +388,7 @@ trackServer(){
 							}						
 						}	
 					}
-					
+					*/
 					//int i = trkSvrData.currentTrain;
 					
 					
