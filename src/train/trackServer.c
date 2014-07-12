@@ -499,9 +499,9 @@ trackServer(){
 			{
 				int curVelocity;
 				int displacement;
-				int trainIdx = req.target-45;	//for specific train
+				//int trainIdx = req.target-45;	//for specific train
 				
-				//int i = trkSvrData.currentTrain; 	//for demo 1
+				int i = trkSvrData.currentTrain; 	//for demo 1
 				int sensorTimeStemp = trkSvrData.trainsStatus[i].lastTimeStemp;
 				locationInfo locInfo;
 
