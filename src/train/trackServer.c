@@ -200,12 +200,7 @@ getNextSensorNode(track_node* curSensorNode, int* totalDist, int* switchesStatus
 	return nextLandmark;
 }
 static int
-determineTrainByTriggeredSensor(int TriggeredSensor, trainStatus* trainsStatus){
-	int sensorGroup = TriggeredSensor / 17;
-	int sensorId = TriggeredSensor % 17;
-	
-	int sensorIndex = (sensorId + (sensorGroup - 'A') * 16) - 1;
-	
+determineTrainByTriggeredSensor(int TriggeredSensor, trainStatus* trainsStatus){	
 	int i;
 	for (i = 0; i <MAX_TRAINS; i++)
 	{
@@ -302,22 +297,22 @@ trackServer(){
 					thisTrainStat->lastTriggeredSensor = req.value;
 					thisTrainStat->lastTimeStemp = 	req.ts;						
 
-					if(	req.value == ('B' * 17 + 10) 
-						|| req.value == ('B' * 17 + 12) 
-						|| req.value == ('B' * 17 + 8) 
+					if(	req.value == 	(16 + 10 - 1) 	//B10
+						|| req.value == (16 + 12 - 1) 	//B12
+						|| req.value == (16 +  8 - 1) 	//B8
 					){											
 						switch (req.value)
 						{
-							case 'B' * 17 + 10 :
-								thisTrainStat->expectedSensor = 'A' * 17 + 5;  
+							case (16 + 10 - 1) :
+								thisTrainStat->expectedSensor = 5 - 1;  	//A5
 								
 								break;
-							case 'B' * 17 + 12 :
-								thisTrainStat->expectedSensor = 'A' * 17 + 8; 							
+							case (16 + 12 - 1) :
+								thisTrainStat->expectedSensor = 8 - 1; 		//A8					
 								
 								break;
-							case 'B' * 17 + 8 :
-								thisTrainStat->expectedSensor = 'A' * 17 + 10; 
+							case (16 +  8 - 1) :
+								thisTrainStat->expectedSensor = 10 - 1;  	//A10
 																
 								break;	
 						}
@@ -335,21 +330,19 @@ trackServer(){
 						
 						trkSvrData.initTrainNum = -1;
 					}
-					else if( req.value == ('A' * 17 + 5) 
-								|| req.value == ('A' * 17 + 8) 
-								|| req.value == ('A' * 17 + 10) 
+					else if( req.value == 		( 5 - 1) 			//A5
+								|| req.value == ( 8 - 1) 			//A8
+								|| req.value == (10 - 1) 		//A10
 					){						
-						thisTrainStat->expectedSensor = 'C' * 17 + 7; 
+						thisTrainStat->expectedSensor = 32 + 7 - 1; 	//C7
 						
 						trkSvrData.initTrainNum = -1;
 					}				
 				}
-				else {
-					int sensorGroup = req.value / 17;
-					int sensorId = req.value % 17;
+				else {					
+					int sensorGroup = req.value / 16 + 'A';
+					int sensorId = req.value % 16 + 1;
 					
-					int sensorIndex = (sensorId + (sensorGroup - 'A') * 16);
-
 					int ds = req.ts / 10 % 10;
 					int s = req.ts / 100 % 60;
 					int m = req.ts / 6000 % 60;
@@ -357,7 +350,9 @@ trackServer(){
 					sprintf(COM2, "%s\033[15;22H%s%s%c%d\033[16;22H%s%d:%d:%d:%d%s%s", 
 						save, yellow, clearLine, (char)sensorGroup, sensorId, clearLine, h, m, s, ds, resetColor, restore);
 
-					int i = determineTrainByTriggeredSensor(req.value, trkSvrData.trainsStatus);	//normal case handling
+					int sensorIndex = req.value;
+
+					int i = determineTrainByTriggeredSensor(sensorIndex, trkSvrData.trainsStatus);	//normal case handling
 					
 					/*
 					if (i == -1){
@@ -394,7 +389,7 @@ trackServer(){
 					
 					
 					trainStatus *trainStat = &(trkSvrData.trainsStatus[i]);
-
+					/*
 					if (trainStat->expectedSensor > 'A'*17){
 						int expt = trainStat->expectedSensorTime + trainStat->lastTimeStemp;
 						ds = expt / 10 % 10;
@@ -412,7 +407,7 @@ trackServer(){
 						// 	save, 20 + (trainStat->expectedSensor)/2, clearLine,
 						// 	trainStat->expectedSensor-1, 10000 - ((diff * 10000) / trainStat->expectedSensorTime), restore);
 					}
-					
+					*/
 					track_node*	curSensorNode 	= trkSvrData.trackA[sensorIndex].edge[DIR_AHEAD].dest;
 					int 		totalDist 		= trkSvrData.trackA[sensorIndex].edge[DIR_AHEAD].dist;
 
@@ -420,9 +415,9 @@ trackServer(){
 
 					int speed = trkSvrData.trainsActualSpeeds[i%2][trainStat->currentTrainSpeed-1];
 
-					trainStat->lastTriggeredSensor = req.value;
+					trainStat->lastTriggeredSensor = sensorIndex;
 					trainStat->lastTimeStemp = req.ts;
-					trainStat->expectedSensor = ((nextSensorNode->num / 16) + 'A') * 17 + ((nextSensorNode->num % 16) + 1); 
+					trainStat->expectedSensor = nextSensorNode->num; //((nextSensorNode->num / 16) + 'A') * 17 + ((nextSensorNode->num % 16) + 1); 
 					trainStat->distToExpectedSensor = totalDist;
 					int t = (totalDist * 10000 / speed);// * trkSvrData.trackFraction[nextLandmark->num-1] ; // ticks
 					trainStat->expectedSensorTime = t;
@@ -647,7 +642,7 @@ updateLastTriggeredSensor(int sensorUID, int ts){
 	req.trkSvrReq_uid = TRACKSERVER_UPDATE_LAST_SENSOR;
 		
 	req.target 	= NULL;
-	req.value	= sensorUID;//(sensorUID % 17 + (sensorUID / 17 - 'A') * 16) - 1;;
+	req.value	= (sensorUID % 17 + (sensorUID / 17 - 'A') * 16) - 1;
 	req.ts = ts;
 	
 	Send(TRACKSERVER_TID, &req, sizeof(trackServerRequest), NULL, 0);
