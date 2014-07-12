@@ -7,7 +7,7 @@
 #define MAX_TASK 		64
 #define MAX_PRIORITY 	16
 
-#define STACK_LOCATION 	0x00400000	
+#define STACK_LOCATION 	0x00600000	
 #define STACK_SIZE		128*1024	//128KB is the best!
 
 #define MAX_PRIORITY 	16
