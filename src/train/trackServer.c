@@ -356,7 +356,7 @@ trackServer(){
 					sprintf(COM2, "%s\033[15;22H%s%s%c%d\033[16;22H%s%d:%d:%d:%d%s%s", 
 						save, yellow, clearLine, (char)sensorGroup, sensorId, clearLine, h, m, s, ds, resetColor, restore);
 
-					int i = determineTrainByTriggeredSensor(req.value, trkSvrData.trainsStatus);
+					int i = determineTrainByTriggeredSensor(req.value, trkSvrData.trainsStatus);	//normal case handling
 
 					if (i == -1){
 						for (i = 0; i <MAX_TRAINS; i++)
@@ -366,13 +366,15 @@ trackServer(){
 								int expectedSensorIndex = (expectedSensor%17 + (expectedSensor/17 - 'A') * 16) - 1;
 								
 								track_node*	expectedSensorNode 	= trkSvrData.trackA[expectedSensorIndex].edge[DIR_AHEAD].dest;
+								
 								int 		temp;
-
-								track_node* nextSensorNode = getNextSensorNode(expectedSensorNode, &temp, trkSvrData.switchesStatus);
+								track_node* nextSensorNode = getNextSensorNode(expectedSensorNode, &temp, trkSvrData.switchesStatus);	//forward direction
+								track_node* backSensorNode = expectedSensorNode.reverse;	//backward direction
 								
 								int nextSensor = ((nextSensorNode->num / 16) + 'A') * 17 + ((nextSensorNode->num % 16) + 1);
+								int backSensor = ((backSensorNode->num / 16) + 'A') * 17 + ((backSensorNode->num % 16) + 1);	
 								
-								if (req.value == nextSensor)
+								if (req.value == nextSensor || req.value == backSensor)
 									break;		
 							}						
 						}	
