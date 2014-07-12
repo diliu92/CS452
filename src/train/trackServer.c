@@ -180,10 +180,9 @@ getNextSensorNode(track_node* curSensorNode, int* totalDist, int* switchesStatus
 	while(nextLandmark->type != NODE_SENSOR && nextLandmark->type != NODE_EXIT){
 		int direction = DIR_AHEAD;
 		if(nextLandmark->type == NODE_BRANCH){
-			int status = (nextLandmark->num <= 18) ? 
-								switchesStatus[nextLandmark->num-1] : 
-								switchesStatus[nextLandmark->num-135];
-			
+			int status = (nextLandmark->num <= 18) ? switchesStatus[(nextLandmark->num)-1] : 
+														switchesStatus[(nextLandmark->num)-135] ;
+								
 			sprintf(COM2, "%s\033[45;0H%s%d:%d:%d%s", save, clearLine, curSensorNode->num, nextLandmark->num, status, restore);
 			switch(status){
 				case STRAIGHT:
