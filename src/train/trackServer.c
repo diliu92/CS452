@@ -403,7 +403,7 @@ trackServer(){
 
 					track_node* nextSensorNode = getNextSensorNode(curSensorNode, &totalDist, trkSvrData.switchesStatus);					
 
-					int speed = trkSvrData.trainsActualSpeeds[i%2][trainStat->currentTrainSpeed-1];
+					int speed = trkSvrData.trainsActualSpeeds[trainIdx%2][trainStat->currentTrainSpeed-1];
 
 					trainStat->lastTriggeredSensor = sensorIndex;
 					trainStat->lastTimeStemp = req.ts;
