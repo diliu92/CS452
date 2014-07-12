@@ -236,6 +236,7 @@ trackServer(){
 			case TRACKSERVER_INIT_TRAIN:
 			{
 				trkSvrData.initTrainNum = req.target;
+				trkSvrData.currentTrain = req.target - 45;
 				trkSvrData.trainsStatus[req.target - 45].isUsed = 1;
 				
 				Reply(requester, NULL, 0);	
