@@ -2,6 +2,7 @@
 
 
 typedef struct trainStatus{
+	int		isUsed;
 	int 	trainNum;
 	
 	int 	previousTrainSpeed;
@@ -120,6 +121,7 @@ initTrackServerData(trackServerData* trkSvrData){
 	
 	for (i = 0; i < MAX_TRAINS; i++)
 	{
+		(trkSvrData->trainsStatus[i]).isUsed = 0; 
 		(trkSvrData->trainsStatus[i]).trainNum = i + 45; 		
 		
 		(trkSvrData->trainsStatus[i]).previousTrainSpeed = 0;
@@ -224,7 +226,6 @@ trackServer(){
 	putc(COM1, 96);	
 	initTrackServerData(&trkSvrData);
 	
-	//sprintf(COM2, "\033[6;70H%d", (int)trkSvrData.trainsActualSpeeds[0][7]);
 	
 	while (1)
 	{
@@ -235,7 +236,7 @@ trackServer(){
 			case TRACKSERVER_INIT_TRAIN:
 			{
 				trkSvrData.initTrainNum = req.target;
-				trkSvrData.currentTrain = req.target - 45;
+				trkSvrData.trainsStatus[req.target - 45].isUsed = 1;
 				
 				Reply(requester, NULL, 0);	
 				break;
@@ -356,6 +357,26 @@ trackServer(){
 
 					int i = determineTrainByTriggeredSensor(req.value, trkSvrData.trainsStatus);
 
+					if (i == -1){
+						for (i = 0; i <MAX_TRAINS; i++)
+						{
+							if (trkSvrData.trainsStatus[i].isUsed){
+								int expectedSensor = trkSvrData.trainsStatus[i].expectedSensor;
+								int expectedSensorIndex = (expectedSensor%17 + (expectedSensor/17 - 'A') * 16) - 1;
+								
+								track_node*	expectedSensorNode 	= trkSvrData.trackA[expectedSensorIndex].edge[DIR_AHEAD].dest;
+								int 		temp;
+
+								track_node* nextSensorNode = getNextSensorNode(expectedSensorNode, &temp, trkSvrData.switchesStatus);
+								
+								int nextSensor = ((nextSensorNode->num / 16) + 'A') * 17 + ((nextSensorNode->num % 16) + 1);
+								
+								if (req.value == nextSensor)
+									break;		
+							}						
+						}	
+					}
+					
 					//int i = trkSvrData.currentTrain;
 					
 					
