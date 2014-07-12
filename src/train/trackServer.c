@@ -352,23 +352,21 @@ trackServer(){
 
 					int sensorIndex = req.value;
 
-					int i = determineTrainByTriggeredSensor(sensorIndex, trkSvrData.trainsStatus);	//normal case handling
-					
-					/*
+					int i = determineTrainByTriggeredSensor(sensorIndex, trkSvrData.trainsStatus);	//expected sensor handling(normal case)
+									
 					if (i == -1){
 						for (i = 0; i <MAX_TRAINS; i++)
 						{
 							if (trkSvrData.trainsStatus[i].isUsed){
 								int expectedSensor = trkSvrData.trainsStatus[i].expectedSensor;
-								int expectedSensorIndex = (expectedSensor % 17 + (expectedSensor / 17 - 'A') * 16) - 1;
 								
-								track_node*	expectedSensorNode 	= &(trkSvrData.trackA[expectedSensorIndex]);
+								track_node*	expectedSensorNode 	= &(trkSvrData.trackA[expectedSensor]);
 								
 								int 		temp;
 								track_node* nextSensorNode = getNextSensorNode(expectedSensorNode, &temp, trkSvrData.switchesStatus);	//forward direction
 								//track_node* backSensorNode = expectedSensorNode.reverse;	//backward direction
 								
-								int nextSensor = ((nextSensorNode->num / 16) + 'A') * 17 + ((nextSensorNode->num % 16) + 1);
+								int nextSensor = nextSensorNode->num;
 								//int backSensor = ((backSensorNode->num / 16) + 'A') * 17 + ((backSensorNode->num % 16) + 1);	
 								
 								if (req.value == nextSensor)
@@ -383,8 +381,6 @@ trackServer(){
 							}						
 						}	
 					}
-					*/
-					//int i = trkSvrData.currentTrain;
 					
 					
 					
