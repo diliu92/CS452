@@ -358,8 +358,11 @@ trackServer(){
 						{
 							if (trkSvrData.trainsStatus[trainIdx].isUsed == 1){
 								int expectedSensor = trkSvrData.trainsStatus[trainIdx].expectedSensor;
-																
-								track_node*	expectedSensorAheadNode = trkSvrData.trackA[expectedSensor].edge[DIR_AHEAD].dest;	//forward direction
+									
+								/*
+								 * nextNode of expectedSensor
+								 */ 								
+								track_node*	expectedSensorAheadNode = trkSvrData.trackA[expectedSensor].edge[DIR_AHEAD].dest;
 								int 		tempF;													
 								track_node* nextSensorNode = getNextSensorNode(expectedSensorAheadNode, &tempF, trkSvrData.switchesStatus);
 								
@@ -370,7 +373,10 @@ trackServer(){
 									break;
 								}
 
-								track_node*	reverseSensorNode = trkSvrData.trackA[expectedSensor].reverse;						//reverse direction
+								/*
+								 * reverseNode of expectedSensor
+								 */ 
+								track_node*	reverseSensorNode = trkSvrData.trackA[expectedSensor].reverse;
 										
 								int reverseSensor = reverseSensorNode->num;
 								
