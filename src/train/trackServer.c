@@ -184,7 +184,7 @@ getNextSensorNode(track_node* curSensorNode, int* totalDist, int* switchesStatus
 								switchesStatus[nextLandmark->num-1] : 
 								switchesStatus[nextLandmark->num-135];
 			
-			sprintf(COM2, "%s\033[45;0H%s%d:%d:%d%s", save, clearLine, curSensorNode->num, nextLandmark->num, status, restore);
+			//sprintf(COM2, "%s\033[45;0H%s%d:%d:%d%s", save, clearLine, curSensorNode->num, nextLandmark->num, status, restore);
 			switch(status){
 				case STRAIGHT:
 					direction = DIR_STRAIGHT;
@@ -381,29 +381,22 @@ trackServer(){
 							}						
 						}	
 					}
-					
-					
-					
+									
 					trainStatus *trainStat = &(trkSvrData.trainsStatus[i]);
-					/*
-					if (trainStat->expectedSensor > 'A'*17){
-						int expt = trainStat->expectedSensorTime + trainStat->lastTimeStemp;
-						ds = expt / 10 % 10;
-						s = expt / 100 % 60;
-						m = expt / 6000 % 60;
-						h = expt / 360000;
-						sprintf(COM2, "%s\033[17;22H%s%s%d:%d:%d:%d%s%s", 
-							save, yellow, clearLine, h, m, s, ds, resetColor, restore);
+					
+					int expt = trainStat->expectedSensorTime + trainStat->lastTimeStemp;
+					ds = expt / 10 % 10;
+					s = expt / 100 % 60;
+					m = expt / 6000 % 60;
+					h = expt / 360000;
+					sprintf(COM2, "%s\033[17;22H%s%s%d:%d:%d:%d%s%s", 
+						save, yellow, clearLine, h, m, s, ds, resetColor, restore);
 
-						int diff = expt - req.ts;
-						sprintf(COM2, "%s\033[18;22H%s%s%d ticks%s%s", 
-							save, yellow, clearLine, diff, resetColor, restore);
+					int diff = expt - req.ts;
+					sprintf(COM2, "%s\033[18;22H%s%s%d ticks%s%s", 
+						save, yellow, clearLine, diff, resetColor, restore);
 
-						// sprintf(COM2, "%s\033[%u;100H%s%d:%d%s", 
-						// 	save, 20 + (trainStat->expectedSensor)/2, clearLine,
-						// 	trainStat->expectedSensor-1, 10000 - ((diff * 10000) / trainStat->expectedSensorTime), restore);
-					}
-					*/
+					
 					track_node*	curSensorNode 	= trkSvrData.trackA[sensorIndex].edge[DIR_AHEAD].dest;
 					int 		totalDist 		= trkSvrData.trackA[sensorIndex].edge[DIR_AHEAD].dist;
 
