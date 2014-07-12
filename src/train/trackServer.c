@@ -183,7 +183,7 @@ getNextSensorNode(track_node* curSensorNode, int* totalDist, int* switchesStatus
 			int status = (nextLandmark->num <= 18) ? switchesStatus[(nextLandmark->num)-1] : 
 														switchesStatus[(nextLandmark->num)-135] ;
 								
-			sprintf(COM2, "%s\033[45;0H%s%d:%d:%d%s", save, clearLine, curSensorNode->num, nextLandmark->num, status, restore);
+			//sprintf(COM2, "%s\033[45;0H%s%d:%d:%d%s", save, clearLine, curSensorNode->num, nextLandmark->num, status, restore);
 			switch(status){
 				case STRAIGHT:
 					direction = DIR_STRAIGHT;
@@ -370,6 +370,7 @@ trackServer(){
 								//int backSensor = ((backSensorNode->num / 16) + 'A') * 17 + ((backSensorNode->num % 16) + 1);	
 								
 								if (req.value == nextSensor){
+									sprintf(COM2, "%s\033[45;0H%s :%d: %s", save, clearLine, trainIdx, restore);
 									break;
 								}
 									
