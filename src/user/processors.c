@@ -650,7 +650,7 @@ void showTrainLocation(){
 		// 	displacement = locInfo50.displacement;
 		// 	sprintf(COM2, "%s\033[12;18H%s %c%d + %dmm%s", save, clearLine, (char)group, id, displacement, restore);
 		// }
-		Delay(8);
+		Delay(18);
 	}
 
 	Exit();
