@@ -348,7 +348,7 @@ trackServer(){
 					int sensorGroup = req.value / 17;
 					int sensorId = req.value % 17;
 					
-					int sensorIndex = (sensorId + (sensorGroup - 'A') * 16) - 1;
+					int sensorIndex = (sensorId + (sensorGroup - 'A') * 16);
 
 					int ds = req.ts / 10 % 10;
 					int s = req.ts / 100 % 60;
@@ -647,7 +647,7 @@ updateLastTriggeredSensor(int sensorUID, int ts){
 	req.trkSvrReq_uid = TRACKSERVER_UPDATE_LAST_SENSOR;
 		
 	req.target 	= NULL;
-	req.value	= sensorUID;
+	req.value	= sensorUID;//(sensorUID % 17 + (sensorUID / 17 - 'A') * 16) - 1;;
 	req.ts = ts;
 	
 	Send(TRACKSERVER_TID, &req, sizeof(trackServerRequest), NULL, 0);
