@@ -357,8 +357,10 @@ trackServer(){
 					if (trainIdx == -1){
 						for (trainIdx = 0; trainIdx <MAX_TRAINS; trainIdx++)
 						{
-							if (trkSvrData.trainsStatus[trainIdx].isUsed){
+							if (trkSvrData.trainsStatus[trainIdx].isUsed == 1){
 								int expectedSensor = trkSvrData.trainsStatus[trainIdx].expectedSensor;
+								
+								sprintf(COM2, "%s\033[44;0H%s expectedSensor:%d %s", save, clearLine, expectedSensor, restore);
 								
 								track_node*	expectedSensorNode 	= &(trkSvrData.trackA[expectedSensor]);
 								
@@ -369,8 +371,10 @@ trackServer(){
 								int nextSensor = nextSensorNode->num;
 								//int backSensor = ((backSensorNode->num / 16) + 'A') * 17 + ((backSensorNode->num % 16) + 1);	
 								
+								sprintf(COM2, "%s\033[45;0H%s nextSensor:%d %s", save, clearLine, nextSensor, restore);
+								
 								if (req.value == nextSensor){
-									sprintf(COM2, "%s\033[45;0H%s :%d: %s", save, clearLine, trainIdx, restore);
+									sprintf(COM2, "%s\033[46;0H%s :%d: %s", save, clearLine, trainIdx, restore);
 									break;
 								}
 									
