@@ -363,7 +363,7 @@ trackServer(){
 						{
 							if (trkSvrData.trainsStatus[i].isUsed){
 								int expectedSensor = trkSvrData.trainsStatus[i].expectedSensor;
-								int expectedSensorIndex = (expectedSensor%17 + (expectedSensor/17 - 'A') * 16) - 1;
+								int expectedSensorIndex = (expectedSensor % 17 + (expectedSensor / 17 - 'A') * 16) - 1;
 								
 								track_node*	expectedSensorNode 	= &(trkSvrData.trackA[expectedSensorIndex]);
 								
