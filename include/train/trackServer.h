@@ -44,6 +44,8 @@ typedef struct trackServerRequest{
 	int 	value;
 	int 	value2;
 	int 	ts;
+	
+	trainPath*	path;
 }trackServerRequest;
 
 typedef struct locationInfo{	
@@ -53,6 +55,9 @@ typedef struct locationInfo{
 
 void 
 trackServer();
+
+void 
+initTrain(int trainNo);
 
 int
 getTrainSpeed(int trainNo); 
@@ -72,13 +77,12 @@ changeSwitchStatus(int switchNo, int switchStatus);
 void
 updateLastTriggeredSensor(int sensorUID, int ts);
 
-void 
-initTrain(int trainNo);
+void
+executePath(int trainNo, trainPath* path);
 
 locationInfo
 getTrainLocation(int trainNo);
 
-int 
-goToPosition(int trainNo, locationInfo destInfo);
+
 
 #endif

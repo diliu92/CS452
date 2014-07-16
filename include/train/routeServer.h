@@ -19,9 +19,9 @@ typedef struct routeServerRequest{
 	int 	dest;
 }routeServerRequest;
 
-typedef struct routeServerResponse_Path{
+typedef struct trainPath{
 	int		path[TRACK_MAX_NUM];
-}routeServerResponse_Path;
+}trainPath;
 
 void
 routeServer();

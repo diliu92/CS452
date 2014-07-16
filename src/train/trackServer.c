@@ -247,13 +247,17 @@ trackServer(){
 						
 						thisTrainStat->expectedSensor 		= 5 - 1;  		//A5
 						
+						(thisTrainStat->destInfo).sensor		= 16 + 9 - 1;
+						(thisTrainStat->destInfo).displacement	= 260;
 						break;
 					case (TRACK_A_ENTRY_TWO) :
 						thisTrainStat->lastTriggeredSensor	= 16 + 11 - 1;	//B11
 						thisTrainStat->lastTimeStemp 		= req.ts;	
 						
-						thisTrainStat->expectedSensor 		= 8 - 1; 		//A8					
-						
+						thisTrainStat->expectedSensor 		= 8 - 1; 		//A8	
+										
+						(thisTrainStat->destInfo).sensor		= 16 + 11 - 1;
+						(thisTrainStat->destInfo).displacement	= 260;						
 						break;	
 				}
 				
@@ -317,7 +321,7 @@ trackServer(){
 			{
 				if (trkSvrData.initTrainNum != -1){
 					/*
-					 * Init: handle trains' direction
+					 * Init: handle trains' direction(reverse case)
 					 */ 
 					trainStatus* thisTrainStat = &(trkSvrData.trainsStatus[trkSvrData.initTrainNum - 45]);		
 					
@@ -347,6 +351,7 @@ trackServer(){
 								break;
 						
 						} */
+						(thisTrainStat->destInfo).displacement	= 200;	
 									
 						putc(COM1, 0);
 						putc(COM1, trkSvrData.initTrainNum);
@@ -359,7 +364,7 @@ trackServer(){
 						
 						trkSvrData.initTrainNum = -1;
 					}
-					else if( req.value == 		( 5 - 1) 			//A5
+				/*	else if( req.value == 		( 5 - 1) 			//A5
 								|| req.value == ( 8 - 1) 			//A8
 						//		|| req.value == (10 - 1) 		//A10
 					){
@@ -369,7 +374,7 @@ trackServer(){
 						thisTrainStat->expectedSensor = 32 + 7 - 1; 	//C7
 						
 						trkSvrData.initTrainNum = -1;
-					}				
+					}	*/			
 				}
 				else {					
 					int sensorGroup = req.value / 16 + 'A';
@@ -583,15 +588,21 @@ trackServer(){
 			}
 			case TRACKSERVER_EXECUTE_PATH:
 			{
-				/*
-				trainStatus *targetTrainStatus = &(trkSvrData.trainsStatus[req.target-45]);
-				targetTrainStatus->destInfo.sensor = req.value;
-				targetTrainStatus->destInfo.displacement = req.value2;
-				targetTrainStatus->needToCheckStopTime = 1;
-
-				req.retval = 0;
-				Reply(requester, &(req.retval), sizeof(int));
-				*/
+				
+				trainStatus* 	thisTrainStatus	= &(trkSvrData.trainsStatus[req.target-45]);
+				trainPath*		thisTrainPath 	= req.path;
+				
+				int i;
+				int a = 0;	
+				for (i = thisTrainPath->path[0]; i < TRACK_MAX; i++)
+				{
+						sprintf(COM2, "%s\033[45;%uH%d%s", 
+							save, a, thisTrainPath->path[i], restore);
+						a = a + 6;					
+				}				
+				
+				Reply(requester, NULL, 0);
+				
 				break;
 			}	
 		}
@@ -717,16 +728,15 @@ getTrainLocation(int trainNo){
 	return response;
 }
 
-int 
-goToPosition(int trainNo, locationInfo destInfo){
+void
+executePath(int trainNo, trainPath* path){
 	trackServerRequest req;
-	
+		
 	req.trkSvrReq_uid = TRACKSERVER_EXECUTE_PATH;
+		
 	req.target 	= trainNo;
-	req.value = destInfo.sensor;
-	req.value2 = destInfo.displacement;
-
-	Send(TRACKSERVER_TID, &req, sizeof(trackServerRequest), &(req.retval), sizeof(int));
-
-	return req.retval;	
+	req.path	= path;
+	
+	Send(TRACKSERVER_TID, &req, sizeof(trackServerRequest), NULL, 0);	
 }
+

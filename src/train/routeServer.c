@@ -189,7 +189,7 @@ routeServer(){
 					}					
 				}
 				
-				routeServerResponse_Path response;
+				trainPath response;
 											
 				if (mineNodeIdx != -1){
 					int curIdx = mineNodeIdx;
@@ -217,7 +217,7 @@ routeServer(){
 						a = a + 6;					
 				}
 				
-				Reply(requester, &response, sizeof(routeServerResponse_Path));			
+				Reply(requester, &response, sizeof(trainPath));			
 				break;		
 			}			
 		}
@@ -229,22 +229,31 @@ GoTo(int trainNo, int dest){
 	/*
 	 * After this function is finished, tr rv sw will disabled
 	 * 
-	 * get the current src node from track for this train
-	 * ask the routeServer for a shortest path from src to dest
-	 * tell the path to the trackServer
-	 * trackServer parse this command and formated this path
-	 * trackServer pass this formated path to the trainCommandWorker
+	 * 1. get the current src node from track for this train
+	 * 2. ask the routeServer for a shortest path from src to dest
+	 * 3. tell the path to the trackServer
+	 * 4. trackServer parse this command and formated this path
+	 * 5. trackServer pass this formated path to the trainCommandWorker
 	 */ 
-	 /*
-	routeServerRequest req;
-	routeServerResponse_Path response;
+	 
+	locationInfo trainLoc = getTrainLocation(trainNo);	 //Step 1
+	
+	/*
+	 * Step 2
+	 */  	 	 
+	routeServerRequest req;			
+	trainPath response;
 	
 	req.rtSvrReq_uid = ROUTESERVER_ROUTE_GET_SHORTEST;
 	
-	req.src  = src;
+	req.src  = trainLoc.sensor;
 	req.dest = dest;
+
+	Send(ROUTESERVER_TID, &req, sizeof(routeServerRequest), &response, sizeof(trainPath));
 	
-	Send(ROUTESERVER_TID, &req, sizeof(routeServerRequest), &response, sizeof(routeServerResponse_Path));
-	*/
+	/*
+	 * Step 3
+	 */  
+	executePath(trainNo, &response);
 	
 }
