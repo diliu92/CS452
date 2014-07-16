@@ -663,7 +663,7 @@ initTrain(int trainNo){
 
 	Send(TRACKSERVER_TID, &req, sizeof(trackServerRequest), NULL, 0);
 	
-	Delay(50);
+	Delay(100);
 	
 	changeTrainSpeed(trainNo, 0);
 }
