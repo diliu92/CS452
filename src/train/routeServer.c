@@ -225,7 +225,16 @@ routeServer(){
 }
 
 void
-GetPath(int src, int dest){
+GoTo(int trainNo, int dest){
+	/*
+	 * After this function is finished, tr rv sw will disabled
+	 * 
+	 * get the current src node from track for this train
+	 * ask the routeServer for a shortest path from src to dest
+	 * tell the path to the trackServer
+	 * trackServer parse this command and formated this path
+	 * trackServer pass this formated path to the trainCommandWorker
+	 */ 
 	routeServerRequest req;
 	routeServerResponse_Path response;
 	

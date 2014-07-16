@@ -28,5 +28,5 @@ routeServer();
 
 
 void
-GetPath(int src, int dest);
+GoTo(int dest);
 #endif

@@ -31,6 +31,9 @@
 #define MAX_TRAINS		10
 #define MAX_SWITCHES	22
 #define MAX_SENSORS 	80
+
+#define TRACK_A_ENTRY_ONE	1
+#define TRACK_A_ENTRY_TWO	2
 	
 	
 typedef struct trackServerRequest{		

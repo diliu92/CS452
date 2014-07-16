@@ -222,6 +222,7 @@ trackServer(){
 	putc(COM1, 96);	
 	initTrackServerData(&trkSvrData);
 	
+	int tempTrackIdx = TRACK_A_ENTRY_ONE; 
 	
 	while (1)
 	{
@@ -233,7 +234,30 @@ trackServer(){
 			{
 				trkSvrData.initTrainNum = req.target;
 				trkSvrData.currentTrain = req.target - 45;
-				trkSvrData.trainsStatus[req.target - 45].isUsed = 1;
+				
+				trainStatus* thisTrainStat = &(trkSvrData.trainsStatus[trkSvrData.target - 45]);		
+				
+				thisTrainStat->isUsed = 1;
+				
+				switch (tempTrackIdx)
+				{
+					case (TRACK_A_ENTRY_ONE) :
+						thisTrainStat->lastTriggeredSensor	= 16 + 9 - 1;	//B9
+						thisTrainStat->lastTimeStemp 		= req.ts;	
+						
+						thisTrainStat->expectedSensor 		= 5 - 1;  		//A5
+						
+						break;
+					case (TRACK_A_ENTRY_TWO) :
+						thisTrainStat->lastTriggeredSensor	= 16 + 11 - 1;	//B11
+						thisTrainStat->lastTimeStemp 		= req.ts;	
+						
+						thisTrainStat->expectedSensor 		= 8 - 1; 		//A8					
+						
+						break;	
+				}
+				
+				tempTrackIdx++;
 				
 				Reply(requester, NULL, 0);	
 				break;
@@ -292,30 +316,37 @@ trackServer(){
 			case TRACKSERVER_UPDATE_LAST_SENSOR:
 			{
 				if (trkSvrData.initTrainNum != -1){
-					trainStatus* thisTrainStat = &(trkSvrData.trainsStatus[trkSvrData.initTrainNum - 45]);
+					/*
+					 * Init: handle trains' direction
+					 */ 
+					trainStatus* thisTrainStat = &(trkSvrData.trainsStatus[trkSvrData.initTrainNum - 45]);		
 					
-					thisTrainStat->lastTriggeredSensor = req.value;
-					thisTrainStat->lastTimeStemp = 	req.ts;						
-
 					if(	req.value == 	(16 + 10 - 1) 	//B10
 						|| req.value == (16 + 12 - 1) 	//B12
-						|| req.value == (16 +  8 - 1) 	//B8
+					//	|| req.value == (16 +  8 - 1) 	//B8
 					){											
-						switch (req.value)
+						/*	switch (req.value)
 						{
 							case (16 + 10 - 1) :
-								thisTrainStat->expectedSensor = 5 - 1;  	//A5
+								thisTrainStat->lastTriggeredSensor	= 16 + 9 - 1;	//B9
+								thisTrainStat->lastTimeStemp 		= req.ts;	
+								
+								thisTrainStat->expectedSensor 		= 5 - 1;  		//A5
 								
 								break;
 							case (16 + 12 - 1) :
-								thisTrainStat->expectedSensor = 8 - 1; 		//A8					
+								thisTrainStat->lastTriggeredSensor	= 16 + 11 - 1;	//B11
+								thisTrainStat->lastTimeStemp 		= req.ts;	
+								
+								thisTrainStat->expectedSensor 		= 8 - 1; 		//A8					
 								
 								break;
 							case (16 +  8 - 1) :
 								thisTrainStat->expectedSensor = 10 - 1;  	//A10
 																
-								break;	
-						}
+								break;
+						
+						} */
 									
 						putc(COM1, 0);
 						putc(COM1, trkSvrData.initTrainNum);
@@ -330,8 +361,11 @@ trackServer(){
 					}
 					else if( req.value == 		( 5 - 1) 			//A5
 								|| req.value == ( 8 - 1) 			//A8
-								|| req.value == (10 - 1) 		//A10
-					){						
+						//		|| req.value == (10 - 1) 		//A10
+					){
+						thisTrainStat->lastTriggeredSensor = req.value;
+						thisTrainStat->lastTimeStemp = 	req.ts;							
+						
 						thisTrainStat->expectedSensor = 32 + 7 - 1; 	//C7
 						
 						trkSvrData.initTrainNum = -1;
@@ -549,7 +583,7 @@ trackServer(){
 			}
 			case TRACKSERVER_EXECUTE_PATH:
 			{
-
+				/*
 				trainStatus *targetTrainStatus = &(trkSvrData.trainsStatus[req.target-45]);
 				targetTrainStatus->destInfo.sensor = req.value;
 				targetTrainStatus->destInfo.displacement = req.value2;
@@ -557,6 +591,7 @@ trackServer(){
 
 				req.retval = 0;
 				Reply(requester, &(req.retval), sizeof(int));
+				*/
 				break;
 			}	
 		}
