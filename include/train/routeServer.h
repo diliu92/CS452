@@ -28,5 +28,5 @@ routeServer();
 
 
 void
-GoTo(int dest);
+GoTo(int trainNo, int dest);
 #endif
