@@ -547,7 +547,7 @@ trackServer(){
 				Reply(requester, &locInfo, sizeof(locationInfo));
 				break;
 			}
-			case TRACKSERVER_GO_TO_POSITION:
+			case TRACKSERVER_EXECUTE_PATH:
 			{
 
 				trainStatus *targetTrainStatus = &(trkSvrData.trainsStatus[req.target-45]);
@@ -686,7 +686,7 @@ int
 goToPosition(int trainNo, locationInfo destInfo){
 	trackServerRequest req;
 	
-	req.trkSvrReq_uid = TRACKSERVER_GO_TO_POSITION;
+	req.trkSvrReq_uid = TRACKSERVER_EXECUTE_PATH;
 	req.target 	= trainNo;
 	req.value = destInfo.sensor;
 	req.value2 = destInfo.displacement;
