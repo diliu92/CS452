@@ -235,7 +235,7 @@ trackServer(){
 				trkSvrData.initTrainNum = req.target;
 				trkSvrData.currentTrain = req.target - 45;
 				
-				trainStatus* thisTrainStat = &(trkSvrData.trainsStatus[trkSvrData.target - 45]);		
+				trainStatus* thisTrainStat = &(trkSvrData.trainsStatus[req.target - 45]);		
 				
 				thisTrainStat->isUsed = 1;
 				
