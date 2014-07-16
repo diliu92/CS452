@@ -235,6 +235,7 @@ GoTo(int trainNo, int dest){
 	 * trackServer parse this command and formated this path
 	 * trackServer pass this formated path to the trainCommandWorker
 	 */ 
+	 /*
 	routeServerRequest req;
 	routeServerResponse_Path response;
 	
@@ -244,6 +245,6 @@ GoTo(int trainNo, int dest){
 	req.dest = dest;
 	
 	Send(ROUTESERVER_TID, &req, sizeof(routeServerRequest), &response, sizeof(routeServerResponse_Path));
-	
+	*/
 	
 }
