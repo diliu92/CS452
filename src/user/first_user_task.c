@@ -57,7 +57,7 @@ void
 goto_test(){
 	Delay(100*30);
 	
-	GoTo(49, 57)
+	GoTo(49, 57);
 	
 	Exit();
 }
