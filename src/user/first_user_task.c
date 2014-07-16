@@ -53,6 +53,15 @@ idleTask(){
 // 	}
 // }
 
+void 
+goto_test(){
+	Delay(100*30);
+	
+	GoTo(49, 57)
+	
+	Exit();
+}
+
 void
 firstUserTask()	//priority 6
 {
@@ -75,9 +84,9 @@ firstUserTask()	//priority 6
 	Create(7, stopTrain2_Worker);
 	Create(7, sensorFeedProcessor);
 	Create(7, cmdProcessor);
-	Create(7, showTrainLocation);
+	//Create(7, showTrainLocation);
 	
-	//Create(4, com2_testone);
+	Create(7, goto_test);
 	//Create(4, com2_testtwo);
 
 	//GetPath(24, 57);
