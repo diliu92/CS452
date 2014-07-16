@@ -204,10 +204,10 @@ int processCmd(char *cmd, int *trainSpeed){
 				destInfo.displacement = value;
 				sprintf(COM2, "%s\033[7;40H%sExpect train to stop at: %c%d + %d%s", 
 					save, clearLine, (char)group, id, value, restore);
-				int i = goToPosition(target, destInfo);
-				if (i != 0){
-					return -2;
-				}
+				//int i = goToPosition(target, destInfo);
+				//if (i != 0){
+				//	return -2;
+				//}
 			}
 			else{
 				return -1;
