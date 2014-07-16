@@ -1,6 +1,8 @@
 #ifndef __TRACKSERVER_H__
 #define __TRACKSERVER_H__
 
+#include <train/routeServer.h>
+
 
 #define TRACKSERVER_TID					10
 
