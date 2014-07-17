@@ -554,6 +554,15 @@ int sensorFeedProcessor (){
 	int prevLoc = -1;
 	int t = 0;
 
+	/*
+	 * speedTest
+	 */ 
+	int startSensor = 'B' * 17 + 1;
+ 	int endSensor = 'E' * 17 + 14;
+ 	long startTime, endTime, temp;
+ 	int *high = (int *) 0x80810064;
+ 	int *low = (int *) 0x80810060;
+
 	while(1){
 		int feed = getc(COM1);
 		sensorFeed[sensorCount] = feed;
@@ -564,6 +573,24 @@ int sensorFeedProcessor (){
 			curSensor = processFeed(sensorFeed, prevSensor, t);
 			putc(COM1, 192);
 			putc(COM1, 133);
+			
+			
+			/*
+			 * speedTest
+			 */ 
+			if (curSensor == startSensor){
+ 				startTime = *low;
+ 				temp = *high;
+ 				startTime = startTime + (temp << 32);
+ 			}
+ 			else if (curSensor == endSensor){
+ 				endTime = *low;
+ 				temp = *high;
+ 				endTime = endTime + (temp << 32);
+ 				sprintf(COM2, "%s\033[45;0H%d%s", save, endTime - startTime, restore);
+ 			}			
+			
+			
 			if (curSensor > ('A'*17) && curSensor != prevSensor){
 				prevLoc = highlightSensor(curSensor, prevLoc);
 				updateLastTriggeredSensor(curSensor, t);
