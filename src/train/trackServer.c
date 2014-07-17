@@ -666,7 +666,7 @@ trackServer(){
 					
 					req.numberOfCommands = 0;
 					
-					req.commands[req.numberOfCommands] = {RUN, 10};
+					req.commands[req.numberOfCommands] = (trainWorkerCommand){RUN, 10};
 					req.numberOfCommands++;
 					
 					int src  = thisTrainPath->path[thisTrainPath->path[0]];
