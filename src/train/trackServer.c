@@ -592,13 +592,29 @@ trackServer(){
 				trainStatus* 	thisTrainStatus	= &(trkSvrData.trainsStatus[req.target-45]);
 				trainPath*		thisTrainPath 	= req.path;
 				
-				int i;
-				int a = 0;	
-				for (i = thisTrainPath->path[0]; i < TRACK_MAX; i++)
-				{
-						sprintf(COM2, "%s\033[45;%uH%d%s", 
-							save, a, thisTrainPath->path[i], restore);
-						a = a + 6;					
+				// 4. trackServer parse this command and formated this path
+				// 5. trackServer pass this formated path to the trainCommandWorker		
+				
+				if(thisTrainPath->path[0] != -1){		
+					int i;
+					int a = 0;	
+					
+					for (i = thisTrainPath->path[0]; i < TRACK_MAX; i++)
+					{
+							sprintf(COM2, "%s\033[45;%uH%s%s", 
+								save, a, trkSvrData.trackA[(thisTrainPath->path[i])].name, restore);
+							a = a + 6;					
+					}
+					
+					
+					
+							//int temp = totalDist + trainStat->destInfo.displacement - stopDist - additionalLength;
+							//int delay = (temp * 10000 / speed) + a - ((trainStat->currentTrainSpeed - 10) / 2);
+							//int stopSignalTime = delay + trainStat->lastTimeStemp;					
+					
+				}
+				else{
+					//errorMsg;
 				}				
 				
 				Reply(requester, NULL, 0);
