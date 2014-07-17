@@ -714,7 +714,7 @@ trackServer(){
 								int totalDist  = currentDist - 649;
 								int totalDelay = (totalDist * 10000 / 48900);
 								
-								req.commands[req.numberOfCommands] = {DELAY_STOP, totalDelay};
+								req.commands[req.numberOfCommands] = (trainWorkerCommand){DELAY_STOP, totalDelay};
 								req.numberOfCommands++;	
 								
 								break;						
