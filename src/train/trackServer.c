@@ -714,6 +714,9 @@ trackServer(){
 								int totalDist  = currentDist - 649;
 								int totalDelay = (totalDist * 10000 / 48900);
 								
+								sprintf(COM2, "%s\033[46;0H%d%s", 
+									save, totalDist, restore);
+									
 								req.commands[req.numberOfCommands] = (trainWorkerCommand){DELAY_STOP, totalDelay};
 								req.numberOfCommands++;	
 								
