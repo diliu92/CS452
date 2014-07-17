@@ -212,6 +212,52 @@ determineTrainByTriggeredSensor(int TriggeredSensor, trainStatus* trainsStatus){
 }
 
 
+static void
+trainWorker(){
+	int trainNo;
+	
+	int requester;
+	Receive(&requester, &trainNo, sizeof(int));
+	Reply(requester, NULL, 0);
+	
+	trainWorkerRequest trainWorkerReq; 
+
+	while(!NeedToShutDown()){
+		Receive(&requester, &trainWorkerReq, sizeof(trainWorkerRequest));
+		Reply(requester, NULL, 0);
+		
+		int i;
+		for (i = 0; i < MAX_SWITCHES; i++)
+		{
+			if (trainWorkerReq.switchesChange[i] != -1){
+				if (i < 18)
+					changeSwitchStatus(i + 1, trainWorkerReq.switchesChange[i]);
+				else
+					changeSwitchStatus(i + 135, trainWorkerReq.switchesChange[i]);		
+			}		
+		}
+		
+		for (i = 0; i < trainWorkerReq.numberOfCommands; i++)
+		{
+			trainWorkerCommand* currentCommand = &(trainWorkerReq.commands[i]);
+			
+			switch (currentCommand->cmdType)
+			{
+				case RUN:
+					changeTrainSpeed(trainNo, currentCommand->cmdValue);
+				break;
+				case DELAY_STOP:
+					Delay(currentCommand->cmdValue);
+					changeTrainSpeed(trainNo, 0);
+				break;		
+			}	
+		}	
+	}
+	
+	Exit();
+}
+
+
 void
 trackServer(){
 	trackServerData trkSvrData;
@@ -238,6 +284,8 @@ trackServer(){
 				trainStatus* thisTrainStat = &(trkSvrData.trainsStatus[req.target - 45]);		
 				
 				thisTrainStat->isUsed = 1;
+				thisTrainStat->trainWorkerTid = Create(8, trainWorker);
+				Send(thisTrainStat->trainWorkerTid, &(thisTrainStat->trainNum), sizeof(int), NULL, 0);
 				
 				switch (tempTrackIdx)
 				{
@@ -592,9 +640,10 @@ trackServer(){
 				trainStatus* 	thisTrainStatus	= &(trkSvrData.trainsStatus[req.target-45]);
 				trainPath*		thisTrainPath 	= req.path;
 				
-				// 4. trackServer parse this command and formated this path
-				// 5. trackServer pass this formated path to the trainCommandWorker		
-				
+				/*
+				 * 4. trackServer parse this command and formated this path	
+				 */ 
+				 
 				if(thisTrainPath->path[0] != -1){		
 					int i;
 					int a = 0;	
@@ -606,7 +655,78 @@ trackServer(){
 							a = a + 6;					
 					}
 					
+					trainWorkerRequest req;
+					/*
+					 * Init switches
+					 */ 
+					for (i = 0; i < MAX_SWITCHES; i++)
+					{
+						req.switchesChange[i] = -1;
+					}
 					
+					req.numberOfCommands = 0
+					
+					req.commands[req.numberOfCommands] = {RUN, 10};
+					req.numberOfCommands++;
+					
+					int src  = thisTrainPath->path[thisTrainPath->path[0]];
+					int dest = thisTrainPath->path[TRACK_MAX-1];
+									 
+					int currentDist = 0 - thisTrainStatus->destInfo.displacement;
+				 
+					for (i = thisTrainPath->path[0]; i < TRACK_MAX; i++)
+					{
+							track_node* thisNode = &(trkSvrData.trackA[thisTrainPath->path[i]]);
+							track_node* nextNode = &(trkSvrData.trackA[thisTrainPath->path[i+1]]);
+							
+							switch (thisNode->type)
+							{
+								case NODE_SENSOR:
+								case NODE_MERGE:
+								{
+									currentDist += thisNode->edge[DIR_AHEAD].dist;
+									
+									break;
+								}
+								case NODE_BRANCH:
+								{
+									if (thisNode->edge[DIR_STRAIGHT].dest == nextNode){
+										if(thisNode->num <= 18)
+											req.switchesChange[thisNode->num - 1] = STRAIGHT;
+										else
+											req.switchesChange[thisNode->num - 135] = STRAIGHT;
+											
+										currentDist += thisNode->edge[DIR_STRAIGHT].dist;
+									}
+									else if (thisNode->edge[DIR_CURVED].dest == nextNode){
+										if(thisNode->num <= 18)
+											req.switchesChange[thisNode->num - 1] = CURVED;
+										else
+											req.switchesChange[thisNode->num - 135] = CURVED;
+										
+										currentDist += thisNode->edge[DIR_CURVED].dist;
+									}	
+								}
+							}
+							
+							//TODO: if (nextNode == thisNode->reverse)
+							if (nextNode->num == dest){
+								int totalDist  = currentDist - 649;
+								int totalDelay = (totalDist * 10000 / 48900);
+								
+								req.commands[req.numberOfCommands] = {DELAY_STOP, totalDelay};
+								req.numberOfCommands++;	
+								
+								break;						
+							}			
+					}
+					
+					/*
+					 * 5. trackServer pass this formated path to the trainCommandWorker	
+					 */
+					Send(thisTrainStatus->trainWorkerTid, &(req), sizeof(trainWorkerRequest), NULL, 0); 
+					 
+					 
 					
 							//int temp = totalDist + trainStat->destInfo.displacement - stopDist - additionalLength;
 							//int delay = (temp * 10000 / speed) + a - ((trainStat->currentTrainSpeed - 10) / 2);

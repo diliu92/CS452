@@ -55,6 +55,19 @@ typedef struct locationInfo{
 	int 	displacement;
 }locationInfo;
 
+
+typedef struct trainWorkerCommand{
+	enum { RUN, DELAY_STOP, REVERSE} 
+		cmdType;
+	int cmdValue;
+}trainWorkerCommand;
+typedef struct trainWorkerRequest{
+	int		switchesChange[MAX_SWITCHES];
+	
+	int		numberOfCommands;
+	trainWorkerCommand	commands[10];
+}trainWorkerRequest;
+
 void 
 trackServer();
 
