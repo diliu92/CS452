@@ -664,7 +664,7 @@ trackServer(){
 						req.switchesChange[i] = -1;
 					}
 					
-					req.numberOfCommands = 0
+					req.numberOfCommands = 0;
 					
 					req.commands[req.numberOfCommands] = {RUN, 10};
 					req.numberOfCommands++;
