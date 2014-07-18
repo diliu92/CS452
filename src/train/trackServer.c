@@ -5,6 +5,7 @@
  * STOP->DELAY_STOP
  * REVERSE->(DELAY_STOP, REVERSE, GO)
  */ 
+ /*
 typedef struct trainStopInfo{
 	enum { STOP, REVERSE} 
 		Type;
@@ -12,7 +13,7 @@ typedef struct trainStopInfo{
 	int sensor;	
 	int delay;
 }trainStopInfo;
-
+*/
 
 typedef struct trainStatus{
 	int		isUsed;
