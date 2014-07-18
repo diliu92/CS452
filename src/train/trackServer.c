@@ -153,7 +153,7 @@ initTrackServerData(trackServerData* trkSvrData){
 		(trkSvrData->trainsStatus[i]).expectedSensor  = -1;
 		(trkSvrData->trainsStatus[i]).expectedSensorTime  = -1;
 
-		(trkSvrData->trainsStatus[i]).needToCheckStopTime  = -1;
+		//(trkSvrData->trainsStatus[i]).needToCheckStopTime  = -1;
 		(trkSvrData->trainsStatus[i]).destInfo.sensor = 0;
 		(trkSvrData->trainsStatus[i]).destInfo.displacement = 0;
 		
