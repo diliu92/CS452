@@ -35,8 +35,8 @@ typedef struct trainStatus{
 
 	locationInfo 	destInfo;
 	
-	int				trainStopInfoNum;
-	trainStopInfo 	trainStopInfos[10];
+	//int				trainStopInfoNum;
+	//trainStopInfo 	trainStopInfos[10];
 }trainStatus;
 
 typedef struct trackServerData{
