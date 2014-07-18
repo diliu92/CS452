@@ -64,7 +64,7 @@ typedef struct trainWorkerCommand{
 typedef struct trainWorkerRequest{
 	int		switchesChange[MAX_SWITCHES];
 	
-	int		numberOf
+	int		numberOfCommands;
 	trainWorkerCommand	commands[10];
 }trainWorkerRequest;
 
