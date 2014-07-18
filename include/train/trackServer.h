@@ -59,13 +59,13 @@ typedef struct locationInfo{
 typedef struct trainWorkerCommand{
 	enum { RUN, DELAY_STOP, REVERSE} 
 		cmdType;
+		
+	int cmdTarget;
 	int cmdValue;
 }trainWorkerCommand;
 typedef struct trainWorkerRequest{
-	int		switchesChange[MAX_SWITCHES];
-	
 	int		numberOfCommands;
-	trainWorkerCommand	commands[10];
+	trainWorkerCommand	commands[MAX_SWITCHES];
 }trainWorkerRequest;
 
 void 

@@ -1,6 +1,19 @@
 #include <train.h>
 
 
+/*
+ * STOP->DELAY_STOP
+ * REVERSE->(DELAY_STOP, REVERSE, GO)
+ */ 
+typedef struct trainStopInfo{
+	enum { STOP, REVERSE} 
+		Type;
+		
+	int sensor;	
+	int delay;
+}trainStopInfo;
+
+
 typedef struct trainStatus{
 	int		isUsed;
 	int 	trainNum;
@@ -20,16 +33,18 @@ typedef struct trainStatus{
 	int 	distToExpectedSensor;
 
 	locationInfo 	destInfo;
-	int 			needToCheckStopTime;
+	
+	int				trainStopInfoNum;
+	trainStopInfo 	trainStopInfos[10];
 }trainStatus;
 
 typedef struct trackServerData{
 	track_node 	trackA[TRACK_MAX];
 	
-	int 		trainsActualSpeeds[2][14];			//0->49, 1->50	in (mm/10ms * 10000)
+	int 		trainsActualSpeeds[4][14];			//0->49, 1->50	in (mm/10ms * 10000)
 	int			trainsStopDistances[2][14];			//0->49, 1->50	in mm
 	int 		trainsStopTimes[2][14];
-	int 		trainsStopDeceleration[2][14];
+	int 		trainsStopDeceleration[2][14];		
 	
 	trainStatus trainsStatus[MAX_TRAINS];
 	
@@ -41,7 +56,7 @@ typedef struct trackServerData{
 
 static void
 initTrainsSpecData(trackServerData* trkSvrData){	
-	trkSvrData->trainsActualSpeeds[0][0] = 1348; //need to divide by 10000
+	trkSvrData->trainsActualSpeeds[0][0] = 1348;		 //need to divide by 10000
 	trkSvrData->trainsActualSpeeds[0][1] = 8225; 
 	trkSvrData->trainsActualSpeeds[0][2] = 13388;
 	trkSvrData->trainsActualSpeeds[0][3] = 18065;
@@ -175,7 +190,6 @@ initTrackServerData(trackServerData* trkSvrData){
 	trkSvrData->currentTrain = -1;
 }
 
-
 static track_node*
 getNextSensorNode(track_node* nextLandmark, int* totalDist, int* switchesStatus){
 	
@@ -210,6 +224,53 @@ determineTrainByTriggeredSensor(int TriggeredSensor, trainStatus* trainsStatus){
 	
 	return -1;
 }
+
+static int
+getTrainActualSpeed(trackServerData* trkSvrData, int trainNo, int trainSpeed){
+	switch (trainNo)
+	{
+		case 49:
+			if(trainSpeed == 0)
+				return 0;
+			else
+				return trkSvrData->trainsActualSpeeds[0][trainSpeed-1];
+			
+			break;
+		case 50:
+			if(trainSpeed == 0)
+				return 0;
+			else
+				return trkSvrData->trainsActualSpeeds[1][trainSpeed-1];
+			
+			break;
+		case 48:
+			if(trainSpeed == 0)
+				return 0;
+			else
+				return trkSvrData->trainsActualSpeeds[2][trainSpeed-1];
+			
+			break;
+		case 45:
+			if(trainSpeed == 0)
+				return 0;
+			else
+				return trkSvrData->trainsActualSpeeds[3][trainSpeed-1];
+			
+			break;			
+	}
+	
+}
+static int
+getTrainStopDistance(trackServerData* trkSvrData, ){
+	
+}
+static int
+getTrainStopTime(){
+}
+static int
+getTrainStopDistance(){
+}
+
 
 
 static void
@@ -257,7 +318,6 @@ trainWorker(){
 	Exit();
 }
 
-
 void
 trackServer(){
 	trackServerData trkSvrData;
@@ -284,6 +344,7 @@ trackServer(){
 				trainStatus* thisTrainStat = &(trkSvrData.trainsStatus[req.target - 45]);		
 				
 				thisTrainStat->isUsed = 1;
+				
 				thisTrainStat->trainWorkerTid = Create(8, trainWorker);
 				Send(thisTrainStat->trainWorkerTid, &(thisTrainStat->trainNum), sizeof(int), NULL, 0);
 				
@@ -398,7 +459,8 @@ trackServer(){
 																
 								break;
 						
-						} */
+						} 
+						*/
 						(thisTrainStat->destInfo).displacement	= 200;	
 									
 						putc(COM1, 0);
@@ -654,20 +716,22 @@ trackServer(){
 								save, a, trkSvrData.trackA[(thisTrainPath->path[i])].name, restore);
 							a = a + 6;					
 					}
-					
-					trainWorkerRequest req;
+
 					/*
 					 * Init switches
-					 */ 
+					 */ 					
+					trainWorkerRequest 	switchCommands;
+ 
+					switchCommands.numberOfCommands = 0;
 					for (i = 0; i < MAX_SWITCHES; i++)
 					{
-						req.switchesChange[i] = -1;
+						switchCommands.switchCommands[i] = -1;
 					}
 					
-					req.numberOfCommands = 0;
+					//req.numberOfCommands = 0;
 					
-					req.commands[req.numberOfCommands] = (trainWorkerCommand){RUN, 10};
-					req.numberOfCommands++;
+					//req.commands[req.numberOfCommands] = (trainWorkerCommand){RUN, 10};
+					//req.numberOfCommands++;
 					
 					int src  = thisTrainPath->path[thisTrainPath->path[0]];
 					int dest = thisTrainPath->path[TRACK_MAX-1];
@@ -711,7 +775,7 @@ trackServer(){
 							
 							//TODO: if (nextNode == thisNode->reverse)
 							if (nextNode->num == dest){
-								int totalDist  = currentDist;// - 649;
+								int totalDist  = currentDist;	// - 649;
 								int totalDelay = (totalDist * 10000 / 48900);
 								
 								sprintf(COM2, "%s\033[46;0H%d%s", 
@@ -727,7 +791,7 @@ trackServer(){
 					/*
 					 * 5. trackServer pass this formated path to the trainCommandWorker	
 					 */
-					Send(thisTrainStatus->trainWorkerTid, &(req), sizeof(trainWorkerRequest), NULL, 0); 
+					Send(thisTrainStatus->trainWorkerTid, &switchCommands, sizeof(trainWorkerRequest), NULL, 0); 
 					 
 					 
 					
