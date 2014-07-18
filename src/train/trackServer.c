@@ -716,22 +716,20 @@ trackServer(){
 								save, a, trkSvrData.trackA[(thisTrainPath->path[i])].name, restore);
 							a = a + 6;					
 					}
-
+					
+					trainWorkerRequest req;
 					/*
 					 * Init switches
-					 */ 					
-					trainWorkerRequest 	switchCommands;
- 
-					switchCommands.numberOfCommands = 0;
+					 */ 
 					for (i = 0; i < MAX_SWITCHES; i++)
 					{
-						switchCommands.switchCommands[i] = -1;
+						req.switchesChange[i] = -1;
 					}
 					
-					//req.numberOfCommands = 0;
+					req.numberOfCommands = 0;
 					
-					//req.commands[req.numberOfCommands] = (trainWorkerCommand){RUN, 10};
-					//req.numberOfCommands++;
+					req.commands[req.numberOfCommands] = (trainWorkerCommand){RUN, 10};
+					req.numberOfCommands++;
 					
 					int src  = thisTrainPath->path[thisTrainPath->path[0]];
 					int dest = thisTrainPath->path[TRACK_MAX-1];
@@ -791,7 +789,7 @@ trackServer(){
 					/*
 					 * 5. trackServer pass this formated path to the trainCommandWorker	
 					 */
-					Send(thisTrainStatus->trainWorkerTid, &switchCommands, sizeof(trainWorkerRequest), NULL, 0); 
+					Send(thisTrainStatus->trainWorkerTid, &(req), sizeof(trainWorkerRequest), NULL, 0); 
 					 
 					 
 					
