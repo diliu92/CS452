@@ -1,19 +1,13 @@
 #include <train.h>
 
 
-/*
- * STOP->DELAY_STOP
- * REVERSE->(DELAY_STOP, REVERSE, GO)
- */ 
- /*
-typedef struct trainStopInfo{
-	enum { STOP, REVERSE} 
-		Type;
-		
-	int sensor;	
-	int delay;
-}trainStopInfo;
-*/
+
+
+#define TRAIN_ACTUALDATA_SPEED					1
+#define TRAIN_ACTUALDATA_STOPDISTANCE			2
+#define TRAIN_ACTUALDATA_STOPTIME				3
+#define TRAIN_ACTUALDATA_STOPDECELERATION		4
+
 
 typedef struct trainStatus{
 	int		isUsed;
@@ -42,10 +36,10 @@ typedef struct trainStatus{
 typedef struct trackServerData{
 	track_node 	trackA[TRACK_MAX];
 	
-	int 		trainsActualSpeeds[4][14];			//0->49, 1->50	in (mm/10ms * 10000)
-	int			trainsStopDistances[2][14];			//0->49, 1->50	in mm
-	int 		trainsStopTimes[2][14];
-	int 		trainsStopDeceleration[2][14];		
+	int 		trainsActualSpeeds[4][14];			//0->49, 1->50, 2->45, 3->48 in (mm/10ms * 10000)
+	int			trainsStopDistances[4][14];			
+	int 		trainsStopTimes[4][14];
+	int 		trainsStopDeceleration[4][14];		
 	
 	trainStatus trainsStatus[MAX_TRAINS];
 	
@@ -117,7 +111,7 @@ initTrainsSpecData(trackServerData* trkSvrData){
 	trkSvrData->trainsActualSpeeds[3][12] = -1; 
 	trkSvrData->trainsActualSpeeds[3][13] = -1;    
 
-	trkSvrData->trainsStopDistances[0][0] = -1; 		//in mm
+	trkSvrData->trainsStopDistances[0][0] = -1; 		
 	trkSvrData->trainsStopDistances[0][1] = -1; 
 	trkSvrData->trainsStopDistances[0][2] = 149; 
 	trkSvrData->trainsStopDistances[0][3] = 226; 
@@ -147,6 +141,35 @@ initTrainsSpecData(trackServerData* trkSvrData){
 	trkSvrData->trainsStopDistances[1][12] = 752; 
 	trkSvrData->trainsStopDistances[1][13] = 777;  
 
+	trkSvrData->trainsStopDistances[2][0] = -1; 		
+	trkSvrData->trainsStopDistances[2][1] = -1; 
+	trkSvrData->trainsStopDistances[2][2] = -1; 
+	trkSvrData->trainsStopDistances[2][3] = -1; 
+	trkSvrData->trainsStopDistances[2][4] = -1; 
+	trkSvrData->trainsStopDistances[2][5] = -1; 
+	trkSvrData->trainsStopDistances[2][6] = ; 
+	trkSvrData->trainsStopDistances[2][7] = ;
+	trkSvrData->trainsStopDistances[2][8] = ; 
+	trkSvrData->trainsStopDistances[2][9] = ; 
+	trkSvrData->trainsStopDistances[2][10] = ; 
+	trkSvrData->trainsStopDistances[2][11] = ; 
+	trkSvrData->trainsStopDistances[2][12] = -1; 
+	trkSvrData->trainsStopDistances[2][13] = -1;  
+	
+	trkSvrData->trainsStopDistances[3][0] =  -1; 
+	trkSvrData->trainsStopDistances[3][1] =  -1; 
+	trkSvrData->trainsStopDistances[3][2] =  -1;
+	trkSvrData->trainsStopDistances[3][3] =  -1; 
+	trkSvrData->trainsStopDistances[3][4] =  -1; 
+	trkSvrData->trainsStopDistances[3][5] =  -1; 
+	trkSvrData->trainsStopDistances[3][6] =  ; 
+	trkSvrData->trainsStopDistances[3][7] =  ; 
+	trkSvrData->trainsStopDistances[3][8] =  ; 
+	trkSvrData->trainsStopDistances[3][9] =  ; 
+	trkSvrData->trainsStopDistances[3][10] = ; 
+	trkSvrData->trainsStopDistances[3][11] = ; 
+	trkSvrData->trainsStopDistances[3][12] = -1; 
+	trkSvrData->trainsStopDistances[3][13] = -1;  
 	int i, j;
 	for(i = 0; i < 2; i++){
 		for(j = 0; j < 14; j++){
@@ -155,6 +178,7 @@ initTrainsSpecData(trackServerData* trkSvrData){
 			int stopDist = trkSvrData->trainsStopDistances[i][j];
 			trkSvrData->trainsStopTimes[i][j] = stopDist * 10000 / va;
 			trkSvrData->trainsStopDeceleration[i][j] = vi / trkSvrData->trainsStopTimes[i][j];
+	
 		}
 	}
 	
@@ -257,53 +281,41 @@ determineTrainByTriggeredSensor(int TriggeredSensor, trainStatus* trainsStatus){
 }
 
 static int
-getTrainActualSpeed(trackServerData* trkSvrData, int trainNo, int trainSpeed){
-	switch (trainNo)
-	{
-		case 49:
-			if(trainSpeed == 0)
-				return 0;
-			else
-				return trkSvrData->trainsActualSpeeds[0][trainSpeed-1];
-			
-			break;
-		case 50:
-			if(trainSpeed == 0)
-				return 0;
-			else
-				return trkSvrData->trainsActualSpeeds[1][trainSpeed-1];
-			
-			break;
-		case 45:
-			if(trainSpeed == 0)
-				return 0;
-			else
-				return trkSvrData->trainsActualSpeeds[2][trainSpeed-1];
-			
-			break;
-		case 48:
-			if(trainSpeed == 0)
-				return 0;
-			else
-				return trkSvrData->trainsActualSpeeds[3][trainSpeed-1];
-			
-			break;			
+getTrainActualData(int whichData, trackServerData* trkSvrData, int trainNo, int trainSpeed){
+	int whichRow;
+		
+	if(trainSpeed == 0)
+		return 0;
+	else{
+		switch (trainNo)
+		{
+			case 49:
+				whichRow = 0;
+				break;
+			case 50:
+				whichRow = 1;
+				break;
+			case 45:
+				whichRow = 2;
+				break;
+			case 48:
+				whichRow = 3;
+				break;		
+		}
 	}
-	
+	switch (whichData)
+	{
+		case TRAIN_ACTUALDATA_SPEED:
+			return	trkSvrData->trainsActualSpeeds[whichRow][trainSpeed-1];	
+		case TRAIN_ACTUALDATA_STOPDISTANCE:
+			return	trkSvrData->trainsStopDistances[whichRow][trainSpeed-1];	
+		case TRAIN_ACTUALDATA_STOPTIME:
+			return	trkSvrData->trainsStopTimes[whichRow][trainSpeed-1];	
+		case TRAIN_ACTUALDATA_STOPDECELERATION:
+			return	trkSvrData->trainsStopDeceleration[whichRow][trainSpeed-1];			
+	}			
 }
 
-/*
-static int
-getTrainStopDistance(trackServerData* trkSvrData, ){
-	
-}
-static int
-getTrainStopTime(){
-}
-static int
-getTrainStopDistance(){
-}
-*/
 
 
 static void
