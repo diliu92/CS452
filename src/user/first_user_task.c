@@ -84,10 +84,10 @@ firstUserTask()	//priority 6
 	Create(7, cmdProcessor);
 	//Create(7, showTrainLocation);
 	
-	//Create(7, goto_test);
+	Create(7, goto_test);
 	//Create(4, com2_testtwo);
 
-	GetPath(24, 57);
+	//GetPath(24, 57);
 
 	Create(16, idleTask);
 
