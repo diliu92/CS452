@@ -225,6 +225,8 @@ determineTrainByTriggeredSensor(int TriggeredSensor, trainStatus* trainsStatus){
 	return -1;
 }
 
+/*
+
 static int
 getTrainActualSpeed(trackServerData* trkSvrData, int trainNo, int trainSpeed){
 	switch (trainNo)
@@ -271,7 +273,7 @@ static int
 getTrainStopDistance(){
 }
 
-
+*/
 
 static void
 trainWorker(){
