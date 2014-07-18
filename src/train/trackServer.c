@@ -57,7 +57,7 @@ typedef struct trackServerData{
 
 static void
 initTrainsSpecData(trackServerData* trkSvrData){	
-	trkSvrData->trainsActualSpeeds[0][0] = 1348;		 //need to divide by 10000
+	trkSvrData->trainsActualSpeeds[0][0] = 1348;		//train-49
 	trkSvrData->trainsActualSpeeds[0][1] = 8225; 
 	trkSvrData->trainsActualSpeeds[0][2] = 13388;
 	trkSvrData->trainsActualSpeeds[0][3] = 18065;
@@ -72,7 +72,7 @@ initTrainsSpecData(trackServerData* trkSvrData){
 	trkSvrData->trainsActualSpeeds[0][12] = 62222; 
 	trkSvrData->trainsActualSpeeds[0][13] = 62221;  
 	
-	trkSvrData->trainsActualSpeeds[1][0] =  945; 		//for tr50, works ok with tr48
+	trkSvrData->trainsActualSpeeds[1][0] =  945; 		//train-50
 	trkSvrData->trainsActualSpeeds[1][1] =  7482; 
 	trkSvrData->trainsActualSpeeds[1][2] =  12923;
 	trkSvrData->trainsActualSpeeds[1][3] =  17263; 
@@ -85,7 +85,37 @@ initTrainsSpecData(trackServerData* trkSvrData){
 	trkSvrData->trainsActualSpeeds[1][10] = 51079; 	//0.89553
 	trkSvrData->trainsActualSpeeds[1][11] = 57041; 	//0.97174
 	trkSvrData->trainsActualSpeeds[1][12] = 59658; 	//0.95879
-	trkSvrData->trainsActualSpeeds[1][13] = 55469;  
+	trkSvrData->trainsActualSpeeds[1][13] = 55469;
+	
+	trkSvrData->trainsActualSpeeds[2][0] = -1;		 	//train-45
+	trkSvrData->trainsActualSpeeds[2][1] = -1; 
+	trkSvrData->trainsActualSpeeds[2][2] = -1;
+	trkSvrData->trainsActualSpeeds[2][3] = -1;
+	trkSvrData->trainsActualSpeeds[2][4] = -1;
+	trkSvrData->trainsActualSpeeds[2][5] = -1;
+	trkSvrData->trainsActualSpeeds[2][6] = 33388; 
+	trkSvrData->trainsActualSpeeds[2][7] = 37201;
+	trkSvrData->trainsActualSpeeds[2][8] = 42301; 
+	trkSvrData->trainsActualSpeeds[2][9] = 45633; 
+	trkSvrData->trainsActualSpeeds[2][10] = 49947; 
+	trkSvrData->trainsActualSpeeds[2][11] = 56606; 
+	trkSvrData->trainsActualSpeeds[2][12] = -1; 
+	trkSvrData->trainsActualSpeeds[2][13] = -1;  
+	
+	trkSvrData->trainsActualSpeeds[3][0] = -1;			//train-48 
+	trkSvrData->trainsActualSpeeds[3][1] = -1; 
+	trkSvrData->trainsActualSpeeds[3][2] = -1;
+	trkSvrData->trainsActualSpeeds[3][3] = -1;
+	trkSvrData->trainsActualSpeeds[3][4] = -1;
+	trkSvrData->trainsActualSpeeds[3][5] = -1;
+	trkSvrData->trainsActualSpeeds[3][6] = 33719; 
+	trkSvrData->trainsActualSpeeds[3][7] = 37621;
+	trkSvrData->trainsActualSpeeds[3][8] = 42515; 
+	trkSvrData->trainsActualSpeeds[3][9] = 47268; 
+	trkSvrData->trainsActualSpeeds[3][10] = 52609; 
+	trkSvrData->trainsActualSpeeds[3][11] = 56982; 
+	trkSvrData->trainsActualSpeeds[3][12] = -1; 
+	trkSvrData->trainsActualSpeeds[3][13] = -1;    
 
 	trkSvrData->trainsStopDistances[0][0] = -1; 		//in mm
 	trkSvrData->trainsStopDistances[0][1] = -1; 
@@ -226,8 +256,6 @@ determineTrainByTriggeredSensor(int TriggeredSensor, trainStatus* trainsStatus){
 	return -1;
 }
 
-/*
-
 static int
 getTrainActualSpeed(trackServerData* trkSvrData, int trainNo, int trainSpeed){
 	switch (trainNo)
@@ -246,14 +274,14 @@ getTrainActualSpeed(trackServerData* trkSvrData, int trainNo, int trainSpeed){
 				return trkSvrData->trainsActualSpeeds[1][trainSpeed-1];
 			
 			break;
-		case 48:
+		case 45:
 			if(trainSpeed == 0)
 				return 0;
 			else
 				return trkSvrData->trainsActualSpeeds[2][trainSpeed-1];
 			
 			break;
-		case 45:
+		case 48:
 			if(trainSpeed == 0)
 				return 0;
 			else
@@ -263,6 +291,8 @@ getTrainActualSpeed(trackServerData* trkSvrData, int trainNo, int trainSpeed){
 	}
 	
 }
+
+/*
 static int
 getTrainStopDistance(trackServerData* trkSvrData, ){
 	
@@ -273,8 +303,8 @@ getTrainStopTime(){
 static int
 getTrainStopDistance(){
 }
-
 */
+
 
 static void
 trainWorker(){
@@ -441,29 +471,6 @@ trackServer(){
 						|| req.value == (16 + 12 - 1) 	//B12
 					//	|| req.value == (16 +  8 - 1) 	//B8
 					){											
-						/*	switch (req.value)
-						{
-							case (16 + 10 - 1) :
-								thisTrainStat->lastTriggeredSensor	= 16 + 9 - 1;	//B9
-								thisTrainStat->lastTimeStemp 		= req.ts;	
-								
-								thisTrainStat->expectedSensor 		= 5 - 1;  		//A5
-								
-								break;
-							case (16 + 12 - 1) :
-								thisTrainStat->lastTriggeredSensor	= 16 + 11 - 1;	//B11
-								thisTrainStat->lastTimeStemp 		= req.ts;	
-								
-								thisTrainStat->expectedSensor 		= 8 - 1; 		//A8					
-								
-								break;
-							case (16 +  8 - 1) :
-								thisTrainStat->expectedSensor = 10 - 1;  	//A10
-																
-								break;
-						
-						} 
-						*/
 						(thisTrainStat->destInfo).displacement	= 200;	
 									
 						putc(COM1, 0);
@@ -477,17 +484,6 @@ trackServer(){
 						
 						trkSvrData.initTrainNum = -1;
 					}
-				/*	else if( req.value == 		( 5 - 1) 			//A5
-								|| req.value == ( 8 - 1) 			//A8
-						//		|| req.value == (10 - 1) 		//A10
-					){
-						thisTrainStat->lastTriggeredSensor = req.value;
-						thisTrainStat->lastTimeStemp = 	req.ts;							
-						
-						thisTrainStat->expectedSensor = 32 + 7 - 1; 	//C7
-						
-						trkSvrData.initTrainNum = -1;
-					}	*/			
 				}
 				else {					
 					int sensorGroup = req.value / 16 + 'A';
@@ -537,6 +533,7 @@ trackServer(){
 							}						
 						}	
 					}
+					
 					if (trainIdx == MAX_TRAINS){
 						sprintf(COM2, "%s\033[45;0H%s Can't distribute sensor %c%d, drop this sensor! %s", 
 											save, clearLine, (char)sensorGroup, sensorId, restore);

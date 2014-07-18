@@ -682,32 +682,3 @@ void showTrainLocation(){
 
 	Exit();
 }
-
-void stopTrain1_Worker(){
-	RegisterAs("stopTrain1_Worker");
-	int tid;
-	int wakeupTime;
-	while(!NeedToShutDown()){
-		Receive(&tid, &wakeupTime, sizeof(int));
-		Reply(tid, NULL, 0);
-		DelayUntil(wakeupTime);
-		changeTrainSpeed(49, 0);
-	}
-
-	Exit();
-}
-
-void stopTrain2_Worker(){
-	RegisterAs("stopTrain2_Worker");
-	int tid;
-	int wakeupTime;
-	while(!NeedToShutDown()){
-		Receive(&tid, &wakeupTime, sizeof(int));
-		Reply(tid, NULL, 0);
-		DelayUntil(wakeupTime);
-		changeTrainSpeed(50, 0);
-		changeTrainSpeed(48, 0);
-	}
-
-	Exit();
-}
