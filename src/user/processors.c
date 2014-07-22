@@ -148,102 +148,98 @@ int processCmd(char *cmd, int *trainSpeed){
 
 	target = array2int(cmdTarget);
 
-	if (value == -1){
-		initTrain(target);
-	}
-	else{
-		if (value > 15 && 
-			(target <= 0 || (target > 18 && !((target >= 153) && (target <= 156))))){
-				return -1;
-		}
-		else if ((value == 1) && (target <= 0 || target > 80)){
-			return -1;
-		}
-		else if(value <= 15 && (target <= 0 || target > 80)){
-			return -1;
-		}
+	
 
-		//get command value
+	if (value > 15 && 
+		(target <= 0 || (target > 18 && !((target >= 153) && (target <= 156))))){
+			return -1;
+	}
+	else if ((value == 1) && (target <= 0 || target > 80)){
+		return -1;
+	}
+	else if(value <= 15 && (target <= 0 || target > 80)){
+		return -1;
+	}
+
+	//get command value
+	j = 0;
+	while (cmd[i] == ' ') i++;
+	while (cmd[i] != ' ' && cmd[i] != '\0' && i < BUFFER_MAX_SIZE){
+		if (j >= 2){
+			return -1;
+		}
+		cmdValue[j] = cmd[i];
+		i++;
+		j++;
+	}
+
+	if (value != 1 && cmd[i] != '\0'){
+		return -1;
+	}
+	else if (value == -1){
+		value = array2int(cmdValue);
+		initTrain(target, value);
+	}
+	else if (value == 1){	//go cmd
+		value = array2int(cmdValue); 
+
+		char cmdValue2[5];
 		j = 0;
 		while (cmd[i] == ' ') i++;
+
+		int group = cmd[i];
+		i++;
+
 		while (cmd[i] != ' ' && cmd[i] != '\0' && i < BUFFER_MAX_SIZE){
-			if (j >= 2){
+			if (j >= 3){
 				return -1;
 			}
-			cmdValue[j] = cmd[i];
+			cmdValue2[j] = cmd[i % BUFFER_MAX_SIZE];
 			i++;
 			j++;
 		}
+		int id = array2int(cmdValue2);
 
-		if (value != 1 && cmd[i] != '\0'){
+		if (group >= 'A' && group <= 'E' && id >= 1 && id <= 16){
+			int dest = group * 17 + id;
+			int speed = value;
+			sprintf(COM2, "%s\033[7;40H%sExpect train to stop at: %c%d + %d%s", 
+				save, clearLine, (char)group, id, value, restore);
+			GoTo(target, speed, dest);
+		}
+		else{
 			return -1;
 		}
-		else if (value == 1){	//go cmd
-			value = array2int(cmdValue); 
-
-			char cmdValue2[5];
-			j = 0;
-			while (cmd[i] == ' ') i++;
-
-			int group = cmd[i];
-			i++;
-
-			while (cmd[i] != ' ' && cmd[i] != '\0' && i < BUFFER_MAX_SIZE){
-				if (j >= 3){
-					return -1;
-				}
-				cmdValue2[j] = cmd[i % BUFFER_MAX_SIZE];
-				i++;
-				j++;
-			}
-			int id = array2int(cmdValue2);
-
-			if (group >= 'A' && group <= 'E' && id >= 1 && id <= 16){
-				locationInfo destInfo;
-				destInfo.sensor = group * 17 + id;
-				destInfo.displacement = value;
-				sprintf(COM2, "%s\033[7;40H%sExpect train to stop at: %c%d + %d%s", 
-					save, clearLine, (char)group, id, value, restore);
-				//int i = goToPosition(target, destInfo);
-				//if (i != 0){
-				//	return -2;
-				//}
-			}
-			else{
-				return -1;
-			}
-
+	}
+	else if (value > 15){
+		if ((cmdValue[0] == 'S' || cmdValue[0] == 's') && 
+			cmdValue[1] == '\0' && cmdValue[2] == '\0'){
+			value = 33;
+		} 
+		else if ((cmdValue[0] == 'C' || cmdValue[0] == 'c') && 
+			cmdValue[1] == '\0' && cmdValue[2] == '\0'){
+			value = 34;
+		} 
+		else{
+			return -1;
 		}
-		else if (value > 15){
-			if ((cmdValue[0] == 'S' || cmdValue[0] == 's') && 
-				cmdValue[1] == '\0' && cmdValue[2] == '\0'){
-				value = 33;
-			} 
-			else if ((cmdValue[0] == 'C' || cmdValue[0] == 'c') && 
-				cmdValue[1] == '\0' && cmdValue[2] == '\0'){
-				value = 34;
-			} 
-			else{
-				return -1;
-			}
-			updateSwitchState(target, value);
-			changeSwitchStatus(target, value);
+		updateSwitchState(target, value);
+		changeSwitchStatus(target, value);
+	}
+	else if (value < 15){
+		value = array2int(cmdValue); 
+		if (value < 0){
+			return -1;
 		}
-		else if (value < 15){
-			value = array2int(cmdValue); 
-			if (value < 0){
-				return -1;
-			}
-			if (value % 16 != 15){
-				trainSpeed[target - 1] = value;
-				// putc(COM1, value);
-				// putc(COM1, target);
-				changeTrainSpeed(target, value);
-			}
+		if (value % 16 != 15){
+			trainSpeed[target - 1] = value;
+			// putc(COM1, value);
+			// putc(COM1, target);
+			changeTrainSpeed(target, value);
 		}
-		else if (value == 15){
-			reverseTrain(target);
-		}
+	}
+	else if (value == 15){
+		reverseTrain(target);
 	}
 
 	sprintf(COM2, "\033[39;0H%s%sCommand '%s' processed.%s", clearLine, green, cmd, resetColor);
@@ -557,12 +553,13 @@ int sensorFeedProcessor (){
 	/*
 	 * speedTest
 	 */ 
-	int startSensor = 'B' * 17 + 1;
- 	int endSensor = 'E' * 17 + 14;
- 	long startTime, endTime, temp;
+	 /*
+	int startSensor = 'C' * 17 + 15;
+ 	int endSensor = 'C' * 17 + 15;
+ 	long startTime = 0, endTime = 0, temp = 0;
  	int *high = (int *) 0x80810064;
  	int *low = (int *) 0x80810060;
-
+	*/
 	while(1){
 		int feed = getc(COM1);
 		sensorFeed[sensorCount] = feed;
@@ -573,12 +570,18 @@ int sensorFeedProcessor (){
 			curSensor = processFeed(sensorFeed, prevSensor, t);
 			putc(COM1, 192);
 			putc(COM1, 133);
+
+			//stopDistanceTest
+
+			//if(curSensor == 'B' * 17 + 9){ 
+			//	changeTrainSpeed(49,11);         
+			//	Delay(500);
+			//	changeTrainSpeed(49,0);
+			//}			
 			
-			
+			// * speedTest 
 			/*
-			 * speedTest
-			 */ 
-			if (curSensor == startSensor){
+			if (curSensor == startSensor && startTime == 0){
  				startTime = *low;
  				temp = *high;
  				startTime = startTime + (temp << 32);
@@ -588,8 +591,9 @@ int sensorFeedProcessor (){
  				temp = *high;
  				endTime = endTime + (temp << 32);
  				sprintf(COM2, "%s\033[45;0H%d%s", save, endTime - startTime, restore);
- 			}			
-			
+ 				startTime = 0;
+ 			}
+ 			*/
 			
 			if (curSensor > ('A'*17) && curSensor != prevSensor){
 				prevLoc = highlightSensor(curSensor, prevLoc);

@@ -209,14 +209,14 @@ routeServer(){
 				else{
 					response.path[0] = -1;
 				}
-				
+				/*
 				for (i = response.path[0]; i < TRACK_MAX; i++)
 				{
 						sprintf(COM2, "%s\033[45;%uH%d%s", 
 							save, a, response.path[i], restore);
 						a = a + 6;					
 				}
-				
+				*/
 				Reply(requester, &response, sizeof(trainPath));			
 				break;		
 			}			
@@ -225,7 +225,7 @@ routeServer(){
 }
 
 void
-GoTo(int trainNo, int dest){
+GoTo(int trainNo, int trainSpeed, int dest){
 	/*
 	 * After this function is finished, tr rv sw will disabled
 	 * 
@@ -237,7 +237,9 @@ GoTo(int trainNo, int dest){
 	 */ 
 	 
 	locationInfo trainLoc = getTrainLocation(trainNo);	 //Step 1
-	
+	sprintf(COM2, "%s\033[50;0H%s%d,%d%s", 
+			save, clearLine, trainLoc.sensor, trainLoc.displacement,  restore);	
+
 	/*
 	 * Step 2
 	 */  	 	 
@@ -246,14 +248,15 @@ GoTo(int trainNo, int dest){
 	
 	req.rtSvrReq_uid = ROUTESERVER_ROUTE_GET_SHORTEST;
 	
-	req.src  = trainLoc.sensor;
-	req.dest = dest;
+	req.src  = (trainLoc.sensor / 17 -'A') * 16 + (trainLoc.sensor % 17) - 1;
+	//TODO: parse
+	req.dest = (dest / 17 -'A') * 16 + (dest % 17) - 1;
 
 	Send(ROUTESERVER_TID, &req, sizeof(routeServerRequest), &response, sizeof(trainPath));
-	
+	response.trainSpeed = trainSpeed;
 	/*
 	 * Step 3
-	 */  
+	 */ 
 	executePath(trainNo, &response);
 	
 }

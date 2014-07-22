@@ -16,10 +16,13 @@ typedef struct routeServerRequest{
 	int		retval;
 	
 	int 	src;
+	int 	trainSpeed;
 	int 	dest;
 }routeServerRequest;
 
 typedef struct trainPath{
+	int 	trainSpeed;
+	
 	int		path[TRACK_MAX_NUM];
 }trainPath;
 
@@ -28,5 +31,5 @@ routeServer();
 
 
 void
-GoTo(int trainNo, int dest);
+GoTo(int trainNo, int trainSpeed, int dest);
 #endif

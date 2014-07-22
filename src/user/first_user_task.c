@@ -55,9 +55,9 @@ idleTask(){
 
 void 
 goto_test(){
-	Delay(100*30);
+	Delay(100*20);
 	
-	GoTo(49, 55);
+	GoTo(49, 7, 'B'*17 + 6);
 	
 	Exit();
 }
@@ -82,9 +82,9 @@ firstUserTask()	//priority 6
 
 	Create(7, sensorFeedProcessor);
 	Create(7, cmdProcessor);
-	//Create(7, showTrainLocation);
+	Create(7, showTrainLocation);
 	
-	Create(7, goto_test);
+	//Create(7, goto_test);
 	//Create(4, com2_testtwo);
 
 	//GetPath(24, 57);
