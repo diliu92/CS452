@@ -3,10 +3,10 @@
 
 #define ROUTESERVER_TID					11
 
-#define ROUTESERVER_ROUTE_GET_SHORTEST		0		
+#define ROUTESERVER_ROUTE_GET_SHORTEST				0		
 
-#define ROUTESERVER_TRACKNODE_CAPTURE		1		//for now, dont need this call 'yet'
-#define ROUTESERVER_TRACKNODE_RELEASE		2
+#define ROUTESERVER_TRACKNODE_RELEASE_BYSENSOR		1
+#define ROUTESERVER_TRACKNODE_RELEASE_BYTRAIN		2
 
 #define TRACK_MAX_NUM 144
 
@@ -32,4 +32,10 @@ routeServer();
 
 void
 GoTo(int trainNo, int trainSpeed, int dest);
+
+void
+releaseNodesBySensor(int trainNo, int triggeredSensor);
+
+void
+releaseNodesByTrainNo(int trainNo);
 #endif

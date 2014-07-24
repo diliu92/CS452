@@ -11,9 +11,21 @@
 
 #define REVERSE_COST	400		//750*2
 
+typedef struct trainPathInfo{
+	int isUsed;
+
+	int trainNo;
+
+	//int currentIdx;
+	int trackPathNodes[TRACK_MAX];
+}trainPathInfo;
+
+
 typedef struct routeServerData{
 	track_node trackA[TRACK_MAX];
-	int	blockedTrackNodes[TRACK_MAX];	
+	int	trackNodeStatus[TRACK_MAX];	
+
+	trainPathInfo trainPathInfos[MAX_TRAINS];
 }routeServerData;
 
 typedef struct DijkstraEntry{
@@ -102,7 +114,9 @@ findMin(DijkstraEntry* dests){
 	return retval;
 }
 
-
+/*
+ *	Reservation related functions
+ */
 
 
 static void
@@ -113,11 +127,9 @@ initRouteServerData(routeServerData* rtSvrData){
 	
 	for (i = 0; i < TRACK_MAX; i++)
 	{
-		rtSvrData->blockedTrackNodes[i] = FREE;
-	}
-	
+		rtSvrData->trackNodeStatus[i] = FREE;
+	}	
 }
-
 void
 routeServer(){
 	routeServerData rtSvrData;
@@ -147,8 +159,7 @@ routeServer(){
 								
 				/*
 				 * Dijkstra's Algo: Init Step
-				 */ 	
-				int a = 0;														
+				 */ 														
 				int i;
 				for (i = 0; i < TRACK_MAX; i++)
 				{
@@ -173,7 +184,7 @@ routeServer(){
 					if(mineNodeIdx == dest || mineNodeIdx == -1)
 						break;
 					
-					if (rtSvrData.blockedTrackNodes[mineNodeIdx] == BLOCKED)
+					if (rtSvrData.trackNodeStatus[mineNodeIdx] == BLOCKED)
 						continue;						
 														
 					for (i = 0; i < TRACK_MAX; i++)
@@ -191,7 +202,7 @@ routeServer(){
 				
 				trainPath response;
 											
-				if (mineNodeIdx != -1){
+				if (mineNodeIdx != -1 && mineNodeIdx != src){
 					int curIdx = mineNodeIdx;
 					
 					int i = 0;
@@ -202,14 +213,16 @@ routeServer(){
 						i++;
 					}
 					response.path[(TRACK_MAX-1) - i] = curIdx;
-					
-					
+
 					response.path[0] = (TRACK_MAX-1) - i;
+
+
 				}
 				else{
 					response.path[0] = -1;
 				}
 				/*
+				int a = 0;	
 				for (i = response.path[0]; i < TRACK_MAX; i++)
 				{
 						sprintf(COM2, "%s\033[45;%uH%d%s", 
@@ -219,7 +232,28 @@ routeServer(){
 				*/
 				Reply(requester, &response, sizeof(trainPath));			
 				break;		
-			}			
+			}	
+			case ROUTESERVER_TRACKNODE_RELEASE_BYSENSOR:
+			{
+				Reply(requester, NULL, 0);	
+
+				int trainNo 		= req.src;
+				int triggeredSensor = req.dest;
+
+				trainPathInfo* thisTrainPathInfo = &(rtSvrData.trainPathInfos[trainNo-45]);
+
+				
+				break;
+			}
+			case ROUTESERVER_TRACKNODE_RELEASE_BYTRAIN:
+			{
+				Reply(requester, NULL, 0);	
+
+				int trainNo 		= req.src;
+
+
+				break;
+			}		
 		}
 	}
 }
@@ -237,8 +271,8 @@ GoTo(int trainNo, int trainSpeed, int dest){
 	 */ 
 	 
 	locationInfo trainLoc = getTrainLocation(trainNo);	 //Step 1
-	sprintf(COM2, "%s\033[50;0H%s%d,%d%s", 
-			save, clearLine, trainLoc.sensor, trainLoc.displacement,  restore);	
+	//sprintf(COM2, "%s\033[50;0H%s%d,%d%s", 
+	//		save, clearLine, trainLoc.sensor, trainLoc.displacement,  restore);	
 
 	/*
 	 * Step 2
@@ -257,6 +291,27 @@ GoTo(int trainNo, int trainSpeed, int dest){
 	/*
 	 * Step 3
 	 */ 
-	executePath(trainNo, &response);
+	executePath(trainNo, &response);	
+}
+
+void
+releaseNodesBySensor(int trainNo, int triggeredSensor){
+	routeServerRequest req;			
 	
+	req.rtSvrReq_uid = ROUTESERVER_TRACKNODE_RELEASE_BYSENSOR;
+	
+	req.src = trainNo;
+	req.dest = triggeredSensor;
+
+	Send(ROUTESERVER_TID, &req, sizeof(routeServerRequest), NULL, 0);
+}
+void
+releaseNodesByTrainNo(int trainNo){
+	routeServerRequest req;			
+	
+	req.rtSvrReq_uid = ROUTESERVER_TRACKNODE_RELEASE_BYTRAIN;
+	
+	req.src = trainNo;
+
+	Send(ROUTESERVER_TID, &req, sizeof(routeServerRequest), NULL, 0);
 }

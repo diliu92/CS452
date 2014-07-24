@@ -202,7 +202,7 @@ initTrainsSpecData(trackServerData* trkSvrData){
 	trkSvrData->trainsStartDistances[0][6] = 425;//436; 
 	trkSvrData->trainsStartDistances[0][7] = 559;//562;
 	trkSvrData->trainsStartDistances[0][8] = 651;//641; 
-	trkSvrData->trainsStartDistances[0][9] = 737;//710; 
+	trkSvrData->trainsStartDistances[0][9] = 1005;//737;//710; 
 	trkSvrData->trainsStartDistances[0][10] = 950;//895; 
 	trkSvrData->trainsStartDistances[0][11] = 1014;//935; 
 	trkSvrData->trainsStartDistances[0][12] = -1; 
@@ -244,12 +244,12 @@ initTrainsSpecData(trackServerData* trkSvrData){
 	trkSvrData->trainsStartDistances[3][3] = -1;
 	trkSvrData->trainsStartDistances[3][4] = -1;
 	trkSvrData->trainsStartDistances[3][5] = -1;
-	trkSvrData->trainsStartDistances[3][6] = 33719; 
-	trkSvrData->trainsStartDistances[3][7] = 37621;
-	trkSvrData->trainsStartDistances[3][8] = 42515; 
-	trkSvrData->trainsStartDistances[3][9] = 47268; 
-	trkSvrData->trainsStartDistances[3][10] = 52609; 
-	trkSvrData->trainsStartDistances[3][11] = 56982; 
+	trkSvrData->trainsStartDistances[3][6] = -1; 
+	trkSvrData->trainsStartDistances[3][7] = -1;
+	trkSvrData->trainsStartDistances[3][8] = -1; 
+	trkSvrData->trainsStartDistances[3][9] = 930; 
+	trkSvrData->trainsStartDistances[3][10] = -1; 
+	trkSvrData->trainsStartDistances[3][11] = -1; 
 	trkSvrData->trainsStartDistances[3][12] = -1; 
 	trkSvrData->trainsStartDistances[3][13] = -1;  
 
@@ -263,7 +263,7 @@ initTrainsSpecData(trackServerData* trkSvrData){
 	trkSvrData->trainsStartTimes[0][6] = 349; //352 
 	trkSvrData->trainsStartTimes[0][7] = 382; //383; 
 	trkSvrData->trainsStartTimes[0][8] = 402; //400; 
-	trkSvrData->trainsStartTimes[0][9] = 419; //414; 
+	trkSvrData->trainsStartTimes[0][9] = 465;//419; //414; 
 	trkSvrData->trainsStartTimes[0][10] = 456;//447; 
 	trkSvrData->trainsStartTimes[0][11] = 466;//453; 
 	trkSvrData->trainsStartTimes[0][12] = -1; 
@@ -290,12 +290,12 @@ initTrainsSpecData(trackServerData* trkSvrData){
 	trkSvrData->trainsStartTimes[2][3] = -1;
 	trkSvrData->trainsStartTimes[2][4] = -1;
 	trkSvrData->trainsStartTimes[2][5] = -1;
-	trkSvrData->trainsStartTimes[2][6] = 33388; 
-	trkSvrData->trainsStartTimes[2][7] = 37201;
-	trkSvrData->trainsStartTimes[2][8] = 42301; 
-	trkSvrData->trainsStartTimes[2][9] = 45633; 
-	trkSvrData->trainsStartTimes[2][10] = 49947; 
-	trkSvrData->trainsStartTimes[2][11] = 56606; 
+	trkSvrData->trainsStartTimes[2][6] = -1; 
+	trkSvrData->trainsStartTimes[2][7] = -1;
+	trkSvrData->trainsStartTimes[2][8] = -1; 
+	trkSvrData->trainsStartTimes[2][9] = -1; 
+	trkSvrData->trainsStartTimes[2][10] = -1; 
+	trkSvrData->trainsStartTimes[2][11] = -1; 
 	trkSvrData->trainsStartTimes[2][12] = -1; 
 	trkSvrData->trainsStartTimes[2][13] = -1;  
 	
@@ -305,12 +305,12 @@ initTrainsSpecData(trackServerData* trkSvrData){
 	trkSvrData->trainsStartTimes[3][3] = -1;
 	trkSvrData->trainsStartTimes[3][4] = -1;
 	trkSvrData->trainsStartTimes[3][5] = -1;
-	trkSvrData->trainsStartTimes[3][6] = 33719; 
-	trkSvrData->trainsStartTimes[3][7] = 37621;
-	trkSvrData->trainsStartTimes[3][8] = 42515; 
-	trkSvrData->trainsStartTimes[3][9] = 47268; 
-	trkSvrData->trainsStartTimes[3][10] = 52609; 
-	trkSvrData->trainsStartTimes[3][11] = 56982; 
+	trkSvrData->trainsStartTimes[3][6] = -1; 
+	trkSvrData->trainsStartTimes[3][7] = -1;
+	trkSvrData->trainsStartTimes[3][8] = -1; 
+	trkSvrData->trainsStartTimes[3][9] = 538; 
+	trkSvrData->trainsStartTimes[3][10] = -1; 
+	trkSvrData->trainsStartTimes[3][11] = -1; 
 	trkSvrData->trainsStartTimes[3][12] = -1; 
 	trkSvrData->trainsStartTimes[3][13] = -1; 	
 }
@@ -457,9 +457,9 @@ getTrainActualData(int whichData, trackServerData* trkSvrData, int trainNo, int 
 }
 static int
 getTrainShortMoveTicks(int trainNo, int trainSpeed, int totalDist){
-	int x3 = totalDist * totalDist * totalDist;
-	int x2 = totalDist * totalDist;
-	int x = totalDist;
+	double x3 = totalDist * totalDist * totalDist;
+	double x2 = totalDist * totalDist;
+	double x = totalDist;
 
 	switch (trainNo)
 	{
@@ -467,16 +467,20 @@ getTrainShortMoveTicks(int trainNo, int trainSpeed, int totalDist){
 		{
 			switch (trainSpeed)
 			{
-				case 7:
-					return 2 * x3 / 10000000 - 5 * x2 / 10000 + 636 * x / 1000 + 63625 / 1000;
-				case 8:
-					return 3 * x3 / 10000000 - 7 * x2 / 10000 + 708 * x / 1000 + 54316 / 1000;
-				case 9:
-					return 2 * x3 / 10000000 - 6 * x2 / 10000 + 676 * x / 1000 + 56221 / 1000;
 				case 10:
-					return 1 * x3 / 10000000 - 4 * x2 / 10000 + 584 * x / 1000 + 62767 / 1000;
-				case 11:
-					return 1 * x3 / 10000000 - 4 * x2 / 10000 + 576 * x / 1000 + 63421 / 1000;
+					//return 1 * x3 / 10000000 - 4 * x2 / 10000 + 584 * x / 1000 + 62767 / 1000;
+					//return 2 * x3 / 10000000 - 5 * x2 / 10000 + 620 * x / 1000 + 6686 / 1000;
+					//return 2 * x3 / 10000000 - 4.94146 * x2 / 10000 + 608 * x / 1000 + 69680 / 1000;	
+					// return 	(0.0000002 * x3)
+					// 		- (0.0005 * x2)
+					// 		+ (0.605 * x) 
+					// 		+ 69.933;
+					//return 16 * (x2 / 1000000) * (x / 100) - 5 * (x2 / 10000) + 607 * x / 1000 + 69721 / 1000;	
+								
+					 return (0.163619 * x * x / 10000 * x / 100)
+					 		- (0.493193 * x * x / 1000)
+					 		+ (0.6071511 * x) 
+					 		+ 69.7206;
 			}
 
 			break;
@@ -489,22 +493,16 @@ getTrainShortMoveTicks(int trainNo, int trainSpeed, int totalDist){
 		{
 			switch (trainSpeed)
 			{
-				case 7:
-					return 2 * x3 / 10000000 - 5 * x2 / 10000 + 636 * x / 1000 + 63625 / 1000;
-				case 8:
-					return 3 * x3 / 10000000 - 7 * x2 / 10000 + 708 * x / 1000 + 54316 / 1000;
-				case 9:
-					return 2 * x3 / 10000000 - 6 * x2 / 10000 + 676 * x / 1000 + 56221 / 1000;
 				case 10:
-					return 1 * x3 / 10000000 - 4 * x2 / 10000 + 584 * x / 1000 + 62767 / 1000;
-				case 11:
-					return 1 * x3 / 10000000 - 4 * x2 / 10000 + 576 * x / 1000 + 63421 / 1000;
+					 return (0.259327 * x * x / 10000 * x / 100)
+					 		- (0.723554 * x * x / 1000)
+					 		+ (0.776831 * x) 
+					 		+ 66.5597;
 			}
 
 			break;
 		}		
 	}
-
 }
 
 
@@ -544,6 +542,7 @@ trainWorker(){
 		changeTrainSpeed(trainNo,trainSpeed);
 
 		int isPrevCommandReverse = 0;
+		int x = 47;
 		for (i = 0; i < trainWorkerReq.numberOfCommands; i++)
 		{
 			trainWorkerCommand* currentCommand = &(trainWorkerReq.commands[i]);
@@ -572,6 +571,11 @@ trainWorker(){
 
 					int totalDelay = currentCommand->cmdValue;
 
+					sprintf(COM2, "%s\033[%u;50H totalDelay: %d%s", 
+								save, x, totalDelay, restore);
+					x++;
+
+					
 					while (1){
 						totalDelay += getTrainDelayOffset(trainNo);
 
@@ -585,6 +589,7 @@ trainWorker(){
 						else
 							break;
 					}
+					
 					Delay(totalDelay);
 					changeTrainSpeed(trainNo, 0);
 
@@ -1016,6 +1021,8 @@ trackServer(){
 
 					int startTime = getTrainActualData(TRAIN_ACTUALDATA_START_TIME, &trkSvrData, trainNo, trainSpeed);
 				 
+					int x = 47;
+
 					for (i = thisTrainPath->path[0]; i < TRACK_MAX; i++)
 					{
 							track_node* thisNode = &(trkSvrData.trackA[thisTrainPath->path[i]]);
@@ -1059,39 +1066,62 @@ trackServer(){
 							//TODO: if (nextNode == thisNode->reverse)
 							if(nextNode == thisNode->reverse){
 								int totalDist, totalDelay;
-								//currentDist += 200;
-								if (currentDist > startDist + stopDist){
-									totalDist  = currentDist - stopDist - startDist;	
-									totalDelay = (totalDist * 10000 / actualSpeed) + startTime;// + curvesNum * 10;
-								}
-								else{
-									totalDist  = currentDist;
-									totalDelay = getTrainShortMoveTicks(trainNo, trainSpeed, totalDist);
-								}
-
-								sprintf(COM2, "%s\033[47;0H totalDist:%d totalDelay:%dcurvesNum:%d %s", 
-									save, totalDist, totalDelay, curvesNum, restore);
-									
-								req.commands[req.numberOfCommands] = (trainWorkerCommand){DELAY_STOP, totalDelay};
-								req.numberOfCommands++;	
-
-
-								int reverseDelay;
 								if (nextNode == destNode){
-									//reverseDelay = 0;
-									
-									req.commands[req.numberOfCommands] = (trainWorkerCommand){REVERSE, -1};
-									req.numberOfCommands++;		
 
-									break;
-								}
-								else{
-									//reverseDelay = getTrainShortMoveTicks(trainNo, trainSpeed, 200);
+									if (currentDist > startDist + stopDist){
+										totalDist  = currentDist - stopDist - startDist;	
+										totalDelay = (totalDist * 10000 / actualSpeed) + startTime;// + curvesNum * 10;
+
+										sprintf(COM2, "%s\033[%u;0H %s totalDist:%d totalDelay:%dcurvesNum:%d %s", 
+											save, x, green, totalDist, totalDelay, curvesNum,restore);
+										x++;
+									}
+									else{
+										totalDist  = currentDist;
+										totalDelay = getTrainShortMoveTicks(trainNo, trainSpeed, totalDist);
+
+										sprintf(COM2, "%s\033[%u;0H %s totalDist:%d totalDelay:%dcurvesNum:%d %s", 
+											save, x, yellow, totalDist, totalDelay, curvesNum,restore);
+										x++;
+									}
+										
+									req.commands[req.numberOfCommands] = (trainWorkerCommand){DELAY_STOP, totalDelay};
+									req.numberOfCommands++;	
 
 									req.commands[req.numberOfCommands] = (trainWorkerCommand){REVERSE, -1};
 									req.numberOfCommands++;	
 
-									currentDist = 400 ;//200;
+									req.commands[req.numberOfCommands] = (trainWorkerCommand){DELAY_STOP, getTrainShortMoveTicks(trainNo, trainSpeed, 200)};
+									req.numberOfCommands++;	
+									break;
+								}
+								else{
+
+									currentDist += 300;
+									if (currentDist > startDist + stopDist){
+										totalDist  = currentDist - stopDist - startDist;	
+										totalDelay = (totalDist * 10000 / actualSpeed) + startTime;// + curvesNum * 10;
+
+										sprintf(COM2, "%s\033[%u;0H %s totalDist:%d totalDelay:%dcurvesNum:%d %s", 
+											save, x, green, totalDist, totalDelay, curvesNum,restore);
+										x++;
+									}
+									else{
+										totalDist  = currentDist;
+										totalDelay = getTrainShortMoveTicks(trainNo, trainSpeed, totalDist);
+
+										sprintf(COM2, "%s\033[%u;0H %s totalDist:%d totalDelay:%dcurvesNum:%d %s", 
+											save, x, yellow, totalDist, totalDelay, curvesNum,restore);
+										x++;
+									}
+										
+									req.commands[req.numberOfCommands] = (trainWorkerCommand){DELAY_STOP, totalDelay};
+									req.numberOfCommands++;	
+
+									req.commands[req.numberOfCommands] = (trainWorkerCommand){REVERSE, -1};
+									req.numberOfCommands++;	
+
+									currentDist = 500;//200;
 								}
 							}
 							else if (nextNode == destNode){
@@ -1105,8 +1135,8 @@ trackServer(){
 									totalDelay = getTrainShortMoveTicks(trainNo, trainSpeed, totalDist);
 								}
 
-								//sprintf(COM2, "%s\033[47;0H totalDist:%d totalDelay:%dcurvesNum:%d %s", 
-								//	save, totalDist, totalDelay, curvesNum, restore);
+								sprintf(COM2, "%s\033[50;0H totalDist:%d totalDelay:%d curvesNum:%d %s", 
+									save, totalDist, totalDelay, curvesNum, restore);
 									
 								req.commands[req.numberOfCommands] = (trainWorkerCommand){DELAY_STOP, totalDelay};
 								req.numberOfCommands++;	
@@ -1118,9 +1148,7 @@ trackServer(){
 					/*
 					 * 5. trackServer pass this formated path to the trainCommandWorker	
 					 */
-					Send(thisTrainStatus->trainWorkerTid, &(req), sizeof(trainWorkerRequest), NULL, 0); 
-					 					
-					
+					Send(thisTrainStatus->trainWorkerTid, &(req), sizeof(trainWorkerRequest), NULL, 0); 	 									
 				}
 				else{
 					//errorMsg;
@@ -1169,7 +1197,7 @@ reverseTrain(int trainNo){
 	putc(COM1, 0);								//soft-stop
 	putc(COM1, trainNo);
 
-	Delay(300);									//delay 2s
+	Delay(500);									//delay 2s
 
 	putc(COM1, 15);								//change direction and hard-stop
 	putc(COM1, trainNo);
