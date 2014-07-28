@@ -103,14 +103,14 @@ isNeighbor(track_node* src, track_node* dest, int* cost, int* isReverse){	//can 
 	return 0;
 }
 static int
-findMin(DijkstraEntry* dests){	
+findMin(DijkstraEntry* dests, routeServerData* rtSvrData){	
 	int retval = -1;
 	int minCost = INFINITY;
 	
 	int i;
 	for (i = 0; i < TRACK_MAX; i++)
 	{
-		if(dests[i].isFinished == FINISHED)
+		if(dests[i].isFinished == FINISHED || rtSvrData->trackNodeStatus[dests[i]] == BLOCKED)
 			continue;
 		else if(dests[i].D < minCost){
 			minCost = dests[i].D;
@@ -283,13 +283,13 @@ routeServer(){
 					if(mineNodeIdx == dest || mineNodeIdx == -1)
 						break;
 					
-					if (rtSvrData.trackNodeStatus[mineNodeIdx] == BLOCKED)
-						continue;						
+					//if (rtSvrData.trackNodeStatus[mineNodeIdx] == BLOCKED)
+						//continue;						
 														
 					for (i = 0; i < TRACK_MAX; i++)
 					{						
-						if (dests[i].isFinished == UNFINISHED && 
-								isNeighbor(&(rtSvrData.trackA[mineNodeIdx]), &(rtSvrData.trackA[i]), &cost, &isReverse))
+						if (dests[i].isFinished == UNFINISHED 
+								&& isNeighbor(&(rtSvrData.trackA[mineNodeIdx]), &(rtSvrData.trackA[i]), &cost, &isReverse))
 							{
 								if(dests[mineNodeIdx].D + cost < dests[i].D){							
 									dests[i].D = dests[mineNodeIdx].D + cost;
