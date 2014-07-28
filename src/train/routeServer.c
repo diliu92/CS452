@@ -276,7 +276,7 @@ routeServer(){
 				int mineNodeIdx;
 				while(1)
 				{
-					mineNodeIdx = findMin(dests);
+					mineNodeIdx = findMin(dests, &rtSvrData);
 						
 					dests[mineNodeIdx].isFinished = 1;
 					
