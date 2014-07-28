@@ -177,9 +177,7 @@ releaseAlongPathNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrai
 		{
 			pathNode = thisTrainReservInfo->alongPathNodes[i];
 			
-			if (pathNode == -1)
-				continue;
-			else{
+			if(pathNode != -1){
 				rtSvrData->trackNodeStatus[pathNode] = FREE;
 				
 				thisTrainReservInfo->alongPathNodes[i] = -1;
@@ -188,8 +186,8 @@ releaseAlongPathNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrai
 							save, a, pathNode, restore);
 							a = a + 6;
 				
-				//if (pathNode == triggeredSensor)
-				//	return;
+				if (pathNode == triggeredSensor)
+					return;				
 			}
 		}		
 	}
