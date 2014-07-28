@@ -191,7 +191,7 @@ releaseAlongPathNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrai
 }
 
 static void
-reserveNearDestNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrainReservInfo){
+reserveAllNearDestNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrainReservInfo){
 	
 }
 
@@ -243,7 +243,7 @@ routeServer(){
 				 */ 
 				trainReservationInfo* thisTrainReservInfo = &(rtSvrData.trainReservationInfos[req.trainNo - 45]);
 				
-				releaseNearDestNodes(&rtSvrData, thisTrainReservInfo);
+				releaseAllNearDestNodes(&rtSvrData, thisTrainReservInfo);
 				
 				int src  = req.src;
 				int dest = req.dest;
