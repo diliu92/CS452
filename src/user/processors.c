@@ -20,7 +20,8 @@ void initUI(){
 		cyan, yellow, magenta, yellow, cyan, yellow, magenta, resetColor);
 
 	//recent snesor
-	sprintf( COM2, "\033[12;0H%sCurrent Location: ", yellow);
+	sprintf( COM2, "\033[11;0H%sCurrent Location  ", yellow);
+	sprintf( COM2, "\033[12;0H%sCurrent Location  ", yellow);
 	sprintf( COM2, "\033[13;0HExpect Sensor:      at: ");
 	sprintf( COM2, "\033[15;0HPrevious sensor: ");
 	sprintf( COM2, "\033[16;4HActual time: ");
@@ -28,8 +29,8 @@ void initUI(){
 	sprintf( COM2, "\033[18;4HTime difference: %s", resetColor);
 
 	//Train status
-	sprintf( COM2, "\033[4;40HCurrent Train Direction:      Forward");
-	sprintf( COM2, "\033[5;40HCurrent Train Speed:          0");	
+	// sprintf( COM2, "\033[4;40HCurrent Train Direction:      Forward");
+	// sprintf( COM2, "\033[5;40HCurrent Train Speed:          0");	
 
 	//track
 	sprintf( COM2, "\033[20;0H%s*  *  *  *  A $12 *  * $11 *  *  A  *  *  *  *  *  A  *  *  * ", "");
@@ -660,26 +661,40 @@ void cmdProcessor (){
 	Exit();
 }
 
-void showTrainLocation(){
+void showTrainLocation1(){
 	int displacement, id, group;
-	locationInfo locInfo49;
-	locationInfo locInfo50;
+	locationInfo locInfo;
+	int trainNo = 45;
 
 	while(!NeedToShutDown()){
-		locInfo49 = getTrainLocation(49); //for demo1, train number doesn't matter
-		locInfo50 = getTrainLocation(50);
-		if (locInfo49.sensor > 'A'*17){
-			group = locInfo49.sensor / 17;
-			id = locInfo49.sensor % 17; 
-			displacement = locInfo49.displacement;
-			sprintf(COM2, "%s\033[12;18H%s %c%d + %dmm%s", save, clearLine, (char)group, id, displacement, restore);
+		locInfo = getTrainLocation(trainNo); 
+		if (locInfo.sensor > 'A'*17){
+			group = locInfo.sensor / 17;
+			id = locInfo.sensor % 17; 
+			displacement = locInfo.displacement;
+			sprintf(COM2, "%s\033[11;18H%sTrain %d - %c%d + %dmm%s", 
+				save, clearLine, trainNo, (char)group, id, displacement, restore);
 		}
-		 else if (locInfo50.sensor > 'A'*17){
-		 	group = locInfo50.sensor / 17;
-		 	id = locInfo50.sensor % 17; 
-		 	displacement = locInfo50.displacement;
-		 	sprintf(COM2, "%s\033[12;18H%s %c%d + %dmm%s", save, clearLine, (char)group, id, displacement, restore);
-		 }
+		Delay(18);
+	}
+
+	Exit();
+}
+
+void showTrainLocation2(){
+	int displacement, id, group;
+	locationInfo locInfo;
+	int trainNo = 48;
+
+	while(!NeedToShutDown()){
+		locInfo = getTrainLocation(trainNo);
+		if (locInfo.sensor > 'A'*17){
+		 	group = locInfo.sensor / 17;
+		 	id = locInfo.sensor % 17; 
+		 	displacement = locInfo.displacement;
+		 	sprintf(COM2, "%s\033[12;18H%sTrain %d - %c%d + %dmm%s", 
+		 		save, clearLine, trainNo, (char)group, id, displacement, restore);
+		}
 		Delay(18);
 	}
 

@@ -8,7 +8,10 @@ void
 cmdProcessor();
 
 void 
-showTrainLocation();
+showTrainLocation1();
+
+void 
+showTrainLocation2();
 
 void
 firstUserTask();
