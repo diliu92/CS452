@@ -356,8 +356,6 @@ routeServer(){
 				}
 				else{
 					response.path[0] = -1;
-					sprintf(COM2, "%s\033[51;0H%sNo path now%s", 
-								save, clearLine, restore);
 				}
 				
 				Reply(requester, &response, sizeof(trainPath));			
@@ -422,8 +420,12 @@ GoTo(int trainNo, int trainSpeed, int dest){
 	while(1){
 		Send(ROUTESERVER_TID, &req, sizeof(routeServerRequest), &response, sizeof(trainPath));
 		
-		if(response.path[0] != -1)
+		if(response.path[0] != -1){
 			break;
+		}
+		sprintf(COM2, "%s\033[51;0H%sNo path now-> src:%d dest:%d %s", 
+				save, clearLine, req.src, req.dest, restore);
+		
 		Delay(15);
 	}
 	response.trainSpeed = trainSpeed;
