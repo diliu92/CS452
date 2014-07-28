@@ -878,9 +878,9 @@ trackServer(){
 		
 					for (i = thisTrainPath->path[0]; i < TRACK_MAX; i++)
 					{
-							sprintf(COM2, "%s\033[45;%uH%s%s%s", 
-								save, a, clearLine, trkSvrData.trackA[(thisTrainPath->path[i])].name, restore);
-							a = a + 6;					
+							//sprintf(COM2, "%s\033[45;%uH%s%s%s", 
+							//	save, a, clearLine, trkSvrData.trackA[(thisTrainPath->path[i])].name, restore);
+							//a = a + 6;					
 					}
 
 					trainWorkerRequest req;

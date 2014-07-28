@@ -348,6 +348,13 @@ routeServer(){
 								save, a, response.path[i], restore);
 							a = a + 6;					
 					}
+					a = 0;	
+					for (i = 0; i < thisTrainReservInfo->alongPathNodesNumber; i++)
+					{
+							sprintf(COM2, "%s\033[46;%uH%d%s", 
+								save, a, thisTrainReservInfo->alongPathNodes[i], restore);
+							a = a + 6;					
+					}
 				}
 				else{
 					response.path[0] = -1;
@@ -373,8 +380,6 @@ routeServer(){
 			case ROUTESERVER_TRACKNODE_CAPTURE_BYTRAIN:
 			{
 				Reply(requester, NULL, 0);	
-
-				int trainNo 		= req.trainNo;
 
 				trainReservationInfo* thisTrainReservationInfo = &(rtSvrData.trainReservationInfos[req.trainNo-45]);
 				
