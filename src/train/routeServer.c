@@ -380,7 +380,7 @@ routeServer(){
 
 				trainReservationInfo* thisTrainReservationInfo = &(rtSvrData.trainReservationInfos[req.trainNo-45]);
 				
-				//releaseAllAlongPathNodes(&rtSvrData, thisTrainReservationInfo);
+				releaseAllAlongPathNodes(&rtSvrData, thisTrainReservationInfo);
 				reserveAllNearDestNodes(&rtSvrData, thisTrainReservationInfo);
 				
 				break;
