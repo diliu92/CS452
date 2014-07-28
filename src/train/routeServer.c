@@ -184,11 +184,11 @@ releaseAlongPathNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrai
 				
 				sprintf(COM2, "%s\033[50;%uH%d%s", 
 							save, a, pathNode, restore);
-							a = a + 6;
-				
-				if (pathNode == triggeredSensor)
-					return;				
+							a = a + 6;			
 			}
+			
+			if (pathNode == triggeredSensor)
+				return;	
 		}		
 	}
 }
