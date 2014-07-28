@@ -183,8 +183,8 @@ releaseAlongPathNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrai
 				
 				thisTrainReservInfo->alongPathNodes[i] = -1;
 				
-				if (pathNode == triggeredSensor)
-					break;
+				//if (pathNode == triggeredSensor)
+				//	break;
 			}
 		}		
 	}
