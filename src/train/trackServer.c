@@ -594,11 +594,12 @@ trainWorker(){
 					changeTrainSpeed(trainNo, 0);
 
 					isPrevCommandReverse = 0;
-				}
-				break;		
+				break;	
+				}	
 			}	
 		}
 
+		captureNodesByTrainNo(trainNo);
 
 	}
 	
