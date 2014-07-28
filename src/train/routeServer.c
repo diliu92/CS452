@@ -188,8 +188,8 @@ releaseAlongPathNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrai
 							save, a, pathNode, restore);
 							a = a + 6;
 				
-				if (pathNode == triggeredSensor)
-					return;
+				//if (pathNode == triggeredSensor)
+				//	return;
 			}
 		}		
 	}
