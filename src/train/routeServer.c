@@ -170,6 +170,8 @@ releaseAlongPathNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrai
 	}
 	
 	if (isExisted){
+		sprintf(COM2, "%s\033[50;0HEnter (isExisted):%d%s", 
+						save, triggeredSensor, restore);
 		for (i = 0; i < thisTrainReservInfo->alongPathNodesNumber; i++)
 		{
 			pathNode = thisTrainReservInfo->alongPathNodes[i];
