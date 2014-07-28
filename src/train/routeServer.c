@@ -345,6 +345,8 @@ routeServer(){
 				}
 				else{
 					response.path[0] = -1;
+					sprintf(COM2, "%s\033[51;0HNo path now%s", 
+								save, restore);
 				}
 				
 				Reply(requester, &response, sizeof(trainPath));			
