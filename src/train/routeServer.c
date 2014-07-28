@@ -169,9 +169,10 @@ releaseAlongPathNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrai
 		}
 	}
 	
+	sprintf(COM2, "%s\033[50;0H%s%s", 
+				save, clearLine, restore);
+	int a = 0;			
 	if (isExisted){
-		sprintf(COM2, "%s\033[50;0HEnter (isExisted):%d%s", 
-						save, triggeredSensor, restore);
 		for (i = 0; i < thisTrainReservInfo->alongPathNodesNumber; i++)
 		{
 			pathNode = thisTrainReservInfo->alongPathNodes[i];
@@ -183,13 +184,15 @@ releaseAlongPathNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrai
 				
 				thisTrainReservInfo->alongPathNodes[i] = -1;
 				
-				//if (pathNode == triggeredSensor)
-				//	break;
+				sprintf(COM2, "%s\033[50;%uH%d%s", 
+							save, a, pathNode, restore);
+							a = a + 6;
+				
+				if (pathNode == triggeredSensor)
+					return;
 			}
 		}		
 	}
-	else
-		return;
 }
 
 static void
