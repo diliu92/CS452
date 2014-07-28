@@ -9,23 +9,31 @@
 
 #define INFINITY	999999;
 
-#define REVERSE_COST	400		//750*2
+#define REVERSE_COST	400	
 
-typedef struct trainPathInfo{
+typedef struct trainReservationInfo{
 	int isUsed;
 
 	int trainNo;
+	
+	int src;
+	int dest;
 
 	//int currentIdx;
-	int trackPathNodes[TRACK_MAX];
-}trainPathInfo;
+	int alongPathNodes[TRACK_MAX];	//free them during movement
+	int alongPathNodesNumber;
+	int current;
+	
+	int nearDestNodes[TRACK_MAX];	//free them when train restart
+	int nearDestNodesNumber;
+}trainReservationInfo;
 
 
 typedef struct routeServerData{
 	track_node trackA[TRACK_MAX];
 	int	trackNodeStatus[TRACK_MAX];	
 
-	trainPathInfo trainPathInfos[MAX_TRAINS];
+	trainReservationInfo trainReservationInfos[MAX_TRAINS];
 }routeServerData;
 
 typedef struct DijkstraEntry{
@@ -117,7 +125,20 @@ findMin(DijkstraEntry* dests){
 /*
  *	Reservation related functions
  */
-
+static void 
+releaseNearDestNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrainReservInfo){
+	int i;
+	for (i = 0; i < thisTrainReservInfo->nearDestNodesNumber; i++)
+	{
+		rtSvrData->trackNodeStatus[thisTrainReservInfo->nearDestNodes[i]] = FREE;
+	}
+	
+	thisTrainReservInfo->nearDestNodesNumber = 0;	
+}
+static void
+reserveNearDestNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrainReservInfo){
+	
+}
 
 static void
 initRouteServerData(routeServerData* rtSvrData){
@@ -128,7 +149,21 @@ initRouteServerData(routeServerData* rtSvrData){
 	for (i = 0; i < TRACK_MAX; i++)
 	{
 		rtSvrData->trackNodeStatus[i] = FREE;
-	}	
+	}
+	
+	for (i = 0; i < MAX_TRAINS; i++)
+	{
+		(rtSvrData->trainReservationInfos[i]).isUsed = 0;
+		
+		(rtSvrData->trainReservationInfos[i]).trainNo = 45 + i;
+		
+		(rtSvrData->trainReservationInfos[i]).src = -1;
+		(rtSvrData->trainReservationInfos[i]).dest = -1;
+		
+		(rtSvrData->trainReservationInfos[i]).alongPathNodesNumber = 0;
+		(rtSvrData->trainReservationInfos[i]).nearDestNodesNumber  = 0;
+	}
+		
 }
 void
 routeServer(){
@@ -152,6 +187,8 @@ routeServer(){
 				
 				int src  = req.src;
 				int dest = req.dest;
+				
+				int trainNo = req.trainNo;
 
 				int firstReverseFree = 1;
 				
@@ -168,7 +205,6 @@ routeServer(){
 					dests[i].D = INFINITY;
 					dests[i].p = -1;				
 				}
-				
 				dests[src].D = 0; 		
 						
 				/*
@@ -215,13 +251,23 @@ routeServer(){
 					response.path[(TRACK_MAX-1) - i] = curIdx;
 
 					response.path[0] = (TRACK_MAX-1) - i;
-
-
+					
+					/*
+					 * Reserve these pathNodes
+					 */ 
+					trainReservationInfo* thisTrainReservInfo = &(rtSvrData.trainReservationInfos[trainNo - 45]);
+			
+					for (i = response.path[0]; i < TRACK_MAX; i++)
+					{
+							sprintf(COM2, "%s\033[45;%uH%d%s", 
+								save, a, response.path[i], restore);
+							a = a + 6;					
+					}
 				}
 				else{
 					response.path[0] = -1;
 				}
-				/*
+				
 				int a = 0;	
 				for (i = response.path[0]; i < TRACK_MAX; i++)
 				{
@@ -229,7 +275,7 @@ routeServer(){
 							save, a, response.path[i], restore);
 						a = a + 6;					
 				}
-				*/
+				
 				Reply(requester, &response, sizeof(trainPath));			
 				break;		
 			}	
@@ -240,7 +286,7 @@ routeServer(){
 				int trainNo 		= req.src;
 				int triggeredSensor = req.dest;
 
-				trainPathInfo* thisTrainPathInfo = &(rtSvrData.trainPathInfos[trainNo-45]);
+				trainReservationInfo* thisTrainReservationInfo = &(rtSvrData.trainReservationInfos[trainNo-45]);
 
 				
 				break;
@@ -283,8 +329,9 @@ GoTo(int trainNo, int trainSpeed, int dest){
 	req.rtSvrReq_uid = ROUTESERVER_ROUTE_GET_SHORTEST;
 	
 	req.src  = (trainLoc.sensor / 17 -'A') * 16 + (trainLoc.sensor % 17) - 1;
-	//TODO: parse
 	req.dest = (dest / 17 -'A') * 16 + (dest % 17) - 1;
+	
+	req.trainNo = trainNo;
 
 	Send(ROUTESERVER_TID, &req, sizeof(routeServerRequest), &response, sizeof(trainPath));
 	response.trainSpeed = trainSpeed;
@@ -306,10 +353,10 @@ releaseNodesBySensor(int trainNo, int triggeredSensor){
 	Send(ROUTESERVER_TID, &req, sizeof(routeServerRequest), NULL, 0);
 }
 void
-releaseNodesByTrainNo(int trainNo){
+captureNodesByTrainNo(int trainNo){
 	routeServerRequest req;			
 	
-	req.rtSvrReq_uid = ROUTESERVER_TRACKNODE_RELEASE_BYTRAIN;
+	req.rtSvrReq_uid = ROUTESERVER_TRACKNODE_CAPTURE_BYTRAIN;
 	
 	req.src = trainNo;
 
