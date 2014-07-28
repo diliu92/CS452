@@ -59,38 +59,7 @@ typedef struct trackServerData{
 }trackServerData;
 
 static void
-initTrainsSpecData(trackServerData* trkSvrData){	
-
-	trkSvrData->trainsActualSpeeds[0][0] = 1348;		//train-49
-	trkSvrData->trainsActualSpeeds[0][1] = 8225; 
-	trkSvrData->trainsActualSpeeds[0][2] = 13388;
-	trkSvrData->trainsActualSpeeds[0][3] = 18065;
-	trkSvrData->trainsActualSpeeds[0][4] = 23386;
-	trkSvrData->trainsActualSpeeds[0][5] = 28516;
-	trkSvrData->trainsActualSpeeds[0][6] = 35332; 
-	trkSvrData->trainsActualSpeeds[0][7] = 41806;
-	trkSvrData->trainsActualSpeeds[0][8] = 45630; 
-	trkSvrData->trainsActualSpeeds[0][9] = 48900; 
-	trkSvrData->trainsActualSpeeds[0][10] = 57038; 
-	trkSvrData->trainsActualSpeeds[0][11] = 58700; 
-	trkSvrData->trainsActualSpeeds[0][12] = 62222; 
-	trkSvrData->trainsActualSpeeds[0][13] = 62221;  
-	
-	trkSvrData->trainsActualSpeeds[1][0] =  945; 		//train-50
-	trkSvrData->trainsActualSpeeds[1][1] =  7482; 
-	trkSvrData->trainsActualSpeeds[1][2] =  12923;
-	trkSvrData->trainsActualSpeeds[1][3] =  17263; 
-	trkSvrData->trainsActualSpeeds[1][4] =  22015; 
-	trkSvrData->trainsActualSpeeds[1][5] =  27196; 
-	trkSvrData->trainsActualSpeeds[1][6] =  33286; 
-	trkSvrData->trainsActualSpeeds[1][7] =  38269; 	//0.91539
-	trkSvrData->trainsActualSpeeds[1][8] =  42781; 	//0.93756
-	trkSvrData->trainsActualSpeeds[1][9] =  47828; 	//0.97808
-	trkSvrData->trainsActualSpeeds[1][10] = 51079; 	//0.89553
-	trkSvrData->trainsActualSpeeds[1][11] = 57041; 	//0.97174
-	trkSvrData->trainsActualSpeeds[1][12] = 59658; 	//0.95879
-	trkSvrData->trainsActualSpeeds[1][13] = 55469;
-	
+initTrainsSpecData(trackServerData* trkSvrData){		
 	trkSvrData->trainsActualSpeeds[2][0] = -1;		 	//train-45
 	trkSvrData->trainsActualSpeeds[2][1] = -1; 
 	trkSvrData->trainsActualSpeeds[2][2] = -1;
@@ -119,37 +88,7 @@ initTrainsSpecData(trackServerData* trkSvrData){
 	trkSvrData->trainsActualSpeeds[3][10] = 52609; 
 	trkSvrData->trainsActualSpeeds[3][11] = 56982; 
 	trkSvrData->trainsActualSpeeds[3][12] = -1; 
-	trkSvrData->trainsActualSpeeds[3][13] = -1;    
-
-	trkSvrData->trainsStopDistances[0][0] = -1; 		//train-49 	
-	trkSvrData->trainsStopDistances[0][1] = -1; 
-	trkSvrData->trainsStopDistances[0][2] = 149; 
-	trkSvrData->trainsStopDistances[0][3] = 226; 
-	trkSvrData->trainsStopDistances[0][4] = 292; 
-	trkSvrData->trainsStopDistances[0][5] = 362; 
-	trkSvrData->trainsStopDistances[0][6] = 458; 
-	trkSvrData->trainsStopDistances[0][7] = 511;
-	trkSvrData->trainsStopDistances[0][8] = 579; 
-	trkSvrData->trainsStopDistances[0][9] = 649; 
-	trkSvrData->trainsStopDistances[0][10] = 713; 
-	trkSvrData->trainsStopDistances[0][11] = 779; 
-	trkSvrData->trainsStopDistances[0][12] = 821; 
-	trkSvrData->trainsStopDistances[0][13] = 816;  
-	
-	trkSvrData->trainsStopDistances[1][0] =  -1; 		//train-50
-	trkSvrData->trainsStopDistances[1][1] =  -1; 
-	trkSvrData->trainsStopDistances[1][2] =  134;
-	trkSvrData->trainsStopDistances[1][3] =  205; 
-	trkSvrData->trainsStopDistances[1][4] =  264; 
-	trkSvrData->trainsStopDistances[1][5] =  328; 
-	trkSvrData->trainsStopDistances[1][6] =  404; 
-	trkSvrData->trainsStopDistances[1][7] =  473; 
-	trkSvrData->trainsStopDistances[1][8] =  525; 
-	trkSvrData->trainsStopDistances[1][9] =  590; 
-	trkSvrData->trainsStopDistances[1][10] = 662; 
-	trkSvrData->trainsStopDistances[1][11] = 718; 
-	trkSvrData->trainsStopDistances[1][12] = 752; 
-	trkSvrData->trainsStopDistances[1][13] = 777;  
+	trkSvrData->trainsActualSpeeds[3][13] = -1;     
 
 	trkSvrData->trainsStopDistances[2][0] = -1; 		//train-45		
 	trkSvrData->trainsStopDistances[2][1] = -1; 
@@ -192,36 +131,6 @@ initTrainsSpecData(trackServerData* trkSvrData){
 	
 		}
 	}
-
-	trkSvrData->trainsStartDistances[0][0] = -1;		//train-49
-	trkSvrData->trainsStartDistances[0][1] = -1; 
-	trkSvrData->trainsStartDistances[0][2] = -1;
-	trkSvrData->trainsStartDistances[0][3] = -1;
-	trkSvrData->trainsStartDistances[0][4] = -1;
-	trkSvrData->trainsStartDistances[0][5] = -1;
-	trkSvrData->trainsStartDistances[0][6] = 425;//436; 
-	trkSvrData->trainsStartDistances[0][7] = 559;//562;
-	trkSvrData->trainsStartDistances[0][8] = 651;//641; 
-	trkSvrData->trainsStartDistances[0][9] = 1005;//737;//710; 
-	trkSvrData->trainsStartDistances[0][10] = 950;//895; 
-	trkSvrData->trainsStartDistances[0][11] = 1014;//935; 
-	trkSvrData->trainsStartDistances[0][12] = -1; 
-	trkSvrData->trainsStartDistances[0][13] = -1;  
-	
-	trkSvrData->trainsStartDistances[1][0] =  -1; 		//train-50
-	trkSvrData->trainsStartDistances[1][1] =  -1; 
-	trkSvrData->trainsStartDistances[1][2] =  -1;
-	trkSvrData->trainsStartDistances[1][3] =  -1; 
-	trkSvrData->trainsStartDistances[1][4] =  -1; 
-	trkSvrData->trainsStartDistances[1][5] =  -1; 
-	trkSvrData->trainsStartDistances[1][6] =  -1; 
-	trkSvrData->trainsStartDistances[1][7] =  -1; 	
-	trkSvrData->trainsStartDistances[1][8] =  -1; 	
-	trkSvrData->trainsStartDistances[1][9] =  -1; 	
-	trkSvrData->trainsStartDistances[1][10] = -1; 	
-	trkSvrData->trainsStartDistances[1][11] = -1; 	
-	trkSvrData->trainsStartDistances[1][12] = -1; 	
-	trkSvrData->trainsStartDistances[1][13] = -1;
 	
 	trkSvrData->trainsStartDistances[2][0] = -1;		 	//train-45
 	trkSvrData->trainsStartDistances[2][1] = -1; 
@@ -229,12 +138,12 @@ initTrainsSpecData(trackServerData* trkSvrData){
 	trkSvrData->trainsStartDistances[2][3] = -1;
 	trkSvrData->trainsStartDistances[2][4] = -1;
 	trkSvrData->trainsStartDistances[2][5] = -1;
-	trkSvrData->trainsStartDistances[2][6] = 33388; 
-	trkSvrData->trainsStartDistances[2][7] = 37201;
-	trkSvrData->trainsStartDistances[2][8] = 42301; 
-	trkSvrData->trainsStartDistances[2][9] = 45633; 
-	trkSvrData->trainsStartDistances[2][10] = 49947; 
-	trkSvrData->trainsStartDistances[2][11] = 56606; 
+	trkSvrData->trainsStartDistances[2][6] = -1; 
+	trkSvrData->trainsStartDistances[2][7] = -1;
+	trkSvrData->trainsStartDistances[2][8] = -1; 
+	trkSvrData->trainsStartDistances[2][9] = 912; 
+	trkSvrData->trainsStartDistances[2][10] = -1; 
+	trkSvrData->trainsStartDistances[2][11] = -1; 
 	trkSvrData->trainsStartDistances[2][12] = -1; 
 	trkSvrData->trainsStartDistances[2][13] = -1;  
 	
@@ -252,37 +161,6 @@ initTrainsSpecData(trackServerData* trkSvrData){
 	trkSvrData->trainsStartDistances[3][11] = -1; 
 	trkSvrData->trainsStartDistances[3][12] = -1; 
 	trkSvrData->trainsStartDistances[3][13] = -1;  
-
-
-	trkSvrData->trainsStartTimes[0][0] = -1;		//train-49
-	trkSvrData->trainsStartTimes[0][1] = -1; 
-	trkSvrData->trainsStartTimes[0][2] = -1;
-	trkSvrData->trainsStartTimes[0][3] = -1;
-	trkSvrData->trainsStartTimes[0][4] = -1;
-	trkSvrData->trainsStartTimes[0][5] = -1;
-	trkSvrData->trainsStartTimes[0][6] = 349; //352 
-	trkSvrData->trainsStartTimes[0][7] = 382; //383; 
-	trkSvrData->trainsStartTimes[0][8] = 402; //400; 
-	trkSvrData->trainsStartTimes[0][9] = 465;//419; //414; 
-	trkSvrData->trainsStartTimes[0][10] = 456;//447; 
-	trkSvrData->trainsStartTimes[0][11] = 466;//453; 
-	trkSvrData->trainsStartTimes[0][12] = -1; 
-	trkSvrData->trainsStartTimes[0][13] = -1;  
-	
-	trkSvrData->trainsStartTimes[1][0] =  -1; 		//train-50
-	trkSvrData->trainsStartTimes[1][1] =  -1; 
-	trkSvrData->trainsStartTimes[1][2] =  -1;
-	trkSvrData->trainsStartTimes[1][3] =  -1; 
-	trkSvrData->trainsStartTimes[1][4] =  -1; 
-	trkSvrData->trainsStartTimes[1][5] =  -1; 
-	trkSvrData->trainsStartTimes[1][6] =  -1; 
-	trkSvrData->trainsStartTimes[1][7] =  -1; 	
-	trkSvrData->trainsStartTimes[1][8] =  -1; 	
-	trkSvrData->trainsStartTimes[1][9] =  -1; 	
-	trkSvrData->trainsStartTimes[1][10] = -1; 	
-	trkSvrData->trainsStartTimes[1][11] = -1; 	
-	trkSvrData->trainsStartTimes[1][12] = -1; 	
-	trkSvrData->trainsStartTimes[1][13] = -1;
 	
 	trkSvrData->trainsStartTimes[2][0] = -1;		 	//train-45
 	trkSvrData->trainsStartTimes[2][1] = -1; 
@@ -293,7 +171,7 @@ initTrainsSpecData(trackServerData* trkSvrData){
 	trkSvrData->trainsStartTimes[2][6] = -1; 
 	trkSvrData->trainsStartTimes[2][7] = -1;
 	trkSvrData->trainsStartTimes[2][8] = -1; 
-	trkSvrData->trainsStartTimes[2][9] = -1; 
+	trkSvrData->trainsStartTimes[2][9] = 478; 
 	trkSvrData->trainsStartTimes[2][10] = -1; 
 	trkSvrData->trainsStartTimes[2][11] = -1; 
 	trkSvrData->trainsStartTimes[2][12] = -1; 
@@ -488,6 +366,15 @@ getTrainShortMoveTicks(int trainNo, int trainSpeed, int totalDist){
 		case 50:
 			break;	
 		case 45:
+			switch (trainSpeed)
+			{
+				case 10:
+					 return (0.236651 * x * x / 10000 * x / 100)
+					 		- (0.647747 * x * x / 1000)
+					 		+ (0.707508 * x) 
+					 		+ 64.9667;
+			}
+
 			break;	
 		case 48:
 		{
