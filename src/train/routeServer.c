@@ -229,7 +229,7 @@ routeServer(){
 	
 	initRouteServerData(&rtSvrData);
 		
-
+	rtSvrData.trackNodeStatus[37] = BLOCKED;
 	while (1)
 	{
 		Receive(&requester, &req, sizeof(routeServerRequest));
