@@ -328,17 +328,17 @@ routeServer(){
 						
 						rtSvrData.trackNodeStatus[response.path[i]] = BLOCKED;	
 					}
+					
+					int a = 0;	
+					for (i = response.path[0]; i < TRACK_MAX; i++)
+					{
+							sprintf(COM2, "%s\033[45;%uH%d%s", 
+								save, a, response.path[i], restore);
+							a = a + 6;					
+					}
 				}
 				else{
 					response.path[0] = -1;
-				}
-				
-				int a = 0;	
-				for (i = response.path[0]; i < TRACK_MAX; i++)
-				{
-						sprintf(COM2, "%s\033[45;%uH%d%s", 
-							save, a, response.path[i], restore);
-						a = a + 6;					
 				}
 				
 				Reply(requester, &response, sizeof(trainPath));			

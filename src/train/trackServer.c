@@ -836,6 +836,8 @@ trackServer(){
 					}
 					else{										
 						trainStatus *trainStat = &(trkSvrData.trainsStatus[trainIdx]);
+						
+						releaseNodesBySensor(trainNum, sensorIndex);
 							
 						/*
 						 * Expected time(17;4HExpected time:)
