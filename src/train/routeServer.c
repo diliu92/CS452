@@ -416,7 +416,13 @@ GoTo(int trainNo, int trainSpeed, int dest){
 	
 	req.trainNo = trainNo;
 
-	Send(ROUTESERVER_TID, &req, sizeof(routeServerRequest), &response, sizeof(trainPath));
+	while(1){
+		Send(ROUTESERVER_TID, &req, sizeof(routeServerRequest), &response, sizeof(trainPath));
+		
+		if(response.path[0] != -1)
+			break;
+		Delay(15);
+	}
 	response.trainSpeed = trainSpeed;
 	/*
 	 * Step 3
