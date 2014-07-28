@@ -574,11 +574,11 @@ int sensorFeedProcessor (){
 
 			//stopDistanceTest
 
-			//if(curSensor == 'B' * 17 + 9){ 
-			//	changeTrainSpeed(48,10);         
-			//	Delay(475);
-			//	changeTrainSpeed(48,0);
-			//}
+			if(curSensor == 'B' * 17 + 9){ 
+				changeTrainSpeed(45,10);         
+				Delay(475);
+				changeTrainSpeed(45,0);
+			}
 			// * speedTest 
 			/*
 			if (curSensor == startSensor && startTime == 0){
