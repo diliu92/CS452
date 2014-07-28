@@ -326,7 +326,7 @@ routeServer(){
 						(thisTrainReservInfo->alongPathNodes)[thisTrainReservInfo->alongPathNodesNumber] = response.path[i];
 						(thisTrainReservInfo->alongPathNodesNumber)++;		
 						
-						rtSvrDataresponse.trackNodeStatus[response.path[i]] = BLOCKED;	
+						rtSvrData.trackNodeStatus[response.path[i]] = BLOCKED;	
 					}
 				}
 				else{
