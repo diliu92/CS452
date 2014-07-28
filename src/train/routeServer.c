@@ -19,10 +19,9 @@ typedef struct trainReservationInfo{
 	int src;
 	int dest;
 
-	//int currentIdx;
 	int alongPathNodes[TRACK_MAX];	//free them during movement
 	int alongPathNodesNumber;
-	int current;
+	//int current;
 	
 	int nearDestNodes[TRACK_MAX];	//free them when train restart
 	int nearDestNodesNumber;
@@ -126,15 +125,71 @@ findMin(DijkstraEntry* dests){
  *	Reservation related functions
  */
 static void 
-releaseNearDestNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrainReservInfo){
+releaseAllNearDestNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrainReservInfo){
+	int nearDestNode;
+	
 	int i;
 	for (i = 0; i < thisTrainReservInfo->nearDestNodesNumber; i++)
 	{
-		rtSvrData->trackNodeStatus[thisTrainReservInfo->nearDestNodes[i]] = FREE;
+		nearDestNode = thisTrainReservInfo->nearDestNodes[i];
+		
+		rtSvrData->trackNodeStatus[nearDestNode] = FREE;
 	}
 	
 	thisTrainReservInfo->nearDestNodesNumber = 0;	
 }
+static void
+releaseAllAlongPathNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrainReservInfo){
+	int pathNode;
+	
+	int i;
+	for (i = 0; i < thisTrainReservInfo->alongPathNodesNumber; i++)
+	{
+		pathNode = thisTrainReservInfo->alongPathNodes[i];
+		
+		if(pathNode != -1)
+			rtSvrData->trackNodeStatus[pathNode] = FREE;
+	}
+	
+	thisTrainReservInfo->alongPathNodesNumber = 0;	
+}
+static void
+releaseAlongPathNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrainReservInfo, int triggeredSensor){
+	int pathNode;
+	int isExisted = 0;
+	
+	int i;
+	for (i = 0; i < thisTrainReservInfo->alongPathNodesNumber; i++)
+	{
+		pathNode = thisTrainReservInfo->alongPathNodes[i];
+		
+		if (pathNode == triggeredSensor){
+			isExisted = 1;
+			break;
+		}
+	}
+	
+	if (isExisted){
+		for (i = 0; i < thisTrainReservInfo->alongPathNodesNumber; i++)
+		{
+			pathNode = thisTrainReservInfo->alongPathNodes[i];
+			
+			if (pathNode == -1)
+				continue;
+			else{
+				rtSvrData->trackNodeStatus[pathNode] = FREE;
+				
+				thisTrainReservInfo->alongPathNodes[i] = -1;
+				
+				if (pathNode == triggeredSensor)
+					break;
+			}
+		}		
+	}
+	else
+		return;
+}
+
 static void
 reserveNearDestNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrainReservInfo){
 	
@@ -183,20 +238,28 @@ routeServer(){
 		{
 			case ROUTESERVER_ROUTE_GET_SHORTEST:
 			{	
-				DijkstraEntry dests[TRACK_MAX];
+				/*
+				 * release nearDestNodes
+				 */ 
+				trainReservationInfo* thisTrainReservInfo = &(rtSvrData.trainReservationInfos[req.trainNo - 45]);
+				
+				releaseNearDestNodes(&rtSvrData, thisTrainReservInfo);
 				
 				int src  = req.src;
 				int dest = req.dest;
 				
-				int trainNo = req.trainNo;
+				thisTrainReservInfo->src = src;
+				thisTrainReservInfo->dest = dest;
+				/*
+				 * Dijkstra's Algo: Init Step
+				 */				
+				
+				DijkstraEntry dests[TRACK_MAX];
 
 				int firstReverseFree = 1;
 				
 				int cost, isReverse;
-								
-				/*
-				 * Dijkstra's Algo: Init Step
-				 */ 														
+																		
 				int i;
 				for (i = 0; i < TRACK_MAX; i++)
 				{
@@ -255,13 +318,12 @@ routeServer(){
 					/*
 					 * Reserve these pathNodes
 					 */ 
-					trainReservationInfo* thisTrainReservInfo = &(rtSvrData.trainReservationInfos[trainNo - 45]);
-			
+					thisTrainReservInfo->alongPathNodesNumber = 0;
+					
 					for (i = response.path[0]; i < TRACK_MAX; i++)
 					{
-							sprintf(COM2, "%s\033[45;%uH%d%s", 
-								save, a, response.path[i], restore);
-							a = a + 6;					
+						(thisTrainReservInfo->alongPathNodes)[thisTrainReservInfo->alongPathNodesNumber] = response.path[i];
+						(thisTrainReservInfo->alongPathNodesNumber)++;				
 					}
 				}
 				else{
@@ -283,21 +345,25 @@ routeServer(){
 			{
 				Reply(requester, NULL, 0);	
 
-				int trainNo 		= req.src;
-				int triggeredSensor = req.dest;
+				int triggeredSensor = req.src;
 
-				trainReservationInfo* thisTrainReservationInfo = &(rtSvrData.trainReservationInfos[trainNo-45]);
+				trainReservationInfo* thisTrainReservationInfo = &(rtSvrData.trainReservationInfos[req.trainNo-45]);
 
+				releaseAlongPathNodes(&rtSvrData, thisTrainReservationInfo, triggeredSensor);
 				
 				break;
 			}
-			case ROUTESERVER_TRACKNODE_RELEASE_BYTRAIN:
+			case ROUTESERVER_TRACKNODE_CAPTURE_BYTRAIN:
 			{
 				Reply(requester, NULL, 0);	
 
-				int trainNo 		= req.src;
+				int trainNo 		= req.trainNo;
 
-
+				trainReservationInfo* thisTrainReservationInfo = &(rtSvrData.trainReservationInfos[req.trainNo-45]);
+				
+				releaseAllAlongPathNodes(&rtSvrData, thisTrainReservationInfo);
+				reserveAllNearDestNodes(&rtSvrData, thisTrainReservationInfo);
+				
 				break;
 			}		
 		}
@@ -347,8 +413,8 @@ releaseNodesBySensor(int trainNo, int triggeredSensor){
 	
 	req.rtSvrReq_uid = ROUTESERVER_TRACKNODE_RELEASE_BYSENSOR;
 	
-	req.src = trainNo;
-	req.dest = triggeredSensor;
+	req.trainNo = trainNo;
+	req.src = triggeredSensor;
 
 	Send(ROUTESERVER_TID, &req, sizeof(routeServerRequest), NULL, 0);
 }
@@ -358,7 +424,7 @@ captureNodesByTrainNo(int trainNo){
 	
 	req.rtSvrReq_uid = ROUTESERVER_TRACKNODE_CAPTURE_BYTRAIN;
 	
-	req.src = trainNo;
+	req.trainNo = trainNo;
 
 	Send(ROUTESERVER_TID, &req, sizeof(routeServerRequest), NULL, 0);
 }
