@@ -110,7 +110,7 @@ findMin(DijkstraEntry* dests, routeServerData* rtSvrData){
 	int i;
 	for (i = 0; i < TRACK_MAX; i++)
 	{
-		if(dests[i].isFinished == FINISHED || rtSvrData->trackNodeStatus[dests[i]] == BLOCKED)
+		if(dests[i].isFinished == FINISHED || rtSvrData->trackNodeStatus[dests[i].v] == BLOCKED)
 			continue;
 		else if(dests[i].D < minCost){
 			minCost = dests[i].D;
