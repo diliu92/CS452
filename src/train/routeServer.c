@@ -320,10 +320,13 @@ routeServer(){
 					 */ 
 					thisTrainReservInfo->alongPathNodesNumber = 0;
 					
+					int pathNode;
 					for (i = response.path[0]; i < TRACK_MAX; i++)
 					{
 						(thisTrainReservInfo->alongPathNodes)[thisTrainReservInfo->alongPathNodesNumber] = response.path[i];
-						(thisTrainReservInfo->alongPathNodesNumber)++;				
+						(thisTrainReservInfo->alongPathNodesNumber)++;		
+						
+						rtSvrDataresponse.trackNodeStatus[response.path[i]] = BLOCKED;	
 					}
 				}
 				else{
