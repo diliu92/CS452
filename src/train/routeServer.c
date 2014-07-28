@@ -306,6 +306,9 @@ routeServer(){
 				}
 				
 				trainPath response;
+				
+				sprintf(COM2, "%s\033[51;0H%s%s", 
+								save, clearLine, restore);		
 											
 				if (mineNodeIdx != -1 && mineNodeIdx != src){
 					int curIdx = mineNodeIdx;
