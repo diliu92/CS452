@@ -191,7 +191,7 @@ static void
 reserveAllNearDestNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrainReservInfo){
 	
 	int dest 		= thisTrainReservInfo->dest;
-	int destReverse = rtSvrData->trackA[[thisTrainReservInfo->dest]].reverse->num;
+	int destReverse = rtSvrData->trackA[dest].reverse->num;
 	
 	(rtSvrData->trackNodeStatus)[dest] 			= BLOCKED;
 	(rtSvrData->trackNodeStatus)[destReverse] 	= BLOCKED;
