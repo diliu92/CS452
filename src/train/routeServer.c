@@ -533,16 +533,15 @@ void
 goServer(){
 	goServerData goSvrData;
 	
-	
-	int requester;
-	routeServerRequest req;
-	
 	int i;
 	for (i = 0; i < 2; i++){
 		goSvrData.goWorkersStatus[i].myTid 		= Create(8,goWorker);
 		goSvrData.goWorkersStatus[i].isReady 	= 0;
 	}
 		
+	int requester;
+	routeServerRequest req;
+
 	while (1){
 		Receive(&requester, &req, sizeof(routeServerRequest));
 		switch (req.rtSvrReq_uid)
