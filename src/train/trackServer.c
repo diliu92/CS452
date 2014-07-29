@@ -466,7 +466,7 @@ trainWorker(){
 
 						if (totalDelay > 45){
 							Delay(40);
-							totalDelay -= 39;
+							totalDelay -= 41;
 						}
 						else
 							break;
