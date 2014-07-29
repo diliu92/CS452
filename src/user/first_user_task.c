@@ -77,6 +77,7 @@ firstUserTask()	//priority 6
 	
 	Create(4, trackServer);
 	Create(4, routeServer);
+	//Create(4, goServer);
 
 	sprintf( COM2, "%s\033[H", clearScreen);
 

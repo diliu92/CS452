@@ -55,7 +55,6 @@ typedef struct trackServerData{
 	int			switchesStatus[MAX_SWITCHES];
 	
 	int 		initTrainNum;
-	//int 		currentTrain;
 }trackServerData;
 
 static void
@@ -331,8 +330,8 @@ getTrainActualData(int whichData, trackServerData* trkSvrData, int trainNo, int 
 }
 static int
 getTrainShortMoveTicks(int trainNo, int trainSpeed, int totalDist){
-	double x3 = totalDist * totalDist * totalDist;
-	double x2 = totalDist * totalDist;
+	//double x3 = totalDist * totalDist * totalDist;
+	//double x2 = totalDist * totalDist;
 	double x = totalDist;
 
 	switch (trainNo)
@@ -465,9 +464,9 @@ trainWorker(){
 						//sprintf(COM2, "%s\033[46;0H totalDelay(modified):%d%s%s", 
 						//	save, totalDelay, clearLine, restore);
 
-						if (totalDelay > 40){
-							Delay(30);
-							totalDelay -= 30;
+						if (totalDelay > 45){
+							Delay(40);
+							totalDelay -= 39;
 						}
 						else
 							break;
@@ -751,7 +750,7 @@ trackServer(){
 						 */				 
 						int diff = expt - req.ts;
 
-						if (diff > -30){
+						if (diff > -40){
 							trainStat->delayOffset = trainStat->delayOffset - diff;
 						}
 

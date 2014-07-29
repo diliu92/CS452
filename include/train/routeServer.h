@@ -1,7 +1,8 @@
 #ifndef __ROUTESERVER_H__
 #define __ROUTESERVER_H__
 
-#define ROUTESERVER_TID					11
+#define ROUTESERVER_TID		11
+#define GOSERVER_TID		12					
 
 #define ROUTESERVER_ROUTE_GET_SHORTEST				0		
 
@@ -31,7 +32,6 @@ typedef struct trainPath{
 void
 routeServer();
 
-
 void
 GoTo(int trainNo, int trainSpeed, int dest);
 
@@ -40,4 +40,8 @@ releaseNodesBySensor(int trainNo, int triggeredSensor);
 
 void
 captureNodesByTrainNo(int trainNo);
+
+void
+goServer();
+
 #endif

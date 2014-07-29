@@ -27,7 +27,6 @@ typedef struct trainReservationInfo{
 	int nearDestNodesNumber;
 }trainReservationInfo;
 
-
 typedef struct routeServerData{
 	track_node trackA[TRACK_MAX];
 	int	trackNodeStatus[TRACK_MAX];	
@@ -43,8 +42,6 @@ typedef struct DijkstraEntry{
 	int D; 		//least_cost:D(v)
 	int p;		//pre_node:p(v)
 }DijkstraEntry;
-
-
 
 /*
  *	DijkstraEntry related functions
@@ -269,11 +266,6 @@ routeServer(){
 	routeServerRequest req;
 	
 	initRouteServerData(&rtSvrData);
-		
-	//rtSvrData.trackNodeStatus[37] = BLOCKED;
-	//rtSvrData.trackNodeStatus[2] = BLOCKED;
-	//rtSvrData.trackNodeStatus[55] = BLOCKED;
-	//rtSvrData.trackNodeStatus[52] = BLOCKED;
 	
 	while (1)
 	{
@@ -437,8 +429,6 @@ GoTo(int trainNo, int trainSpeed, int dest){
 	 */ 
 	 
 	locationInfo trainLoc = getTrainLocation(trainNo);	 //Step 1
-	//sprintf(COM2, "%s\033[50;0H%s%d,%d%s", 
-	//		save, clearLine, trainLoc.sensor, trainLoc.displacement,  restore);	
 
 	/*
 	 * Step 2
@@ -491,4 +481,27 @@ captureNodesByTrainNo(int trainNo){
 	req.trainNo = trainNo;
 
 	Send(ROUTESERVER_TID, &req, sizeof(routeServerRequest), NULL, 0);
+}
+
+
+typedef struct goServerData{
+	track_node trackA[TRACK_MAX];
+	int	trackNodeStatus[TRACK_MAX];	
+
+	trainReservationInfo trainReservationInfos[MAX_TRAINS];
+}goServerData;
+
+
+static void
+goWorker(){
+}
+
+void
+goServer(){
+	goServerData goSvrData;
+	
+	//int requester;
+	//routeServerRequest req;
+	
+	//initRouteServerData(&rtSvrData);	
 }
