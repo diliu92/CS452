@@ -639,7 +639,8 @@ trackServer(){
 					
 						(trkSvrData.initTrainNum)--;
 						
-						req.value = req.value - 1;
+						Reply(requester, NULL, 0);
+						break;						
 					}
 					else if(	req.value == 	(5 - 1) 	//A5
 							|| 	req.value == 	(8 - 1) 	//A8
