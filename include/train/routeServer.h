@@ -9,6 +9,8 @@
 #define ROUTESERVER_TRACKNODE_RELEASE_BYSENSOR		1	//called during train movement
 #define ROUTESERVER_TRACKNODE_CAPTURE_BYTRAIN		2	//called when train is stopping
 
+#define ROUTESERVER_GOWORKER_READY		3
+
 #define TRACK_MAX_NUM 144
 
 
@@ -22,6 +24,7 @@ typedef struct routeServerRequest{
 	int		trainNo;
 	int		trainSpeed;
 }routeServerRequest;
+
 
 typedef struct trainPath{
 	int 	trainSpeed;

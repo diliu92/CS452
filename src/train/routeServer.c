@@ -441,7 +441,12 @@ GoTo(int trainNo, int trainSpeed, int dest){
 	req.src  = (trainLoc.sensor / 17 -'A') * 16 + (trainLoc.sensor % 17) - 1;
 	req.dest = (dest / 17 -'A') * 16 + (dest % 17) - 1;
 	
-	req.trainNo = trainNo;
+	req.trainNo 	= trainNo;
+	req.trainSpeed 	= trainSpeed;
+	
+	Send(GOSERVER_TID, &req, sizeof(routeServerRequest), NULL, 0);
+	
+	/*
 
 	while(1){
 		Send(ROUTESERVER_TID, &req, sizeof(routeServerRequest), &response, sizeof(trainPath));
@@ -454,11 +459,12 @@ GoTo(int trainNo, int trainSpeed, int dest){
 		
 		Delay(15);
 	}
-	response.trainSpeed = trainSpeed;
+	*/
+	//response.trainSpeed = trainSpeed;
 	/*
 	 * Step 3
 	 */ 
-	executePath(trainNo, &response);	
+	//executePath(trainNo, &response);	
 }
 
 void
@@ -484,24 +490,89 @@ captureNodesByTrainNo(int trainNo){
 }
 
 
-typedef struct goServerData{
-	track_node trackA[TRACK_MAX];
-	int	trackNodeStatus[TRACK_MAX];	
+typedef struct goWorkerStatus{
+	int myTid;
+	int isReady;
+}goWorkerStatus;
 
-	trainReservationInfo trainReservationInfos[MAX_TRAINS];
+typedef struct goServerData{
+	goWorkerStatus 		goWorkersStatus[2];	
 }goServerData;
 
 
 static void
 goWorker(){
+	routeServerRequest req;	
+	
+	trainPath response;
+	while (1)
+	{	
+		req.rtSvrReq_uid = ROUTESERVER_GOWORKER_READY;
+		Send(GOSERVER_TID, &req, sizeof(routeServerRequest), &req, sizeof(routeServerRequest));
+		
+		while(1){
+			Send(ROUTESERVER_TID, &req, sizeof(routeServerRequest), &response, sizeof(trainPath));
+			
+			if(response.path[0] != -1){
+				break;
+			}
+			sprintf(COM2, "%s\033[51;0H%sNo path now-> src:%d dest:%d %s", 
+					save, clearLine, req.src, req.dest, restore);
+			
+			Delay(15);
+		}
+		
+		response.trainSpeed = req.trainSpeed;
+		
+		executePath(req.trainNo, &response);		
+	}
+	
 }
 
 void
 goServer(){
 	goServerData goSvrData;
 	
-	//int requester;
-	//routeServerRequest req;
 	
-	//initRouteServerData(&rtSvrData);	
+	int requester;
+	routeServerRequest req;
+	
+	int i;
+	for (i = 0; i < 2; i++){
+		goSvrData.goWorkersStatus[i].myTid 		= Create(8,goWorker);
+		goSvrData.goWorkersStatus[i].isReady 	= 0;
+	}
+		
+	while (1){
+		Receive(&requester, &req, sizeof(routeServerRequest));
+		switch (req.rtSvrReq_uid)
+		{
+			case ROUTESERVER_GOWORKER_READY:
+			{
+				for (i = 0; i < 2; i++){
+					if (goSvrData.goWorkersStatus[i].myTid == requester){
+						goSvrData.goWorkersStatus[i].isReady = 1;
+						break;
+					}
+				}
+				break;				
+			}
+			case ROUTESERVER_ROUTE_GET_SHORTEST:
+			{	
+				for (i = 0; i < 2; i++){
+					if (goSvrData.goWorkersStatus[i].isReady)
+						break;
+				}		
+				Reply(goSvrData.goWorkersStatus[i].myTid, &req, sizeof(routeServerRequest));		
+								
+												
+				goSvrData.goWorkersStatus[i].isReady = 0;
+				
+				Reply(requester, NULL, 0);
+				break;
+			}		
+		}
+				
+	}
+	
 }
