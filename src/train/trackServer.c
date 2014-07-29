@@ -625,15 +625,17 @@ trackServer(){
 						}
 						
 						trainStatus* thisTrainStat = &(trkSvrData.trainsStatus[i]);		
-																							
+						
+						putc(COM1, 0);
+						putc(COM1, thisTrainStat->trainNum);					
+						Delay(100);																										
 						putc(COM1, 15);
 						putc(COM1, thisTrainStat->trainNum);						
 									
 						putc(COM1, 10);
 						putc(COM1, thisTrainStat->trainNum);						
-						Delay(300);	
-						putc(COM1, 0);
-						putc(COM1, thisTrainStat->trainNum);	
+						//putc(COM1, 0);
+						//putc(COM1, thisTrainStat->trainNum);	
 						
 						thisTrainStat->currentDisplacement  = -30;								
 						
