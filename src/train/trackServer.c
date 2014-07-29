@@ -466,7 +466,7 @@ trainWorker(){
 
 						if (totalDelay > 45){
 							Delay(40);
-							totalDelay -= 41;
+							totalDelay -= 40;
 						}
 						else
 							break;
@@ -750,7 +750,7 @@ trackServer(){
 						 */				 
 						int diff = expt - req.ts;
 
-						if (diff > -40){
+						if (diff > -30 && diff < 30){
 							trainStat->delayOffset = trainStat->delayOffset - diff;
 						}
 
