@@ -51,8 +51,8 @@ typedef struct DijkstraEntry{
  */
 
 static int 
-NodeToIdx(track_node* track, track_node* src){
-	return track - src;
+NodeToIdx(track_node* node, track_node* src){
+	return node - src;
 }
 static int
 isNeighbor(track_node* src, track_node* dest, int* cost, int* isReverse){	//can src link to dest?
@@ -190,26 +190,39 @@ releaseAlongPathNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrai
 static void
 reserveAllNearDestNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrainReservInfo){
 	
-	int dest 		= thisTrainReservInfo->dest;
-	int destReverse = rtSvrData->trackA[dest].reverse->num;
-	
-	(rtSvrData->trackNodeStatus)[dest] 			= BLOCKED;
-	(rtSvrData->trackNodeStatus)[destReverse] 	= BLOCKED;
-	
-	thisTrainReservInfo->nearDestNodesNumber++;
-	thisTrainReservInfo->nearDestNodesNumber++;
-	
-	track_node* destNode 		= &(rtSvrData->trackA[dest]);
-	track_node* destReverseNode = &(rtSvrData->trackA[destReverse]);
-	
 	/*
 	 * forward direction
-	 */ 
+	 */ 	
+	int dest = thisTrainReservInfo->dest;
 	
+	(rtSvrData->trackNodeStatus)[dest] = BLOCKED;
+	thisTrainReservInfo->nearDestNodes[thisTrainReservInfo->nearDestNodesNumber] = dest;
+	thisTrainReservInfo->nearDestNodesNumber++;
+
+	track_node* destNode_NextNode = rtSvrData->trackA[dest].edge[DIR_AHEAD].dest;
+	
+	int fowardNodeIdx = NodeToIdx(destNode_NextNode, rtSvrData->trackA);
+	
+	(rtSvrData->trackNodeStatus)[fowardNodeIdx] = BLOCKED;	
+	thisTrainReservInfo->nearDestNodes[thisTrainReservInfo->nearDestNodesNumber] = fowardNodeIdx;
+	thisTrainReservInfo->nearDestNodesNumber++;
 	
 	/*
 	 * backward direction
 	 */ 
+	int destReverse = rtSvrData->trackA[dest].reverse->num;
+	
+	(rtSvrData->trackNodeStatus)[destReverse] = BLOCKED;
+	thisTrainReservInfo->nearDestNodes[thisTrainReservInfo->nearDestNodesNumber] = destReverse;		
+	thisTrainReservInfo->nearDestNodesNumber++;
+	
+	track_node* destReverseNode_NextNode = rtSvrData->trackA[destReverse].edge[DIR_AHEAD].dest;
+	
+	int backwardNodeIdx = NodeToIdx(destReverseNode_NextNode, rtSvrData->trackA);
+	
+	(rtSvrData->trackNodeStatus)[backwardNodeIdx] = BLOCKED;
+	thisTrainReservInfo->nearDestNodes[thisTrainReservInfo->nearDestNodesNumber] = backwardNodeIdx;	
+	thisTrainReservInfo->nearDestNodesNumber++;
 }
 
 static void
@@ -349,7 +362,7 @@ routeServer(){
 						
 						rtSvrData.trackNodeStatus[response.path[i]] = BLOCKED;	
 					}
-					
+					/*
 					int a = 0;	
 					for (i = response.path[0]; i < TRACK_MAX; i++)
 					{
@@ -364,6 +377,7 @@ routeServer(){
 								save, a, thisTrainReservInfo->alongPathNodes[i], restore);
 							a = a + 6;					
 					}
+					*/
 				}
 				else{
 					response.path[0] = -1;
