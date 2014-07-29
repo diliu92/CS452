@@ -189,7 +189,7 @@ releaseAlongPathNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrai
 
 static void
 reserveAllNearDestNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrainReservInfo){
-	/*
+	
 	int dest 		= thisTrainReservInfo->dest;
 	int destReverse = rtSvrData->trackA[[thisTrainReservInfo->dest]].reverse->num;
 	
@@ -201,7 +201,7 @@ reserveAllNearDestNodes(routeServerData* rtSvrData, trainReservationInfo* thisTr
 	
 	track_node* destNode 		= &(rtSvrData->trackA[dest]);
 	track_node* destReverseNode = &(rtSvrData->trackA[destReverse]);
-	*/
+	
 	/*
 	 * forward direction
 	 */ 

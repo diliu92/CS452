@@ -218,9 +218,6 @@ initTrackServerData(trackServerData* trkSvrData){
 		(trkSvrData->trainsStatus[i]).expectedSensorTime  = -1;
 
 		(trkSvrData->trainsStatus[i]).delayOffset = 0;
-
-		//(trkSvrData->trainsStatus[i]).destInfo.sensor = 0;
-		//(trkSvrData->trainsStatus[i]).destInfo.displacement = 0;
 		
 		putc(COM1, 0); 
 		putc(COM1, i + 45);
@@ -252,7 +249,6 @@ initTrackServerData(trackServerData* trkSvrData){
 	}
 
 	trkSvrData->initTrainNum = 0;
-	//trkSvrData->currentTrain = -1;
 }
 
 static track_node*
