@@ -55,7 +55,7 @@ typedef struct trackServerData{
 	int			switchesStatus[MAX_SWITCHES];
 	
 	int 		initTrainNum;
-	int 		currentTrain;
+	//int 		currentTrain;
 }trackServerData;
 
 static void
@@ -514,7 +514,7 @@ trackServer(){
 			case TRACKSERVER_INIT_TRAIN:
 			{
 				trkSvrData.initTrainNum = req.target;
-				trkSvrData.currentTrain = req.target - 45;
+				//trkSvrData.currentTrain = req.target - 45;
 				
 				trainStatus* thisTrainStat = &(trkSvrData.trainsStatus[req.target - 45]);		
 				

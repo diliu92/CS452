@@ -178,7 +178,7 @@ releaseAlongPathNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrai
 			pathNode = thisTrainReservInfo->alongPathNodes[i];
 			
 			if(pathNode != -1){
-				rtSvrData->trackNodeStatus[pathNode] = FREE;
+				(rtSvrData->trackNodeStatus)[pathNode] = FREE;
 				
 				thisTrainReservInfo->alongPathNodes[i] = -1;
 				
@@ -234,8 +234,8 @@ routeServer(){
 		
 	//rtSvrData.trackNodeStatus[37] = BLOCKED;
 	//rtSvrData.trackNodeStatus[2] = BLOCKED;
-	rtSvrData.trackNodeStatus[55] = BLOCKED;
-	rtSvrData.trackNodeStatus[52] = BLOCKED;
+	//rtSvrData.trackNodeStatus[55] = BLOCKED;
+	//rtSvrData.trackNodeStatus[52] = BLOCKED;
 	
 	while (1)
 	{
