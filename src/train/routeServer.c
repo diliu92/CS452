@@ -224,8 +224,8 @@ reserveAllNearDestNodes(routeServerData* rtSvrData, trainReservationInfo* thisTr
 	track_node* destReverseNode_NextNode 		 = rtSvrData->trackA[destReverse].edge[DIR_AHEAD].dest;
 	track_node* destReverseNode_NextNode_Reverse = rtSvrData->trackA[destReverse].edge[DIR_AHEAD].dest->reverse;
 	
-	int destReverseNode_NextNode_Idx			= NodeToIdx(destReverseNode_NextNode, rtSvrData->trackA)
-	int destReverseNode_NextNode_Reverse_Idx	= NodeToIdx(destReverseNode_NextNode_Reverse, rtSvrData->trackA)
+	int destReverseNode_NextNode_Idx			= NodeToIdx(destReverseNode_NextNode, rtSvrData->trackA);
+	int destReverseNode_NextNode_Reverse_Idx	= NodeToIdx(destReverseNode_NextNode_Reverse, rtSvrData->trackA);
 		
 	(rtSvrData->trackNodeStatus)[destReverseNode_NextNode_Idx] = BLOCKED;
 	thisTrainReservInfo->nearDestNodes[thisTrainReservInfo->nearDestNodesNumber] = destReverseNode_NextNode_Idx;	
