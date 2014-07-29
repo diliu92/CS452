@@ -625,7 +625,7 @@ trackServer(){
 						}
 						
 						trainStatus* thisTrainStat = &(trkSvrData.trainsStatus[i]);		
-																					
+																															
 						thisTrainStat->currentDisplacement  = -30;
 									
 						putc(COM1, 0);
@@ -636,7 +636,7 @@ trackServer(){
 						
 						putc(COM1, 0);
 						putc(COM1, thisTrainStat->trainNum);
-						
+					
 						(trkSvrData.initTrainNum)--;
 					}
 					else if(	req.value == 	(5 - 1) 	//A5
