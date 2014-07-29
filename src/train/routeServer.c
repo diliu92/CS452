@@ -169,8 +169,6 @@ releaseAlongPathNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrai
 		}
 	}
 	
-	sprintf(COM2, "%s\033[50;0H%s%s", 
-				save, clearLine, restore);
 	int a = 0;			
 	if (isExisted){
 		for (i = 0; i < thisTrainReservInfo->alongPathNodesNumber; i++)
@@ -182,20 +180,35 @@ releaseAlongPathNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrai
 				
 				thisTrainReservInfo->alongPathNodes[i] = -1;
 				
-				sprintf(COM2, "%s\033[50;%uH%d%s", 
-							save, a, pathNode, restore);
-							a = a + 6;			
+				if (pathNode == triggeredSensor)
+					return;		
 			}
-			
-			if (pathNode == triggeredSensor)
-				return;	
 		}		
 	}
 }
 
 static void
 reserveAllNearDestNodes(routeServerData* rtSvrData, trainReservationInfo* thisTrainReservInfo){
+	int dest 		= thisTrainReservInfo->dest;
+	int destReverse = rtSvrData->trackA[[thisTrainReservInfo->dest]].reverse->num;
 	
+	(rtSvrData->trackNodeStatus)[dest] 			= BLOCKED;
+	(rtSvrData->trackNodeStatus)[destReverse] 	= BLOCKED;
+	
+	thisTrainReservInfo->nearDestNodesNumber++;
+	thisTrainReservInfo->nearDestNodesNumber++;
+	
+	track_node* destNode 		= &(rtSvrData->trackA[dest]);
+	track_node* destReverseNode = &(rtSvrData->trackA[destReverse]);
+	
+	/*
+	 * forward direction
+	 */ 
+	
+	
+	/*
+	 * backward direction
+	 */ 
 }
 
 static void

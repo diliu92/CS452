@@ -636,10 +636,11 @@ trackServer(){
 						
 						putc(COM1, 0);
 						putc(COM1, thisTrainStat->trainNum);				
-					
-						req.value = req.value - 1;
 						
 						(trkSvrData.initTrainNum)--;
+						
+						Reply(requester, NULL, 0);
+						break;
 							
 					}
 					else if(	req.value == 	(5 - 1) 	//A5
