@@ -199,14 +199,19 @@ reserveAllNearDestNodes(routeServerData* rtSvrData, trainReservationInfo* thisTr
 	thisTrainReservInfo->nearDestNodes[thisTrainReservInfo->nearDestNodesNumber] = dest;
 	thisTrainReservInfo->nearDestNodesNumber++;
 
-	track_node* destNode_NextNode = rtSvrData->trackA[dest].edge[DIR_AHEAD].dest;
+	track_node* destNode_NextNode 			= rtSvrData->trackA[dest].edge[DIR_AHEAD].dest;
+	track_node* destNode_NextNode_Reverse	= rtSvrData->trackA[dest].edge[DIR_AHEAD].dest->reverse;
 	
-	int fowardNodeIdx = NodeToIdx(destNode_NextNode, rtSvrData->trackA);
+	int destNode_NextNode_Idx 			= NodeToIdx(destNode_NextNode, rtSvrData->trackA);
+	int destNode_NextNode_Reverse_Idx	= NodeToIdx(destNode_NextNode_Reverse, rtSvrData->trackA);
 	
-	(rtSvrData->trackNodeStatus)[fowardNodeIdx] = BLOCKED;	
-	thisTrainReservInfo->nearDestNodes[thisTrainReservInfo->nearDestNodesNumber] = fowardNodeIdx;
+	(rtSvrData->trackNodeStatus)[destNode_NextNode_Idx] = BLOCKED;	
+	thisTrainReservInfo->nearDestNodes[thisTrainReservInfo->nearDestNodesNumber] = destNode_NextNode_Idx;
 	thisTrainReservInfo->nearDestNodesNumber++;
 	
+	(rtSvrData->trackNodeStatus)[destNode_NextNode_Reverse_Idx] = BLOCKED;	
+	thisTrainReservInfo->nearDestNodes[thisTrainReservInfo->nearDestNodesNumber] = destNode_NextNode_Reverse_Idx;
+	thisTrainReservInfo->nearDestNodesNumber++;
 	/*
 	 * backward direction
 	 */ 
@@ -216,12 +221,18 @@ reserveAllNearDestNodes(routeServerData* rtSvrData, trainReservationInfo* thisTr
 	thisTrainReservInfo->nearDestNodes[thisTrainReservInfo->nearDestNodesNumber] = destReverse;		
 	thisTrainReservInfo->nearDestNodesNumber++;
 	
-	track_node* destReverseNode_NextNode = rtSvrData->trackA[destReverse].edge[DIR_AHEAD].dest;
+	track_node* destReverseNode_NextNode 		 = rtSvrData->trackA[destReverse].edge[DIR_AHEAD].dest;
+	track_node* destReverseNode_NextNode_Reverse = rtSvrData->trackA[destReverse].edge[DIR_AHEAD].dest->reverse;
 	
-	int backwardNodeIdx = NodeToIdx(destReverseNode_NextNode, rtSvrData->trackA);
+	int destReverseNode_NextNode_Idx			= NodeToIdx(destReverseNode_NextNode, rtSvrData->trackA)
+	int destReverseNode_NextNode_Reverse_Idx	= NodeToIdx(destReverseNode_NextNode_Reverse, rtSvrData->trackA)
+		
+	(rtSvrData->trackNodeStatus)[destReverseNode_NextNode_Idx] = BLOCKED;
+	thisTrainReservInfo->nearDestNodes[thisTrainReservInfo->nearDestNodesNumber] = destReverseNode_NextNode_Idx;	
+	thisTrainReservInfo->nearDestNodesNumber++;
 	
-	(rtSvrData->trackNodeStatus)[backwardNodeIdx] = BLOCKED;
-	thisTrainReservInfo->nearDestNodes[thisTrainReservInfo->nearDestNodesNumber] = backwardNodeIdx;	
+	(rtSvrData->trackNodeStatus)[destReverseNode_NextNode_Reverse_Idx] = BLOCKED;
+	thisTrainReservInfo->nearDestNodes[thisTrainReservInfo->nearDestNodesNumber] = destReverseNode_NextNode_Reverse_Idx;	
 	thisTrainReservInfo->nearDestNodesNumber++;
 }
 
