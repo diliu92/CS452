@@ -638,7 +638,7 @@ trackServer(){
 						putc(COM1, 0);
 						putc(COM1, thisTrainStat->trainNum);	
 						
-						thisTrainStat->currentDisplacement  = -30;								
+						//thisTrainStat->currentDisplacement  = -30;								
 						
 						(trkSvrData.initTrainNum)--;
 							
