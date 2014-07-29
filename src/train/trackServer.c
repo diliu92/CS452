@@ -660,12 +660,12 @@ trackServer(){
 						thisTrainStat->lastTimeStemp 		= req.ts;
 						//thisTrainStat->currentDisplacement  = 60;	
 						
-						thisTrainStat->expectedSensor 		= 32 + 7 - 1; 			//C7	
+						//thisTrainStat->expectedSensor 		= 32 + 7 - 1; 			//C7	
 						
 						(trkSvrData.initTrainNum)--;
 						
-						Reply(requester, NULL, 0);
-						break;
+						//Reply(requester, NULL, 0);
+						//break;
 					}
 				}
 				if (1){	
