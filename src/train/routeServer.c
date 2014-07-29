@@ -365,22 +365,6 @@ routeServer(){
 						
 						rtSvrData.trackNodeStatus[response.path[i]] = BLOCKED;	
 					}
-					/*
-					int a = 0;	
-					for (i = response.path[0]; i < TRACK_MAX; i++)
-					{
-							sprintf(COM2, "%s\033[45;%uH%d%s", 
-								save, a, response.path[i], restore);
-							a = a + 6;					
-					}
-					a = 0;	
-					for (i = 0; i < thisTrainReservInfo->alongPathNodesNumber; i++)
-					{
-							sprintf(COM2, "%s\033[46;%uH%d%s", 
-								save, a, thisTrainReservInfo->alongPathNodes[i], restore);
-							a = a + 6;					
-					}
-					*/
 				}
 				else{
 					response.path[0] = -1;
