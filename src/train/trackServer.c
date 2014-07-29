@@ -400,7 +400,7 @@ trainWorker(){
 	
 	trainWorkerRequest trainWorkerReq; 
 
-	while(!NeedToShutDown()){
+	while(1){
 		Receive(&requester, &trainWorkerReq, sizeof(trainWorkerRequest));
 		Reply(requester, NULL, 0);
 		
@@ -431,17 +431,8 @@ trainWorker(){
 			
 			switch (currentCommand->cmdType)
 			{
-				//case RUN:
-					//changeTrainSpeed(trainNo, trainSpeed);
-				//break;
 				case REVERSE:
 					reverseTrain(trainNo);
-					//changeTrainSpeed(trainNo,trainSpeed);
-
-					//Delay(currentCommand->cmdValue);
-
-					//changeTrainSpeed(trainNo, 0);
-					//changeTrainSpeed(trainNo, currentCommand->cmdValue);
 					isPrevCommandReverse = 1;
 
 				break;
