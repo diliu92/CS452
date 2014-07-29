@@ -635,7 +635,7 @@ trackServer(){
 									
 						putc(COM1, 10);
 						putc(COM1, thisTrainStat->trainNum);						
-						Delay(100);	
+						Delay(300);	
 						putc(COM1, 0);
 						putc(COM1, thisTrainStat->trainNum);	
 						
