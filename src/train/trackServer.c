@@ -638,10 +638,8 @@ trackServer(){
 						putc(COM1, thisTrainStat->trainNum);				
 						
 						(trkSvrData.initTrainNum)--;
-						
-						Reply(requester, NULL, 0);
-						break;
 							
+						(req.value)--;
 					}
 					else
 						(trkSvrData.initTrainNum)--;
