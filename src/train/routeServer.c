@@ -368,7 +368,7 @@ routeServer(){
 				}
 				else{
 					response.path[0] = -1;
-					reserveAllNearDestNodes(&rtSvrData, thisTrainReservationInfo);
+					reserveAllNearDestNodes(&rtSvrData, thisTrainReservInfo);
 				}
 				
 				Reply(requester, &response, sizeof(trainPath));			
