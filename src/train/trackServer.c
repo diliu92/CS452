@@ -252,7 +252,7 @@ initTrackServerData(trackServerData* trkSvrData){
 	}
 
 	trkSvrData->initTrainNum = -1;
-	trkSvrData->currentTrain = -1;
+	//trkSvrData->currentTrain = -1;
 }
 
 static track_node*
