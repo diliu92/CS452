@@ -535,7 +535,7 @@ goServer(){
 	
 	int i;
 	for (i = 0; i < 2; i++){
-		goSvrData.goWorkersStatus[i].myTid 		= Create(8,goWorker);
+		goSvrData.goWorkersStatus[i].myTid 		= Create(9,goWorker);
 		goSvrData.goWorkersStatus[i].isReady 	= 0;
 	}
 		
