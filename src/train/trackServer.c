@@ -643,30 +643,8 @@ trackServer(){
 						break;
 							
 					}
-					else if(	req.value == 	(5 - 1) 	//A5
-							|| 	req.value == 	(8 - 1) 	//A8
-							|| 	req.value == 	(10 - 1) 	//A10
-					){
-						int i;
-						for (i = 0; i <MAX_TRAINS; i++)
-						{
-							if ((trkSvrData.trainsStatus[i].expectedSensor) == req.value)
-								break;
-						}
-						
-						trainStatus* thisTrainStat = &(trkSvrData.trainsStatus[i]);								
-									
-						thisTrainStat->lastTriggeredSensor	= req.value;		
-						thisTrainStat->lastTimeStemp 		= req.ts;
-						//thisTrainStat->currentDisplacement  = 60;	
-						
-						//thisTrainStat->expectedSensor 		= 32 + 7 - 1; 			//C7	
-						
+					else
 						(trkSvrData.initTrainNum)--;
-						
-						//Reply(requester, NULL, 0);
-						//break;
-					}
 				}
 				if (1){	
 					/*
