@@ -251,7 +251,7 @@ initTrackServerData(trackServerData* trkSvrData){
 		putc(COM1, 32);				
 	}
 
-	trkSvrData->initTrainNum = -1;
+	trkSvrData->initTrainNum = 0;
 	//trkSvrData->currentTrain = -1;
 }
 
@@ -513,8 +513,7 @@ trackServer(){
 		{
 			case TRACKSERVER_INIT_TRAIN:
 			{
-				trkSvrData.initTrainNum = req.target;
-				//trkSvrData.currentTrain = req.target - 45;
+				(trkSvrData.initTrainNum)++;
 				
 				trainStatus* thisTrainStat = &(trkSvrData.trainsStatus[req.target - 45]);		
 				
@@ -610,31 +609,44 @@ trackServer(){
 			}
 			case TRACKSERVER_UPDATE_LAST_SENSOR:
 			{
-				if (trkSvrData.initTrainNum != -1){
+				if (trkSvrData.initTrainNum > 0){
 					/*
 					 * Init: handle trains' direction(reverse case)
-					 */ 
-					trainStatus* thisTrainStat = &(trkSvrData.trainsStatus[trkSvrData.initTrainNum - 45]);		
-					
+					 */									
 					if(	req.value == 	(16 + 10 - 1) 	//B10
 						|| req.value == (16 + 12 - 1) 	//B12
 						|| req.value == (16 +  8 - 1) 	//B8
-					){											
+					){	
+						int i;
+						for (i = 0; i <MAX_TRAINS; i++)
+						{
+							if ((trkSvrData.trainsStatus[i].lastTriggeredSensor + 1) == req.value)
+								break;
+						}
+						
+						trainStatus* thisTrainStat = &(trkSvrData.trainsStatus[i]);		
+																					
 						thisTrainStat->currentDisplacement  = -30;
 									
 						putc(COM1, 0);
-						putc(COM1, trkSvrData.initTrainNum);
+						putc(COM1, thisTrainStat->trainNum);
 
 						putc(COM1, 15);
-						putc(COM1, trkSvrData.initTrainNum);
+						putc(COM1, thisTrainStat->trainNum);
 						
 						putc(COM1, 0);
-						putc(COM1, trkSvrData.initTrainNum);
+						putc(COM1, thisTrainStat->trainNum);
+						
+						(trkSvrData.initTrainNum)--;
 					}
-
-					trkSvrData.initTrainNum = -1;
+					else if(	req.value == 	(5 - 1) 	//A5
+							|| 	req.value == 	(8 - 1) 	//A8
+							|| 	req.value == 	(10 - 1) 	//A10
+					){									
+						(trkSvrData.initTrainNum)--;
+					}
 				}
-				else {	
+				if (1){	
 					/*
 					 * Previous sensor(15;0HPrevious sensor:)
 					 * Actual time(16;4HActual time:)
