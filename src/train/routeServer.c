@@ -508,10 +508,10 @@ goWorker(){
 			if(response.path[0] != -1){
 				break;
 			}
-			sprintf(COM2, "%s\033[51;0H%sNo path now-> src:%d dest:%d %s", 
-					save, clearLine, req.src, req.dest, restore);
+			//sprintf(COM2, "%s\033[51;0H%sNo path now-> src:%d dest:%d %s", 
+			//		save, clearLine, req.src, req.dest, restore);
 			
-			Delay(35);
+			Delay(25);
 		}
 		
 		response.trainSpeed = req.trainSpeed;
