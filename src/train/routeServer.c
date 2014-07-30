@@ -358,12 +358,19 @@ routeServer(){
 					thisTrainReservInfo->alongPathNodesNumber = 0;
 					
 					int pathNode;
+					int pathReverseNode;
 					for (i = response.path[0]; i < TRACK_MAX; i++)
 					{
-						thisTrainReservInfo->alongPathNodes[thisTrainReservInfo->alongPathNodesNumber] = response.path[i];
-						thisTrainReservInfo->alongPathNodesNumber++;		
+						pathNode 			= response.path[i];
+						pathReverseNode 	= NodeToIdx(rtSvrData.trackA[pathNode].reverse, rtSvrData.trackA);
+
+						thisTrainReservInfo->alongPathNodes[thisTrainReservInfo->alongPathNodesNumber] = pathReverseNode;
+						thisTrainReservInfo->alongPathNodesNumber++;								
+						rtSvrData.trackNodeStatus[pathReverseNode] = BLOCKED;	
 						
-						rtSvrData.trackNodeStatus[response.path[i]] = BLOCKED;	
+						thisTrainReservInfo->alongPathNodes[thisTrainReservInfo->alongPathNodesNumber] = pathNode;
+						thisTrainReservInfo->alongPathNodesNumber++;		
+						rtSvrData.trackNodeStatus[pathNode] = BLOCKED;	
 					}
 				}
 				else{
