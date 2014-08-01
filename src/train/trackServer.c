@@ -336,30 +336,6 @@ getTrainShortMoveTicks(int trainNo, int trainSpeed, int totalDist){
 
 	switch (trainNo)
 	{
-		case 49:
-		{
-			switch (trainSpeed)
-			{
-				case 10:
-					//return 1 * x3 / 10000000 - 4 * x2 / 10000 + 584 * x / 1000 + 62767 / 1000;
-					//return 2 * x3 / 10000000 - 5 * x2 / 10000 + 620 * x / 1000 + 6686 / 1000;
-					//return 2 * x3 / 10000000 - 4.94146 * x2 / 10000 + 608 * x / 1000 + 69680 / 1000;	
-					// return 	(0.0000002 * x3)
-					// 		- (0.0005 * x2)
-					// 		+ (0.605 * x) 
-					// 		+ 69.933;
-					//return 16 * (x2 / 1000000) * (x / 100) - 5 * (x2 / 10000) + 607 * x / 1000 + 69721 / 1000;	
-								
-					 return (0.163619 * x * x / 10000 * x / 100)
-					 		- (0.493193 * x * x / 1000)
-					 		+ (0.6071511 * x) 
-					 		+ 69.7206;
-			}
-
-			break;
-		}
-		case 50:
-			break;	
 		case 45:
 			switch (trainSpeed)
 			{
@@ -387,7 +363,19 @@ getTrainShortMoveTicks(int trainNo, int trainSpeed, int totalDist){
 	}
 }
 
-
+static int
+needToUpdate(trainStatus* trainsStatus, int sensor, int ts){
+	int i;
+	for (i = 0; i <MAX_TRAINS; i++)
+	{
+		if (trainsStatus[i].isUsed == 1 &&
+				trainsStatus[i].lastTriggeredSensor == sensor && 
+				ts - trainsStatus[i].lastTimeStemp <= 20)
+			return 0;
+	}
+	
+	return 1;
+}
 
 static void
 trainWorker(){
@@ -555,8 +543,12 @@ trackServer(){
 				targetTrainStatus->currentTrainSpeed = req.value % 15;
 
 				//TODO: multi train
-				sprintf(COM2, "%s\033[5;70H%s%d%s", save, clearLine, req.value % 15, restore);
-					
+				if (req.target == 45){
+					sprintf(COM2, "%s\033[5;65H%s%d%s", save, clearLine, req.value % 15, restore);
+				}
+				else{
+					sprintf(COM2, "%s\033[8;65H%s%d%s", save, clearLine, req.value % 15, restore);
+				}
 				Reply(requester, NULL, 0);									
 				break;		
 			}	
@@ -583,11 +575,11 @@ trackServer(){
 			{
 				if (trkSvrData.trainsStatus[req.target-45].trainDirection == FORWARD){
 					trkSvrData.trainsStatus[req.target-45].trainDirection = BACKWARD;
-					sprintf(COM2, "%s\033[4;70H%sBackward%s", save, clearLine, restore);
+					//sprintf(COM2, "%s\033[4;70H%sBackward%s", save, clearLine, restore);
 				}
 				else{
 					trkSvrData.trainsStatus[req.target-45].trainDirection = FORWARD;
-					sprintf(COM2, "%s\033[4;70H%sForward%s", save, clearLine, restore);
+					//sprintf(COM2, "%s\033[4;70H%sForward%s", save, clearLine, restore);
 				}
 				
 				Reply(requester, NULL, 0);
@@ -633,21 +625,20 @@ trackServer(){
 					else
 						(trkSvrData.initTrainNum)--;
 				}
-				if (1){	
+				if (needToUpdate(trkSvrData.trainsStatus, req.value, req.ts) == 1){	
 					/*
 					 * Previous sensor(15;0HPrevious sensor:)
 					 * Actual time(16;4HActual time:)
 					 */
-					int sensorGroup = req.value / 16 + 'A';
-					int sensorId = req.value % 16 + 1;
+					// int sensorGroup = req.value / 16 + 'A';
+					// int sensorId = req.value % 16 + 1;
 					
-					int ds = req.ts / 10 % 10;
-					int s = req.ts / 100 % 60;
-					int m = req.ts / 6000 % 60;
-					int h = req.ts / 360000;
-					sprintf(COM2, "%s\033[15;22H%s%s%c%d\033[16;22H%s%d:%d:%d:%d%s%s", 
-						save, yellow, clearLine, (char)sensorGroup, sensorId, clearLine, h, m, s, ds, resetColor, restore);
-
+					// int ds = req.ts / 10 % 10;
+					// int s = req.ts / 100 % 60;
+					// int m = req.ts / 6000 % 60;
+					// int h = req.ts / 360000;
+					// sprintf(COM2, "%s\033[15;22H%s%s%c%d\033[16;22H%s%d:%d:%d:%d%s%s", 
+					// 	save, yellow, clearLine, (char)sensorGroup, sensorId, clearLine, h, m, s, ds, resetColor, restore);
 
 					int sensorIndex = req.value;
 					int trainIdx = determineTrainByTriggeredSensor(sensorIndex, trkSvrData.trainsStatus);	//expected sensor handling(normal case)
@@ -679,45 +670,11 @@ trackServer(){
 									trainStat->expectedSensorTime += (dist * 10000 / trainActualSpeed);
 									break;
 								}
-
-								/*
-								 * reverseNode of lastTriggeredSensor
-								 */ 
-								int lastTriggeredSensor = trkSvrData.trainsStatus[trainIdx].lastTriggeredSensor;
-								track_node*	reverseLastTriggeredSensorNode = trkSvrData.trackA[lastTriggeredSensor].reverse;
-										
-								int reverseLastTriggeredSensor = reverseLastTriggeredSensorNode->num;
-								
-								if (req.value == reverseLastTriggeredSensor){
-									//trainStatus *trainStat = &(trkSvrData.trainsStatus[trainIdx]);
-
-									break;
-								}
-
-
-								/*
-								 * ahead of reverse of expectedSensor
-								 */ 
-								track_node* aheadOfReverseOfExpectedSensor = trkSvrData.trackA[expectedSensor].reverse->edge[DIR_AHEAD].dest;
-								 									 dist  = trkSvrData.trackA[expectedSensor].reverse->edge[DIR_AHEAD].dist;
-													
-								nextSensorNode = getNextSensorNode(aheadOfReverseOfExpectedSensor, &dist, trkSvrData.switchesStatus);
-								
-								nextSensor = nextSensorNode->num;
-
-								if (req.value == nextSensor){
-									//trainStatus *trainStat = &(trkSvrData.trainsStatus[trainIdx]);
-									//int   trainActualSpeed = getTrainActualData(TRAIN_ACTUALDATA_SPEED, 
-									//					&trkSvrData, trainStat->trainNum, trainStat->currentTrainSpeed);	
-
-									//trainStat->expectedSensorTime += (dist * 10000 / trainActualSpeed);
-									break;
-								}	
 							}						
 						}	
 					}
 					
-					if (trainIdx == MAX_TRAINS){
+					if (trainIdx == MAX_TRAINS || trainIdx < 0){
 						//sprintf(COM2, "%s\033[45;0H%s Can't distribute sensor %c%d, drop this sensor! %s", 
 						//					save, clearLine, (char)sensorGroup, sensorId, restore);
 					}
@@ -729,24 +686,24 @@ trackServer(){
 						/*
 						 * Expected time(17;4HExpected time:)
 						 */
-						int expt = trainStat->expectedSensorTime + trainStat->lastTimeStemp;
-						ds = expt / 10 % 10;
-						s = expt / 100 % 60;
-						m = expt / 6000 % 60;
-						h = expt / 360000;
-						sprintf(COM2, "%s\033[17;22H%s%s%d:%d:%d:%d%s%s", 
-							save, yellow, clearLine, h, m, s, ds, resetColor, restore);
+						// int expt = trainStat->expectedSensorTime + trainStat->lastTimeStemp;
+						// ds = expt / 10 % 10;
+						// s = expt / 100 % 60;
+						// m = expt / 6000 % 60;
+						// h = expt / 360000;
+						// sprintf(COM2, "%s\033[17;22H%s%s%d:%d:%d:%d%s%s", 
+						// 	save, yellow, clearLine, h, m, s, ds, resetColor, restore);
 						/*
 						 * Time difference(18;4HTime difference:)
 						 */				 
-						int diff = expt - req.ts;
+						// int diff = expt - req.ts;
 
-						if (diff > -30 && diff < 30){
-							trainStat->delayOffset = trainStat->delayOffset - diff;
-						}
+						// if (diff > -30 && diff < 30){
+						// 	trainStat->delayOffset = trainStat->delayOffset - diff;
+						// }
 
-						sprintf(COM2, "%s\033[18;22H%s%s%d ticks%s%s", 
-							save, yellow, clearLine, diff, resetColor, restore);
+						// sprintf(COM2, "%s\033[18;22H%s%s%d ticks%s%s", 
+						// 	save, yellow, clearLine, diff, resetColor, restore);
 						
 						
 						track_node*	nextLandmark 	= trkSvrData.trackA[sensorIndex].edge[DIR_AHEAD].dest;
@@ -766,12 +723,12 @@ trackServer(){
 						
 						t = t + req.ts;
 
-						ds = t / 10 % 10;
-						s = t / 100 % 60;
-						m = t / 6000 % 60;
-						h = t / 360000;
-						sprintf(COM2, "%s%s\033[13;16H%s%s\033[13;21Hat: %d:%d:%d:%d%s", 
-							save, yellow, clearLine, nextSensorNode->name, h, m, s, ds, restore);			
+						// ds = t / 10 % 10;
+						// s = t / 100 % 60;
+						// m = t / 6000 % 60;
+						// h = t / 360000;
+						// sprintf(COM2, "%s%s\033[13;16H%s%s\033[13;21Hat: %d:%d:%d:%d%s", 
+						// 	save, yellow, clearLine, nextSensorNode->name, h, m, s, ds, restore);			
 					}
 				}
 				
@@ -788,18 +745,20 @@ trackServer(){
 				Reply(requester, &(delayOffset), sizeof(int));								
 			}
 			case TRACKSERVER_TRAIN_LOCATION_GET:
-			{
-				int curVelocity;
-				int displacement;
-				
+			{	
 				trainStatus *trainStat = &(trkSvrData.trainsStatus[req.target-45]);
 				int 		 trainNum = req.target;
 				int 		 trainSpeed = trainStat->currentTrainSpeed;
 				int 		 prevTrainSpeed = trainStat->previousTrainSpeed;
 				int 		 speedChangeTime = trainStat->lastSpeedChange;
+
+				int	curVelocity = getTrainActualData(TRAIN_ACTUALDATA_SPEED, &trkSvrData, trainNum, trainSpeed);
+				int	prevVelocity = getTrainActualData(TRAIN_ACTUALDATA_SPEED, &trkSvrData, trainNum, prevTrainSpeed);
+
 				//int i = trkSvrData.currentTrain; 	//for demo 1
 				int sensorTimeStemp = trainStat->lastTimeStemp; //trkSvrData.trainsStatus[i].lastTimeStemp;
 				locationInfo locInfo;
+				int displacement;
 
 				if (trainSpeed == 0 && prevTrainSpeed == 0){
 					locInfo.displacement = trainStat->currentDisplacement;
@@ -810,16 +769,18 @@ trackServer(){
 				}
 
 				if (trainSpeed > 0){
-					curVelocity = getTrainActualData(TRAIN_ACTUALDATA_SPEED, &trkSvrData, trainNum, trainSpeed);
 					if (prevTrainSpeed == 0 && speedChangeTime > sensorTimeStemp){
 						displacement = (Time() - speedChangeTime) * curVelocity / 10000 + trainStat->currentDisplacement;
 					}
+					// else if (speedChangeTime > sensorTimeStemp){
+					// 	displacement = (Time() - speedChangeTime) * curVelocity / 10000 
+					// 					+ (speedChangeTime - sensorTimeStemp) * prevVelocity / 10000;
+					// }
 					else{
 						displacement = (Time() - sensorTimeStemp) * curVelocity / 10000;
 					}
 				}
 				else{
-					int prevVelocity = getTrainActualData(TRAIN_ACTUALDATA_SPEED, &trkSvrData, trainNum, prevTrainSpeed);
 					curVelocity = prevVelocity / 2;
 					int stopDist = 	getTrainActualData(TRAIN_ACTUALDATA_STOP_DISTANCE, &trkSvrData, trainNum, prevTrainSpeed);
 					int stopTime = 	getTrainActualData(TRAIN_ACTUALDATA_STOP_TIME, &trkSvrData, trainNum, prevTrainSpeed);
@@ -1037,7 +998,8 @@ trackServer(){
 					/*
 					 * 5. trackServer pass this formated path to the trainCommandWorker	
 					 */
-					Send(thisTrainStatus->trainWorkerTid, &(req), sizeof(trainWorkerRequest), NULL, 0); 	 									
+					Send(thisTrainStatus->trainWorkerTid, &(req), sizeof(trainWorkerRequest), NULL, 0); 
+					break;	 									
 				}
 				else{
 					//errorMsg;
@@ -1046,7 +1008,39 @@ trackServer(){
 				Reply(requester, NULL, 0);
 				
 				break;
-			}	
+			}
+			case TRACKSERVER_DIST_BETWEEN_SENSORS:
+			{
+
+				int sensor1 = req.value;
+				int sensor2 = req.value2;
+
+				int dist = trkSvrData.trackA[sensor1].edge[DIR_AHEAD].dist;		
+				track_node*	temp = trkSvrData.trackA[sensor1].edge[DIR_AHEAD].dest;		
+				temp = getNextSensorNode(temp, &dist, trkSvrData.switchesStatus);
+				int nextSensorNum = temp->num;
+				int i = 1;
+				while (nextSensorNum != sensor2){
+					dist += temp->edge[DIR_AHEAD].dist;	
+					temp = temp->edge[DIR_AHEAD].dest;
+					temp = getNextSensorNode(temp, &dist, trkSvrData.switchesStatus);
+					nextSensorNum = temp->num;
+					i++;
+					if (temp->type != NODE_SENSOR  || i > 10){
+						dist = -1;
+						break;
+					}
+				}			
+
+				// sprintf(COM2, "%s\033[25;32H%s%s to %s = %dmm%s", 
+		 	// 		save, clearLine, 
+		 	// 		trkSvrData.trackA[sensor1].name, 
+		 	// 		trkSvrData.trackA[sensor2].name, 
+		 	// 		dist, restore);									
+
+				Reply(requester, &dist, sizeof(int));
+				break;
+			}
 		}
 	}
 }
@@ -1111,6 +1105,7 @@ getSwitchStatus(int switchNo){
 	
 	return req.retval;
 }
+
 void
 changeSwitchStatus(int switchNo, int switchStatus){
 	trackServerRequest req;
@@ -1200,3 +1195,17 @@ executePath(int trainNo, trainPath* path){
 	Send(TRACKSERVER_TID, &req, sizeof(trackServerRequest), NULL, 0);	
 }
 
+int
+getDistBetweenSensors(int sensor1, int sensor2){
+	int response;
+	trackServerRequest req;
+	
+	req.trkSvrReq_uid = TRACKSERVER_DIST_BETWEEN_SENSORS;
+		
+	req.value = (sensor1 % 17 + (sensor1 / 17 - 'A') * 16) - 1;
+	req.value2 = (sensor2 % 17 + (sensor2 / 17 - 'A') * 16) - 1;
+
+	Send(TRACKSERVER_TID, &req, sizeof(trackServerRequest), &response, sizeof(locationInfo));
+
+	return response;
+}

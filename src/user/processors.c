@@ -20,35 +20,39 @@ void initUI(){
 		cyan, yellow, magenta, yellow, cyan, yellow, magenta, resetColor);
 
 	//recent snesor
-	sprintf( COM2, "\033[11;0H%sCurrent Location  ", yellow);
-	sprintf( COM2, "\033[12;0H%sCurrent Location  ", yellow);
 	sprintf( COM2, "\033[13;0HExpect Sensor:      at: ");
 	sprintf( COM2, "\033[15;0HPrevious sensor: ");
 	sprintf( COM2, "\033[16;4HActual time: ");
 	sprintf( COM2, "\033[17;4HExpected time: ");
 	sprintf( COM2, "\033[18;4HTime difference: %s", resetColor);
 
+
+	sprintf( COM2, "\033[21;0H%sCurrent Location  ", yellow);
+	sprintf( COM2, "\033[22;0H%sCurrent Location  ", yellow);
+	sprintf( COM2, "\033[23;0H%sDistance between tr45 and tr48: ", yellow);
+
 	//Train status
 	// sprintf( COM2, "\033[4;40HCurrent Train Direction:      Forward");
-	// sprintf( COM2, "\033[5;40HCurrent Train Speed:          0");	
+	sprintf( COM2, "\033[5;40HTrain 45 Speed:          0");	
+	sprintf( COM2, "\033[8;40HTrain 48 Speed:          0");	
 
 	//track
-	sprintf( COM2, "\033[20;0H%s*  *  *  *  A $12 *  * $11 *  *  A  *  *  *  *  *  A  *  *  * ", "");
-	sprintf( COM2, "\033[21;0H%s              *       *                                       *", "");
-	sprintf( COM2, "\033[22;0H%s*  *  *  A $04      *   *  A  *  * $13 A  *  A $10 A  *  *  *   A", "");
-	sprintf( COM2, "\033[23;0H%s         *           *                A       A                A", "");
-	sprintf( COM2, "\033[24;0H%s*  A  *            $14                  A * A                  09$", "");
-	sprintf( COM2, "\033[25;0H%s                  A                   156$ $155                   *", "");
-	sprintf( COM2, "\033[26;0H%s                  *                       *                       *", "");
-	sprintf( COM2, "\033[27;0H%s                  *                       *                       *", "");
-	sprintf( COM2, "\033[28;0H%s                  A                   153$ $154                   *", "");
-	sprintf( COM2, "\033[29;0H%s*  A  *            $15                  A * A                  08$", "");
-	sprintf( COM2, "\033[30;0H%s         *           *                A       A                A", "");
-	sprintf( COM2, "\033[31;0H%s*  A  *  A $01      *   *  A  *  * $16 A  *  A $17 *  A  *  *   A", "");
-	sprintf( COM2, "\033[32;0H%s               *      *                                       *", "");
-	sprintf( COM2, "\033[33;0H%s*  A  *  *  *  A $02    *  *  A $06 *  A  *  A  * $07 A  *  *", "");
-	sprintf( COM2, "\033[34;0H%s                     *             *             *", "");
-	sprintf( COM2, "\033[35;0H%s*  A  *  *  *  *  A  * $03 *  *  A $18 *  *  * $05 A  *  *  *  *  *  *  *  *", "");
+	// sprintf( COM2, "\033[20;0H%s*  *  *  *  A $12 *  * $11 *  *  A  *  *  *  *  *  A  *  *  * ", "");
+	// sprintf( COM2, "\033[21;0H%s              *       *                                       *", "");
+	// sprintf( COM2, "\033[22;0H%s*  *  *  A $04      *   *  A  *  * $13 A  *  A $10 A  *  *  *   A", "");
+	// sprintf( COM2, "\033[23;0H%s         *           *                A       A                A", "");
+	// sprintf( COM2, "\033[24;0H%s*  A  *            $14                  A * A                  09$", "");
+	// sprintf( COM2, "\033[25;0H%s                  A                   156$ $155                   *", "");
+	// sprintf( COM2, "\033[26;0H%s                  *                       *                       *", "");
+	// sprintf( COM2, "\033[27;0H%s                  *                       *                       *", "");
+	// sprintf( COM2, "\033[28;0H%s                  A                   153$ $154                   *", "");
+	// sprintf( COM2, "\033[29;0H%s*  A  *            $15                  A * A                  08$", "");
+	// sprintf( COM2, "\033[30;0H%s         *           *                A       A                A", "");
+	// sprintf( COM2, "\033[31;0H%s*  A  *  A $01      *   *  A  *  * $16 A  *  A $17 *  A  *  *   A", "");
+	// sprintf( COM2, "\033[32;0H%s               *      *                                       *", "");
+	// sprintf( COM2, "\033[33;0H%s*  A  *  *  *  A $02    *  *  A $06 *  A  *  A  * $07 A  *  *", "");
+	// sprintf( COM2, "\033[34;0H%s                     *             *             *", "");
+	// sprintf( COM2, "\033[35;0H%s*  A  *  *  *  *  A  * $03 *  *  A $18 *  *  * $05 A  *  *  *  *  *  *  *  *", "");
 
 	//command
 	sprintf( COM2, "\033[38;0H%scommand> %s", green, resetColor);
@@ -262,55 +266,32 @@ int array2int (char *ca){
 	return num;
 }
 
-int processFeed(int *sensorFeed, int lastfeed, int ts){
-	int cur, i, j;
+int processFeed(int *sensorFeed, int *triggeredSensors){
+	int cur, i;
+	int x = 0;
 	for(i = 0; i < 10; i++){
 		cur = sensorFeed[i];
 		if (cur != 0){
 			int group = (i / 2) + 'A';
 			int base = (i % 2) * 8;
 			int id; 
-			j++;
-			switch(cur){ 
-				case 128:
-					id = base + 1;
-					break;
-				case 64:
-					id = base + 2;
-					break;				
-				case 32:
-					id = base + 3;
-					break;
-				case 16:
-					id = base + 4;
-					break;				
-				case 8:
-					id = base + 5;
-					break;				
-				case 4:
-					id = base + 6;
-					break;				
-				case 2:
-					id = base + 7;
-					break;				
-				case 1: 
-					id = base + 8;
-					break;
-				default:
-					return -1;
-					break;
-			}
 
-			int newfeed = group * 17 + id;
-			if (newfeed != lastfeed && newfeed > ('A'*17)) {
-				return newfeed;
-			}
-			else{
-				return -1;
+			int offset = 128;
+			int j = 1;
+			while (cur > 0){
+				if (cur >= offset){
+					id = base + j;
+					triggeredSensors[x] = group * 17 + id;
+
+					cur = cur - offset;
+					x++;
+				}
+				offset = offset / 2;
+				j++;
 			}
 		}
 	}
-	return -1;
+	return x;
 }
 
 int highlightSensor(int sensor, int prevLoc){
@@ -546,21 +527,12 @@ int sensorFeedProcessor (){
 	putc(COM1, 192);
 	putc(COM1, 133);
 
-	int curSensor = -1;
-	int prevSensor = -1;
-	int prevLoc = -1;
+
+	int numSensorTriggered = 0;
+	int triggeredSensors[10];
 	int t = 0;
 
-	/*
-	 * speedTest
-	 */ 
-	 /*
-	int startSensor = 'C' * 17 + 15;
- 	int endSensor = 'C' * 17 + 15;
- 	long startTime = 0, endTime = 0, temp = 0;
- 	int *high = (int *) 0x80810064;
- 	int *low = (int *) 0x80810060;
-	*/
+
 	while(1){
 		int feed = getc(COM1);
 		sensorFeed[sensorCount] = feed;
@@ -568,37 +540,17 @@ int sensorFeedProcessor (){
 		if (sensorCount == 10){
 			sensorCount = 0;
 			t = Time();
-			curSensor = processFeed(sensorFeed, prevSensor, t);
+			numSensorTriggered = processFeed(sensorFeed, triggeredSensors);
 			putc(COM1, 192);
 			putc(COM1, 133);
 
-			//stopDistanceTest
-
-			if(curSensor == 'B' * 17 + 9){ 
-				changeTrainSpeed(45,10);         
-				Delay(475);
-				changeTrainSpeed(45,0);
-			}
-			// * speedTest 
-			/*
-			if (curSensor == startSensor && startTime == 0){
- 				startTime = *low;
- 				temp = *high;
- 				startTime = startTime + (temp << 32);
- 			}
- 			else if (curSensor == endSensor){
- 				endTime = *low;
- 				temp = *high;
- 				endTime = endTime + (temp << 32);
- 				sprintf(COM2, "%s\033[45;0H%d%s", save, endTime - startTime, restore);
- 				startTime = 0;
- 			}
- 			*/
-			
-			if (curSensor > ('A'*17) && curSensor != prevSensor){
-				prevLoc = highlightSensor(curSensor, prevLoc);
-				updateLastTriggeredSensor(curSensor, t);
-				prevSensor = curSensor;
+			if (numSensorTriggered > 0){
+				int i;				
+				for (i = 0; i < numSensorTriggered; i++){
+					if (triggeredSensors[i] > 'A' * 17){
+						updateLastTriggeredSensor(triggeredSensors[i], t);
+					}
+				}
 			};
 		}
 	 }
@@ -672,10 +624,10 @@ void showTrainLocation1(){
 			group = locInfo.sensor / 17;
 			id = locInfo.sensor % 17; 
 			displacement = locInfo.displacement;
-			sprintf(COM2, "%s\033[11;18H%sTrain %d - %c%d + %dmm%s", 
+			sprintf(COM2, "%s\033[21;18H%sTrain %d - %c%d + %dmm%s", 
 				save, clearLine, trainNo, (char)group, id, displacement, restore);
 		}
-		Delay(18);
+		Delay(50);
 	}
 
 	Exit();
@@ -692,10 +644,73 @@ void showTrainLocation2(){
 		 	group = locInfo.sensor / 17;
 		 	id = locInfo.sensor % 17; 
 		 	displacement = locInfo.displacement;
-		 	sprintf(COM2, "%s\033[12;18H%sTrain %d - %c%d + %dmm%s", 
+		 	sprintf(COM2, "%s\033[22;18H%sTrain %d - %c%d + %dmm%s", 
 		 		save, clearLine, trainNo, (char)group, id, displacement, restore);
 		}
-		Delay(18);
+		Delay(50);
+	}
+
+	Exit();
+}
+
+void showDistanceDiff(){
+	DelayUntil(500);
+	initTrain(45, 2);
+	Delay(300);
+
+	initTrain(48, 3);
+	Delay(300);
+
+	updateSwitchState(10, 33);
+	changeSwitchStatus(10, 33);
+
+	updateSwitchState(16, 33);
+	changeSwitchStatus(16, 33);
+
+	changeTrainSpeed(45, 9);
+	Delay(80);
+	changeTrainSpeed(48, 9);
+
+	int diff;
+	locationInfo locInfo45;
+	locationInfo locInfo48;
+
+	while(!NeedToShutDown()){
+		locInfo45 = getTrainLocation(45);
+		locInfo48 = getTrainLocation(48);
+
+		if (locInfo45.sensor > 'A'*17 && locInfo48.sensor > 'A'*17){
+			if (locInfo45.sensor == locInfo48.sensor){
+				diff = locInfo45.displacement - locInfo48.displacement;
+			}
+			else {
+				int sensorDist = getDistBetweenSensors(locInfo48.sensor, locInfo45.sensor);
+
+				if (sensorDist > 0){
+					diff = sensorDist + locInfo45.displacement - locInfo48.displacement;
+				}
+				else{
+					diff = -1;
+				}
+			}
+		}
+
+		if (diff >= 0){
+			if (diff > 270){
+				changeTrainSpeed(48, 10);
+				Delay((diff - 260) * 1000 / 4490);
+				changeTrainSpeed(48, 9);
+			}
+			else if (diff < 270){
+				changeTrainSpeed(48, 8);
+				Delay((260 - diff) * 1000 / 4005);
+				changeTrainSpeed(48, 9);
+			}
+			// sprintf(COM2, "%s\033[23;32H%s%dmm%s", 
+		 // 		save, clearLine, diff, restore);
+		}
+
+		Delay(12);
 	}
 
 	Exit();

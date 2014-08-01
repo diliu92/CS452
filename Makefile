@@ -46,9 +46,9 @@ TRAIN_OBJS=	$(OUT_DIR)/trackServer.o		\
 		$(OUT_DIR)/routeServer.o
 
 
-all: demo1.elf
+all: project.elf
 
-demo1.elf: $(KERN_OBJS) $(USER_OBJS) $(COMMON_OBJS) $(TRAIN_OBJS) 
+project.elf: $(KERN_OBJS) $(USER_OBJS) $(COMMON_OBJS) $(TRAIN_OBJS) 
 	$(LD) $(LDFLAGS) -o $@ $(KERN_OBJS) $(USER_OBJS) $(COMMON_OBJS) $(TRAIN_OBJS) -lgcc	
 	
 #-------------------------------------kernel related----------------------------------------#
@@ -149,4 +149,4 @@ $(OUT_DIR)/routeServer.s:
 
 
 clean:
-	-rm -f demo1.elf $(OUT_DIR)/*.s $(OUT_DIR)/*.o $(OUT_DIR)/main.map
+	-rm -f project.elf $(OUT_DIR)/*.s $(OUT_DIR)/*.o $(OUT_DIR)/main.map

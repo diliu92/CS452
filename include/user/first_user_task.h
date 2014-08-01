@@ -21,6 +21,9 @@ stopTrain1_Worker();
 
 void
 stopTrain2_Worker();
+
+void
+showDistanceDiff();
 /*
  * To be added
  */
