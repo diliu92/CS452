@@ -58,7 +58,22 @@ typedef struct trackServerData{
 }trackServerData;
 
 static void
-initTrainsSpecData(trackServerData* trkSvrData){		
+initTrainsSpecData(trackServerData* trkSvrData){
+	trkSvrData->trainsActualSpeeds[1][0] = -1;		 	//train-54
+	trkSvrData->trainsActualSpeeds[1][1] = -1; 
+	trkSvrData->trainsActualSpeeds[1][2] = -1;
+	trkSvrData->trainsActualSpeeds[1][3] = -1;
+	trkSvrData->trainsActualSpeeds[1][4] = -1;
+	trkSvrData->trainsActualSpeeds[1][5] = -1;
+	trkSvrData->trainsActualSpeeds[1][6] = -1; 
+	trkSvrData->trainsActualSpeeds[1][7] = 38028;
+	trkSvrData->trainsActualSpeeds[1][8] = 42419; 
+	trkSvrData->trainsActualSpeeds[1][9] = 47756; 
+	trkSvrData->trainsActualSpeeds[1][10] = -1; 
+	trkSvrData->trainsActualSpeeds[1][11] = -1; 
+	trkSvrData->trainsActualSpeeds[1][12] = -1; 
+	trkSvrData->trainsActualSpeeds[1][13] = -1; 
+
 	trkSvrData->trainsActualSpeeds[2][0] = -1;		 	//train-45
 	trkSvrData->trainsActualSpeeds[2][1] = -1; 
 	trkSvrData->trainsActualSpeeds[2][2] = -1;
@@ -294,10 +309,7 @@ getTrainActualData(int whichData, trackServerData* trkSvrData, int trainNo, int 
 	else{
 		switch (trainNo)
 		{
-			case 49:
-				whichRow = 0;
-				break;
-			case 50:
+			case 54:
 				whichRow = 1;
 				break;
 			case 45:
@@ -546,8 +558,11 @@ trackServer(){
 				if (req.target == 45){
 					sprintf(COM2, "%s\033[5;65H%s%d%s", save, clearLine, req.value % 15, restore);
 				}
+				else if (req.target == 48){
+					sprintf(COM2, "%s\033[6;65H%s%d%s", save, clearLine, req.value % 15, restore);
+				}
 				else{
-					sprintf(COM2, "%s\033[8;65H%s%d%s", save, clearLine, req.value % 15, restore);
+					sprintf(COM2, "%s\033[7;65H%s%d%s", save, clearLine, req.value % 15, restore);
 				}
 				Reply(requester, NULL, 0);									
 				break;		

@@ -29,12 +29,14 @@ void initUI(){
 
 	sprintf( COM2, "\033[21;0H%sCurrent Location  ", yellow);
 	sprintf( COM2, "\033[22;0H%sCurrent Location  ", yellow);
-	sprintf( COM2, "\033[23;0H%sDistance between tr45 and tr48: ", yellow);
+	sprintf( COM2, "\033[23;0H%sCurrent Location  ", yellow);
+	// sprintf( COM2, "\033[23;0H%sDistance between tr45 and tr48: ", yellow);
 
 	//Train status
 	// sprintf( COM2, "\033[4;40HCurrent Train Direction:      Forward");
 	sprintf( COM2, "\033[5;40HTrain 45 Speed:          0");	
-	sprintf( COM2, "\033[8;40HTrain 48 Speed:          0");	
+	sprintf( COM2, "\033[6;40HTrain 48 Speed:          0");	
+	sprintf( COM2, "\033[7;40HTrain 54 Speed:          0");	
 
 	//track
 	// sprintf( COM2, "\033[20;0H%s*  *  *  *  A $12 *  * $11 *  *  A  *  *  *  *  *  A  *  *  * ", "");
@@ -653,7 +655,27 @@ void showTrainLocation2(){
 	Exit();
 }
 
-void showDistanceDiff(){
+void showTrainLocation3(){
+	int displacement, id, group;
+	locationInfo locInfo;
+	int trainNo = 54;
+
+	while(!NeedToShutDown()){
+		locInfo = getTrainLocation(trainNo);
+		if (locInfo.sensor > 'A'*17){
+		 	group = locInfo.sensor / 17;
+		 	id = locInfo.sensor % 17; 
+		 	displacement = locInfo.displacement;
+		 	sprintf(COM2, "%s\033[23;18H%sTrain %d - %c%d + %dmm%s", 
+		 		save, clearLine, trainNo, (char)group, id, displacement, restore);
+		}
+		Delay(50);
+	}
+
+	Exit();
+}
+
+void initTrack(){
 	DelayUntil(500);
 	initTrain(45, 2);
 	Delay(300);
@@ -661,8 +683,11 @@ void showDistanceDiff(){
 	initTrain(48, 3);
 	Delay(300);
 
-	updateSwitchState(10, 33);
-	changeSwitchStatus(10, 33);
+	initTrain(54, 1);
+	Delay(300);
+
+	updateSwitchState(9, 33);
+	changeSwitchStatus(9, 33);
 
 	updateSwitchState(16, 33);
 	changeSwitchStatus(16, 33);
@@ -670,8 +695,14 @@ void showDistanceDiff(){
 	changeTrainSpeed(45, 9);
 	Delay(80);
 	changeTrainSpeed(48, 9);
+	Delay(130);
+	changeTrainSpeed(54, 9);
 
-	int diff;
+	Exit();
+}
+
+void DistManager1(){
+	int diff = -1;
 	locationInfo locInfo45;
 	locationInfo locInfo48;
 
@@ -696,21 +727,67 @@ void showDistanceDiff(){
 		}
 
 		if (diff >= 0){
-			if (diff > 270){
+			if (diff > 280){
 				changeTrainSpeed(48, 10);
-				Delay((diff - 260) * 1000 / 4490);
+				Delay((diff - 280) * 1000 / 4490);
 				changeTrainSpeed(48, 9);
 			}
-			else if (diff < 270){
+			else if (diff < 280){
 				changeTrainSpeed(48, 8);
-				Delay((260 - diff) * 1000 / 4005);
+				Delay((280 - diff) * 1000 / 4005);
 				changeTrainSpeed(48, 9);
 			}
 			// sprintf(COM2, "%s\033[23;32H%s%dmm%s", 
 		 // 		save, clearLine, diff, restore);
 		}
 
-		Delay(12);
+		Delay(25);
+	}
+
+	Exit();
+}
+
+void DistManager2(){
+	int diff = -1;
+	locationInfo locInfo45;
+	locationInfo locInfo54;
+	
+	while(!NeedToShutDown()){
+		locInfo45 = getTrainLocation(45);
+		locInfo54 = getTrainLocation(54);
+
+		if (locInfo45.sensor > 'A'*17 && locInfo54.sensor > 'A'*17){
+			if (locInfo45.sensor == locInfo54.sensor){
+				diff = locInfo45.displacement - locInfo54.displacement;
+			}
+			else {
+				int sensorDist = getDistBetweenSensors(locInfo54.sensor, locInfo45.sensor);
+
+				if (sensorDist > 0){
+					diff = sensorDist + locInfo45.displacement - locInfo54.displacement;
+				}
+				else{
+					diff = -1;
+				}
+			}
+		}
+
+		if (diff >= 0){
+			if (diff > 650){
+				changeTrainSpeed(54, 10);
+				Delay((diff - 650) * 1000 / 4508);
+				changeTrainSpeed(54, 9);
+			}
+			else if (diff < 650){
+				changeTrainSpeed(54, 8);
+				Delay((650 - diff) * 1000 / 4020);
+				changeTrainSpeed(54, 9);
+			}
+			// sprintf(COM2, "%s\033[23;32H%s%dmm%s", 
+		 // 		save, clearLine, diff, restore);
+		}
+
+		Delay(25);
 	}
 
 	Exit();

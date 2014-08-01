@@ -14,6 +14,9 @@ void
 showTrainLocation2();
 
 void
+showTrainLocation3();
+
+void
 firstUserTask();
 
 void 
@@ -22,8 +25,14 @@ stopTrain1_Worker();
 void
 stopTrain2_Worker();
 
+void 
+initTrack();
+
 void
-showDistanceDiff();
+DistManager1();
+
+void
+DistManager2();
 /*
  * To be added
  */

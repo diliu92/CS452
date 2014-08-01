@@ -85,7 +85,10 @@ firstUserTask()	//priority 6
 	Create(7, cmdProcessor);
 	Create(7, showTrainLocation1);
 	Create(7, showTrainLocation2);
-	Create(7, showDistanceDiff);
+	Create(7, showTrainLocation3);
+	Create(7, initTrack);
+	Create(7, DistManager1);
+	Create(7, DistManager2);
 
 	Create(16, idleTask);
 
