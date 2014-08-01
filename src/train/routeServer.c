@@ -21,7 +21,6 @@ typedef struct trainReservationInfo{
 
 	int alongPathNodes[TRACK_MAX];	//free them during movement
 	int alongPathNodesNumber;
-	//int current;
 	
 	int nearDestNodes[TRACK_MAX];	//free them when train restart
 	int nearDestNodesNumber;
@@ -413,11 +412,28 @@ GoTo(int trainNo, int trainSpeed, int dest){
 	/*
 	 * After this function is finished, tr rv sw will disabled
 	 * 
-	 * 1. get the current src node from track for this train
-	 * 2. ask the routeServer for a shortest path from src to dest
-	 * 3. tell the path to the trackServer
-	 * 4. trackServer parse this command and formated this path
-	 * 5. trackServer pass this formated path to the trainCommandWorker
+	 * 1. get the current src node from track for this train(this train need to know where they are)
+	 * 2. send the this request to goServer
+	 * 3. goServer will find one free goWorker to execute this command 
+	 * 		(goWorker will always Send to the goServer when its rdy or its work is done)
+	 * 		but why do need goServer and goWorker?
+	 * 		Answer: we may get blocked when we try to get a path from src to dest, so we need to keep asking the
+	 * 				route server about this.
+	 * 		How my shortest path works? Using dijsktra's algo, when there is no blocked node from src and dest(shortest path)
+	 * 		it will give that path, however, if thats not the case, it will try to find another path than may be longer but a valid
+	 * 		path(achieve this by removing this node when doing the algo). If there is no way to get a path from src to dest(some important nodes are blocked by now)
+	 * 		goWorker should periocdally talk to the routeSvr for a path
+	 * 		(add the content about our reservation, always lock the pathnodes before giving to the goWorkers(lock all, then free them as we go, for each node in its path,
+	 * 			we need lock each node and the reverse node of each node important for branch and merge), and whenever a train hit a sensor, 
+	 * 		tracksvr will tell the rtSvr that please feel the pathNodes up to this sensor(including), however,  to prevent some naive problems(ex. trains
+	 * 		got stuck, the trainWorker will always feel all of its locked pathNodes when train is stoppping, then the trainWorker tell the rtSvr that
+	 * 		please lock the nodes around the destination of this train now!) )
+	 * 			
+	 * 4. goWorker keep talking to the routeServer until the path it got is usable(go worker is able to handle one goto request per time)
+	 * 5. now, goWorker will send this path to trackSvr, then this worker will send to the goSvr sayting that im rdy for more work 
+	 * 6. trackServer got its path, but its just an array of nodes, we need to transform them into train commands!
+	 * 		after doing this, trackServer will send these commands to trainWorker
+	 * 7. remember that, when trainWorker is finishing for this path, please tell the rtSrv to reserve its nearDestNodes
 	 */ 
 	 
 	locationInfo trainLoc = getTrainLocation(trainNo);	 //Step 1
